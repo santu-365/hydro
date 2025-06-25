@@ -3,34 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hydro Bottles Co. - Premium Water Bottles</title>
+    <title>Hydro Bottles Co. - Premium, Eco-Friendly Water Bottles</title>
+    <meta name="description" content="Discover the best collection of premium, insulated, and eco-friendly water bottles. Hydro Bottles Co. offers durable and stylish bottles to keep you hydrated on the go.">
+    
     <style>
-        /* Reset and base styles */
+        /*
+        ========================================
+        CSS Variables (Design System)
+        ========================================
+        */
+        :root {
+            --primary-color: #0096c7;
+            --primary-light: #48cae4;
+            --primary-lighter: #ade8f4;
+            --primary-lightest: #caf0f8;
+            
+            --secondary-color: #023e8a;
+            --secondary-dark: #03045e;
+            
+            --text-light: #f8f9fa;
+            --text-dark: #343a40;
+            --text-muted: #6c757d;
+            
+            --background-light: #f8f9fa;
+            --background-white: #ffffff;
+            
+            --accent-success: #2a9d8f;
+            --accent-danger: #e76f51;
+            
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+            
+            --border-radius-sm: 5px;
+            --border-radius-md: 10px;
+            --border-radius-lg: 30px;
+            
+            --font-family-base: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            
+            --transition-speed: 0.3s;
+        }
+
+        /*
+        ========================================
+        Reset and Base Styles
+        ========================================
+        */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            background-color: #f8f9fa;
-            color: #333;
+            background-color: var(--background-light);
+            color: var(--text-dark);
             line-height: 1.6;
-        }
-        
-        /* Header styles */
-        header {
-            background-color: #0096c7;
-            color: white;
-            padding: 1rem 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-family: var(--font-family-base);
+            overflow-x: hidden; /* Prevent horizontal scroll from animations */
         }
         
         .container {
             width: 90%;
             max-width: 1200px;
             margin: 0 auto;
+        }
+
+        section {
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            font-weight: 700;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            margin-top: -3.5rem;
+            margin-bottom: 4rem;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Animation class for scroll trigger */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /*
+        ========================================
+        Header & Navigation
+        ========================================
+        */
+        header {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 1rem 0;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: background-color var(--transition-speed);
         }
         
         .header-content {
@@ -39,11 +127,24 @@
             align-items: center;
         }
         
-        .logo h1 {
-            font-size: 1.8rem;
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         
-        .logo span {
+        .logo svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+        
+        .logo h1 span {
             font-weight: 300;
         }
         
@@ -53,116 +154,255 @@
         }
         
         nav ul li {
-            margin-left: 1.5rem;
+            margin-left: 2rem;
         }
         
         nav ul li a {
-            color: white;
+            color: var(--text-light);
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.3s;
+            padding-bottom: 5px;
+            border-bottom: 2px solid transparent;
+            transition: color var(--transition-speed), border-color var(--transition-speed);
         }
         
-        nav ul li a:hover {
-            color: #caf0f8;
+        nav ul li a:hover, nav ul li a.active {
+            color: var(--primary-lightest);
+            border-bottom-color: var(--primary-lightest);
         }
         
-        /* Hero section */
+        .header-actions {
+            position: relative;
+        }
+
+        .cart-icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .cart-icon-btn svg {
+            width: 28px;
+            height: 28px;
+            fill: var(--text-light);
+            transition: transform var(--transition-speed);
+        }
+
+        .cart-icon-btn:hover svg {
+            transform: scale(1.1);
+        }
+
+        .cart-item-count {
+            position: absolute;
+            top: -5px;
+            right: -10px;
+            background-color: var(--accent-danger);
+            color: var(--text-light);
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            border: 2px solid var(--primary-color);
+        }
+
+        /*
+        ========================================
+        Hero Section
+        ========================================
+        */
         .hero {
-            background: linear-gradient(135deg, #0096c7, #48cae4);
-            color: white;
-            padding: 4rem 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: var(--text-light);
+            padding: 6rem 0;
             text-align: center;
         }
         
         .hero h2 {
-            font-size: 2.5rem;
+            font-size: 3.5rem;
             margin-bottom: 1rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
         }
         
         .hero p {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             max-width: 700px;
-            margin: 0 auto 2rem;
+            margin: 0 auto 2.5rem;
+            font-weight: 300;
         }
         
         .btn {
             display: inline-block;
-            background-color: #023e8a;
-            color: white;
-            padding: 0.8rem 1.8rem;
-            border-radius: 30px;
+            background-color: var(--secondary-color);
+            color: var(--text-light);
+            padding: 0.9rem 2.2rem;
+            border-radius: var(--border-radius-lg);
             text-decoration: none;
             font-weight: 600;
-            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+            transition: background-color var(--transition-speed), transform var(--transition-speed), box-shadow var(--transition-speed);
         }
         
         .btn:hover {
-            background-color: #03045e;
+            background-color: var(--secondary-dark);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
         }
         
-        /* Products section */
+        .btn-secondary {
+            background-color: var(--accent-success);
+        }
+        .btn-secondary:hover {
+            background-color: #248b7f;
+        }
+
+        /*
+        ========================================
+        Products Section
+        ========================================
+        */
         .products {
-            padding: 4rem 0;
-        }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 3rem;
-            color: #023e8a;
+            background-color: var(--background-white);
         }
         
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
         }
         
         .product-card {
-            background-color: white;
-            border-radius: 10px;
+            background-color: var(--background-white);
+            border-radius: var(--border-radius-md);
             overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
+            box-shadow: var(--shadow-md);
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+            display: flex;
+            flex-direction: column;
         }
         
         .product-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
         }
         
-        .product-img {
-            height: 200px;
-            background-color: #ade8f4;
+        .product-img-container {
+            height: 250px;
+            background-color: var(--primary-lightest);
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 1rem;
+            position: relative;
         }
         
-        .product-img img {
-            max-width: 70%;
-            max-height: 170px;
+        .product-img {
+            max-width: 80%;
+            max-height: 220px;
+            transition: transform var(--transition-speed);
+        }
+
+        .product-card:hover .product-img {
+            transform: scale(1.05);
         }
         
         .product-info {
             padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
         
         .product-title {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             margin-bottom: 0.5rem;
+            color: var(--secondary-color);
+        }
+        
+        .product-description {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            flex-grow: 1;
         }
         
         .product-price {
             font-weight: bold;
-            color: #023e8a;
-            font-size: 1.1rem;
+            color: var(--primary-color);
+            font-size: 1.4rem;
             margin-bottom: 1rem;
         }
         
-        /* Features section */
+        .product-colors {
+            margin-bottom: 1.5rem;
+        }
+
+        .color-swatch {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            margin-right: 8px;
+            cursor: pointer;
+            border: 2px solid #ddd;
+            transition: transform 0.2s;
+        }
+
+        .color-swatch:hover {
+            transform: scale(1.2);
+        }
+
+        .color-swatch.active {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 5px var(--secondary-color);
+        }
+        
+        /*
+        ========================================
+        About Us Section
+        ========================================
+        */
+        .about {
+            background-color: var(--primary-lightest);
+        }
+        
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+        
+        .about-image img {
+            max-width: 100%;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .about-text h3 {
+            font-size: 2rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .about-text p {
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        /*
+        ========================================
+        Features Section
+        ========================================
+        */
         .features {
-            background-color: #caf0f8;
-            padding: 4rem 0;
+            background-color: var(--background-white);
         }
         
         .features-grid {
@@ -173,113 +413,545 @@
         
         .feature-card {
             text-align: center;
-            padding: 2rem;
+            padding: 2.5rem;
+            background-color: var(--background-light);
+            border-radius: var(--border-radius-md);
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
         }
         
-        .feature-icon {
-            font-size: 2.5rem;
-            color: #0096c7;
-            margin-bottom: 1rem;
+        .feature-icon svg {
+            width: 60px;
+            height: 60px;
+            fill: var(--primary-color);
+            margin-bottom: 1.5rem;
         }
         
         .feature-title {
             margin-bottom: 1rem;
-            color: #023e8a;
+            font-size: 1.5rem;
+            color: var(--secondary-color);
         }
         
-        /* Testimonials section */
+        /*
+        ========================================
+        Testimonials Section
+        ========================================
+        */
         .testimonials {
-            padding: 4rem 0;
+            background-color: var(--primary-lightest);
         }
         
         .testimonial-carousel {
-            max-width: 700px;
+            max-width: 800px;
             margin: 0 auto;
             position: relative;
+            overflow: hidden;
+            border-radius: var(--border-radius-md);
+            background-color: var(--background-white);
+            box-shadow: var(--shadow-md);
+        }
+
+        .testimonial-slider {
+            display: flex;
+            transition: transform var(--transition-speed) ease-in-out;
         }
         
         .testimonial {
             text-align: center;
-            padding: 2rem;
+            padding: 3rem 4rem;
+            min-width: 100%;
+            box-sizing: border-box;
         }
         
         .testimonial-text {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-style: italic;
             margin-bottom: 1.5rem;
+            color: var(--text-muted);
         }
         
         .testimonial-author {
             font-weight: bold;
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+        }
+
+        .testimonial-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 1rem;
+        }
+
+        .testimonial-nav-btn {
+            background-color: rgba(255, 255, 255, 0.7);
+            border: none;
+            cursor: pointer;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-sm);
+            transition: background-color var(--transition-speed);
+        }
+
+        .testimonial-nav-btn:hover {
+            background-color: white;
+        }
+
+        .testimonial-nav-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--secondary-color);
         }
         
-        /* Contact section */
+        /*
+        ========================================
+        FAQ Section
+        ========================================
+        */
+        .faq {
+            background-color: var(--background-white);
+        }
+
+        .faq-accordion {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .faq-question {
+            width: 100%;
+            background: none;
+            border: none;
+            text-align: left;
+            padding: 1.5rem 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--secondary-color);
+        }
+        
+        .faq-question:hover {
+            background-color: var(--primary-lightest);
+        }
+        
+        .faq-icon {
+            transition: transform var(--transition-speed);
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
+            padding: 0 1rem;
+        }
+        
+        .faq-answer p {
+            padding-bottom: 1.5rem;
+        }
+        
+        /*
+        ========================================
+        Contact Section
+        ========================================
+        */
         .contact {
-            background-color: #0096c7;
-            color: white;
-            padding: 4rem 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: var(--text-light);
+            padding: 5rem 0;
+        }
+        
+        .contact .section-title {
+            color: var(--text-light);
         }
         
         .contact-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            gap: 3rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 3rem;
+            border-radius: var(--border-radius-md);
         }
         
         .contact-form input,
         .contact-form textarea {
             width: 100%;
-            padding: 0.8rem;
+            padding: 1rem;
             margin-bottom: 1rem;
             border: none;
-            border-radius: 5px;
+            border-radius: var(--border-radius-sm);
+            font-family: var(--font-family-base);
+            font-size: 1rem;
         }
         
         .contact-form textarea {
             height: 150px;
-            resize: none;
+            resize: vertical;
         }
         
         .contact-info {
-            line-height: 2;
+            line-height: 2.2;
         }
         
-        /* Footer */
+        .contact-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        /*
+        ========================================
+        Footer
+        ========================================
+        */
         footer {
-            background-color: #023e8a;
-            color: white;
-            padding: 2rem 0;
+            background-color: var(--secondary-dark);
+            color: var(--text-light);
+            padding: 4rem 0 2rem 0;
             text-align: center;
         }
-        
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            margin: 1.5rem 0;
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            text-align: left;
+            margin-bottom: 3rem;
         }
-        
-        .footer-links li {
-            margin: 0 1rem;
-        }
-        
-        .footer-links a {
-            color: #caf0f8;
-            text-decoration: none;
-        }
-        
-        .social-icons {
-            margin: 1.5rem 0;
-        }
-        
-        .social-icons a {
-            color: white;
-            margin: 0 0.5rem;
+
+        .footer-column h4 {
             font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-lightest);
         }
         
-        /* Responsive adjustments */
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-column a {
+            color: var(--primary-lighter);
+            text-decoration: none;
+            transition: color var(--transition-speed);
+        }
+
+        .footer-column a:hover {
+            color: var(--text-light);
+            text-decoration: underline;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-logo svg {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .footer-logo h2 {
+            font-size: 1.8rem;
+        }
+
+        .footer-logo span {
+            font-weight: 300;
+        }
+
+        .footer-socials {
+            margin-top: 1.5rem;
+        }
+        
+        .footer-socials a {
+            color: var(--text-light);
+            margin: 0 0.75rem;
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: color var(--transition-speed);
+        }
+
+        .footer-socials a svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+        
+        .footer-socials a:hover {
+            color: var(--primary-light);
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid #1a5ca4;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--primary-lighter);
+        }
+        
+        /*
+        ========================================
+        Shopping Cart Drawer
+        ========================================
+        */
+        .cart-drawer {
+            position: fixed;
+            top: 0;
+            right: -100%; /* Initially hidden */
+            width: 100%;
+            max-width: 450px;
+            height: 100%;
+            background-color: var(--background-white);
+            box-shadow: var(--shadow-lg);
+            z-index: 2000;
+            transition: right 0.4s ease-in-out;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .cart-drawer.open {
+            right: 0;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-header h3 {
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+        }
+        
+        .close-cart-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 2rem;
+        }
+
+        .close-cart-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-muted);
+            transition: transform 0.2s, fill 0.2s;
+        }
+
+        .close-cart-btn:hover svg {
+            transform: rotate(90deg);
+            fill: var(--accent-danger);
+        }
+        
+        .cart-body {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+        
+        .cart-empty-message {
+            text-align: center;
+            color: var(--text-muted);
+            margin-top: 2rem;
+        }
+
+        .cart-items-list {
+            list-style: none;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+        }
+        
+        .cart-item-img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            background-color: var(--primary-lightest);
+            border-radius: var(--border-radius-sm);
+        }
+        
+        .cart-item-info {
+            flex-grow: 1;
+        }
+
+        .cart-item-title {
+            font-size: 1rem;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+        
+        .cart-item-price {
+            color: var(--primary-color);
+            font-size: 0.9rem;
+        }
+        
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+
+        .quantity-btn {
+            background-color: #eee;
+            border: none;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .item-quantity {
+            width: 30px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .cart-item-remove-btn {
+            background: none;
+            border: none;
+            color: var(--accent-danger);
+            cursor: pointer;
+            font-size: 0.8rem;
+            text-decoration: underline;
+            margin-left: auto;
+        }
+
+        .cart-footer {
+            padding: 1.5rem;
+            border-top: 1px solid #eee;
+        }
+
+        .cart-subtotal {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+
+        .cart-checkout-btn {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+        }
+        
+        .cart-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /*
+        ========================================
+        Back to Top Button
+        ========================================
+        */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: var(--primary-color);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: var(--shadow-md);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: opacity 0.3s, visibility 0.3s, transform 0.3s, background-color 0.3s;
+            z-index: 900;
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .back-to-top:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .back-to-top svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        /*
+        ========================================
+        Responsive Adjustments
+        ========================================
+        */
+        @media (max-width: 1024px) {
+            .about-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .about-image {
+                order: -1;
+                margin-bottom: 2rem;
+            }
+        }
+        
         @media (max-width: 768px) {
+            .section-title {
+                font-size: 2rem;
+            }
+            
             .header-content {
                 flex-direction: column;
                 text-align: center;
@@ -287,245 +959,730 @@
             
             nav ul {
                 margin-top: 1rem;
+                padding-left: 0;
             }
             
             nav ul li {
-                margin: 0 0.5rem;
+                margin: 0 0.75rem;
+            }
+            
+            .header-actions {
+                position: absolute;
+                top: 1.5rem;
+                right: 1.5rem;
             }
             
             .hero h2 {
-                font-size: 2rem;
+                font-size: 2.5rem;
+            }
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .testimonial-nav {
+                padding: 0;
+            }
+            .testimonial {
+                padding: 2rem 1rem;
             }
         }
+        
+        @media (max-width: 480px) {
+            .container {
+                width: 95%;
+            }
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .footer-column ul {
+                padding-left: 0;
+            }
+            .footer-logo {
+                justify-content: center;
+            }
+        }
+
     </style>
 </head>
 <body>
+    <!-- SVG Icons Definition -->
+    <svg width="0" height="0" class="hidden">
+      <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="icon-facebook">
+        <path d="M18.77 7.46H14.5v-1.9c0-.9.6-1.1 1-1.1h3V.5h-4.33C10.24.5 9.5 3.14 9.5 5.32v2.14H6v4.44h3.5v12h4.44v-12h3.81l.47-4.44z"/>
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="icon-instagram">
+        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.584.069-4.85c.149-3.225 1.664-4.771 4.919-4.919C8.416 2.175 8.796 2.163 12 2.163m0-1.602c-3.264 0-3.66.014-4.944.076-4.353.2-6.135 1.983-6.335 6.335-.062 1.284-.076 1.68-.076 4.944s.014 3.66.076 4.944c.2 4.353 1.982 6.135 6.335 6.335 1.284.062 1.68.076 4.944.076s3.66-.014 4.944-.076c4.353-.2 6.135-1.982 6.335-6.335.062-1.284.076-1.68.076-4.944s-.014-3.66-.076-4.944c-.2-4.353-1.982-6.135-6.335-6.335C15.66.575 15.264.561 12 .561z"/>
+        <path d="M12 6.865c-2.841 0-5.135 2.294-5.135 5.135s2.294 5.135 5.135 5.135 5.135-2.294 5.135-5.135S14.841 6.865 12 6.865zm0 8.73c-1.984 0-3.595-1.611-3.595-3.595s1.611-3.595 3.595-3.595 3.595 1.611 3.595 3.595-1.611 3.595-3.595 3.595z"/>
+        <circle cx="16.862" cy="7.138" r="1.232"/>
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="icon-twitter">
+        <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.223.085 4.93 4.93 0 004.6 3.419A9.9 9.9 0 010 17.54a13.94 13.94 0 007.544 2.213c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+      </symbol>
+    </svg>
+
     <!-- Header Section -->
     <header>
         <div class="container">
             <div class="header-content">
-                <div class="logo">
+                <a href="#home" class="logo" aria-label="HydroBottles Homepage">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M50 0C26.5 0 10 20.8333 10 41.6667C10 66.6667 50 100 50 100C50 100 90 66.6667 90 41.6667C90 20.8333 73.5 0 50 0ZM50 58.3333C41.25 58.3333 34.1667 51.25 34.1667 42.5C34.1667 33.75 41.25 26.6667 50 26.6667C58.75 26.6667 65.8333 33.75 65.8333 42.5C65.8333 51.25 58.75 58.3333 50 58.3333Z" fill="white"/>
+                    </svg>
                     <h1>Hydro<span>Bottles</span></h1>
-                </div>
+                </a>
                 <nav>
                     <ul>
                         <li><a href="#home">Home</a></li>
                         <li><a href="#products">Products</a></li>
+                        <li><a href="#about">About</a></li>
                         <li><a href="#features">Features</a></li>
-                        <li><a href="#testimonials">Testimonials</a></li>
                         <li><a href="#contact">Contact</a></li>
                     </ul>
                 </nav>
+                <div class="header-actions">
+                    <button class="cart-icon-btn" id="open-cart-btn" aria-label="Open Shopping Cart">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                        <span id="cart-item-count" class="cart-item-count">0</span>
+                    </button>
+                </div>
             </div>
         </div>
     </header>
     
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="container">
-            <h2>Stay Hydrated in Style</h2>
-            <p>Discover our premium collection of eco-friendly, durable water bottles designed for your active lifestyle.</p>
-            <a href="#products" class="btn">Shop Now</a>
-        </div>
-    </section>
-    
-    <!-- Products Section -->
-    <section class="products" id="products">
-        <div class="container">
-            <h2 class="section-title">Our Products</h2>
-            <div class="product-grid">
-                <!-- Product 1 -->
-                <div class="product-card">
-                    <div class="product-img">
-                        <img src="/api/placeholder/200/200" alt="Classic Water Bottle">
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <div class="container">
+                <h2 class="fade-in">Stay Hydrated in Style</h2>
+                <p class="fade-in">Discover our premium collection of eco-friendly, durable water bottles designed for your active lifestyle.</p>
+                <a href="#products" class="btn fade-in">Shop Our Collection</a>
+            </div>
+        </section>
+        
+        <!-- Products Section -->
+        <section class="products" id="products">
+            <div class="container">
+                <h2 class="section-title fade-in">Our Products</h2>
+                <p class="section-subtitle fade-in">Choose the perfect companion for your daily hydration needs.</p>
+                <div class="product-grid">
+                    <!-- Product 1 -->
+                    <div class="product-card fade-in" data-id="1" data-name="Classic Hydro Bottle" data-price="24.99">
+                        <div class="product-img-container">
+                            <img src="https://placehold.co/300x300/ade8f4/023e8a?text=HydroBottle" alt="Classic Hydro Bottle" class="product-img" data-colors='{"#ade8f4":"https://placehold.co/300x300/ade8f4/023e8a?text=HydroBottle", "#f7a8a8":"https://placehold.co/300x300/f7a8a8/ffffff?text=HydroBottle", "#a8e6cf":"https://placehold.co/300x300/a8e6cf/023e8a?text=HydroBottle"}'>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Classic Hydro Bottle</h3>
+                            <p class="product-description">Perfect for everyday use with 24-hour cold retention. 24oz capacity.</p>
+                             <div class="product-colors">
+                                <span class="color-swatch active" style="background-color: #ade8f4;" data-color="#ade8f4"></span>
+                                <span class="color-swatch" style="background-color: #f7a8a8;" data-color="#f7a8a8"></span>
+                                <span class="color-swatch" style="background-color: #a8e6cf;" data-color="#a8e6cf"></span>
+                            </div>
+                            <p class="product-price">$24.99</p>
+                            <button class="btn add-to-cart">Add to Cart</button>
+                        </div>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-title">Classic Hydro Bottle</h3>
-                        <p>Perfect for everyday use with 24-hour cold retention.</p>
-                        <p class="product-price">$24.99</p>
-                        <button class="btn add-to-cart" data-id="1">Add to Cart</button>
+                    
+                    <!-- Product 2 -->
+                    <div class="product-card fade-in" data-id="2" data-name="Sport Bottle Pro" data-price="29.99">
+                        <div class="product-img-container">
+                            <img src="https://placehold.co/300x300/343a40/ffffff?text=Sport+Pro" alt="Sport Bottle Pro" class="product-img" data-colors='{"#343a40":"https://placehold.co/300x300/343a40/ffffff?text=Sport+Pro", "#e76f51":"https://placehold.co/300x300/e76f51/ffffff?text=Sport+Pro", "#0096c7":"https://placehold.co/300x300/0096c7/ffffff?text=Sport+Pro"}'>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Sport Bottle Pro</h3>
+                            <p class="product-description">Designed for athletes with an easy-flip straw and a non-slip grip. 32oz.</p>
+                             <div class="product-colors">
+                                <span class="color-swatch active" style="background-color: #343a40;" data-color="#343a40"></span>
+                                <span class="color-swatch" style="background-color: #e76f51;" data-color="#e76f51"></span>
+                                <span class="color-swatch" style="background-color: #0096c7;" data-color="#0096c7"></span>
+                            </div>
+                            <p class="product-price">$29.99</p>
+                            <button class="btn add-to-cart">Add to Cart</button>
+                        </div>
                     </div>
-                </div>
-                
-                <!-- Product 2 -->
-                <div class="product-card">
-                    <div class="product-img">
-                        <img src="/api/placeholder/200/200" alt="Sport Water Bottle">
+                    
+                    <!-- Product 3 -->
+                    <div class="product-card fade-in" data-id="3" data-name="Insulated Traveler" data-price="34.99">
+                        <div class="product-img-container">
+                            <img src="https://placehold.co/300x300/f8f9fa/343a40?text=Traveler" alt="Insulated Traveler" class="product-img" data-colors='{"#f8f9fa":"https://placehold.co/300x300/f8f9fa/343a40?text=Traveler", "#6c757d":"https://placehold.co/300x300/6c757d/ffffff?text=Traveler", "#d4a373":"https://placehold.co/300x300/d4a373/ffffff?text=Traveler"}'>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Insulated Traveler</h3>
+                            <p class="product-description">Leak-proof coffee mug for hot and cold drinks. Fits most cup holders. 16oz.</p>
+                             <div class="product-colors">
+                                <span class="color-swatch active" style="background-color: #f8f9fa;" data-color="#f8f9fa"></span>
+                                <span class="color-swatch" style="background-color: #6c757d;" data-color="#6c757d"></span>
+                                <span class="color-swatch" style="background-color: #d4a373;" data-color="#d4a373"></span>
+                            </div>
+                            <p class="product-price">$34.99</p>
+                            <button class="btn add-to-cart">Add to Cart</button>
+                        </div>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-title">Sport Bottle Pro</h3>
-                        <p>Designed for athletes with easy-flip straw and grip.</p>
-                        <p class="product-price">$29.99</p>
-                        <button class="btn add-to-cart" data-id="2">Add to Cart</button>
+                    
+                    <!-- Product 4 -->
+                    <div class="product-card fade-in" data-id="4" data-name="Kids Hydro Pal" data-price="19.99">
+                        <div class="product-img-container">
+                            <img src="https://placehold.co/300x300/ffc8dd/bde0fe?text=Kids+Pal" alt="Kids Hydro Pal" class="product-img" data-colors='{"#ffc8dd":"https://placehold.co/300x300/ffc8dd/bde0fe?text=Kids+Pal", "#a2d2ff":"https://placehold.co/300x300/a2d2ff/ffffff?text=Kids+Pal", "#cdb4db":"https://placehold.co/300x300/cdb4db/ffffff?text=Kids+Pal"}'>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Kids Hydro Pal</h3>
+                            <p class="product-description">Colorful, durable, and safe for children of all ages. Easy to clean. 12oz.</p>
+                             <div class="product-colors">
+                                <span class="color-swatch active" style="background-color: #ffc8dd;" data-color="#ffc8dd"></span>
+                                <span class="color-swatch" style="background-color: #a2d2ff;" data-color="#a2d2ff"></span>
+                                <span class="color-swatch" style="background-color: #cdb4db;" data-color="#cdb4db"></span>
+                            </div>
+                            <p class="product-price">$19.99</p>
+                            <button class="btn add-to-cart">Add to Cart</button>
+                        </div>
                     </div>
-                </div>
-                
-                <!-- Product 3 -->
-                <div class="product-card">
-                    <div class="product-img">
-                        <img src="/api/placeholder/200/200" alt="Insulated Water Bottle">
+                    
+                    <!-- Product 5 -->
+                    <div class="product-card fade-in" data-id="5" data-name="The Summit Jug" data-price="49.99">
+                        <div class="product-img-container">
+                            <img src="https://placehold.co/300x300/2a9d8f/ffffff?text=The+Jug" alt="The Summit Jug" class="product-img" data-colors='{"#2a9d8f":"https://placehold.co/300x300/2a9d8f/ffffff?text=The+Jug", "#264653":"https://placehold.co/300x300/264653/ffffff?text=The+Jug"}'>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">The Summit Jug</h3>
+                            <p class="product-description">A massive 64oz jug for all-day hydration on hikes or at the gym. Heavy-duty handle.</p>
+                             <div class="product-colors">
+                                <span class="color-swatch active" style="background-color: #2a9d8f;" data-color="#2a9d8f"></span>
+                                <span class="color-swatch" style="background-color: #264653;" data-color="#264653"></span>
+                            </div>
+                            <p class="product-price">$49.99</p>
+                            <button class="btn add-to-cart">Add to Cart</button>
+                        </div>
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-title">Insulated Traveler</h3>
-                        <p>Double-wall vacuum insulation for hot and cold drinks.</p>
-                        <p class="product-price">$34.99</p>
-                        <button class="btn add-to-cart" data-id="3">Add to Cart</button>
-                    </div>
-                </div>
-                
-                <!-- Product 4 -->
-                <div class="product-card">
-                    <div class="product-img">
-                        <img src="/api/placeholder/200/200" alt="Kids Water Bottle">
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-title">Kids Hydro Pal</h3>
-                        <p>Colorful, durable, and safe for children of all ages.</p>
-                        <p class="product-price">$19.99</p>
-                        <button class="btn add-to-cart" data-id="4">Add to Cart</button>
+                    
+                    <!-- Product 6 -->
+                    <div class="product-card fade-in" data-id="6" data-name="Urban Sleek Bottle" data-price="27.99">
+                        <div class="product-img-container">
+                            <img src="https://placehold.co/300x300/e9ecef/212529?text=Urban+Sleek" alt="Urban Sleek Bottle" class="product-img" data-colors='{"#e9ecef":"https://placehold.co/300x300/e9ecef/212529?text=Urban+Sleek", "#333333":"https://placehold.co/300x300/333333/ffffff?text=Urban+Sleek"}'>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Urban Sleek Bottle</h3>
+                            <p class="product-description">Minimalist design for the modern professional. Fits perfectly in any briefcase. 20oz.</p>
+                             <div class="product-colors">
+                                <span class="color-swatch active" style="background-color: #e9ecef;" data-color="#e9ecef"></span>
+                                <span class="color-swatch" style="background-color: #333333;" data-color="#333333"></span>
+                            </div>
+                            <p class="product-price">$27.99</p>
+                            <button class="btn add-to-cart">Add to Cart</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-    
-    <!-- Features Section -->
-    <section class="features" id="features">
-        <div class="container">
-            <h2 class="section-title">Why Choose Our Bottles</h2>
-            <div class="features-grid">
-                <!-- Feature 1 -->
-                <div class="feature-card">
-                    <div class="feature-icon">🌿</div>
-                    <h3 class="feature-title">Eco-Friendly</h3>
-                    <p>All our bottles are made from sustainable materials, helping reduce plastic waste.</p>
-                </div>
-                
-                <!-- Feature 2 -->
-                <div class="feature-card">
-                    <div class="feature-icon">❄️</div>
-                    <h3 class="feature-title">Temperature Control</h3>
-                    <p>Advanced insulation keeps your drinks cold for 24 hours or hot for 12 hours.</p>
-                </div>
-                
-                <!-- Feature 3 -->
-                <div class="feature-card">
-                    <div class="feature-icon">💪</div>
-                    <h3 class="feature-title">Durability</h3>
-                    <p>Built to last with premium materials that can withstand your active lifestyle.</p>
+        </section>
+        
+        <!-- About Us Section -->
+        <section class="about" id="about">
+            <div class="container">
+                <h2 class="section-title fade-in">Our Story</h2>
+                <div class="about-content">
+                    <div class="about-image fade-in">
+                        <img src="https://placehold.co/500x350/023e8a/ffffff?text=Our+Team" alt="A group of people hiking with water bottles">
+                    </div>
+                    <div class="about-text fade-in">
+                        <h3>Born from Adventure</h3>
+                        <p>Hydro Bottles Co. was founded by a group of outdoor enthusiasts who were tired of single-use plastic and unreliable water bottles. We wanted to create a product that was not only stylish and functional but also kind to our planet.</p>
+                        <p>Our mission is simple: to provide the highest quality reusable water bottles that support an active and sustainable lifestyle. Every bottle we design is a testament to our commitment to durability, performance, and environmental responsibility.</p>
+                        <a href="#contact" class="btn btn-secondary">Join Our Journey</a>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-    
-    <!-- Testimonials Section -->
-    <section class="testimonials" id="testimonials">
-        <div class="container">
-            <h2 class="section-title">What Our Customers Say</h2>
-            <div class="testimonial-carousel">
-                <div class="testimonial">
-                    <p class="testimonial-text">"I take my HydroBottle everywhere I go. It keeps my water ice cold all day, even in summer heat!"</p>
-                    <p class="testimonial-author">- Sarah T.</p>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features" id="features">
+            <div class="container">
+                <h2 class="section-title fade-in">Why Choose HydroBottles</h2>
+                <p class="section-subtitle fade-in">We build our bottles with you and the planet in mind.</p>
+                <div class="features-grid">
+                    <!-- Feature 1 -->
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,2A10,10,0,0,0,2,12A10,10,0,0,0,12,22A10,10,0,0,0,22,12C22,8.85,20.54,6.07,18.3,4.32L17.68,5C19.5,6.54,20.5,8.9,20.5,11.5A8.5,8.5,0,0,1,12,20A8.5,8.5,0,0,1,3.5,11.5A8.5,8.5,0,0,1,12,3A8.5,8.5,0,0,1,17.65,5.55L18.4,4.92C16.8,3.62,14.5,3,12,3A9,9,0,0,0,3,12A9,9,0,0,0,12,21A9,9,0,0,0,21,12C21,8.45,19.17,5.4,16.5,3.68V2H12M12,6V12H18V10H14V6H12Z" /></svg>
+                        </div>
+                        <h3 class="feature-title">Eco-Friendly</h3>
+                        <p>All our bottles are made from sustainable, BPA-free materials, helping reduce plastic waste.</p>
+                    </div>
+                    
+                    <!-- Feature 2 -->
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">
+                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,2A9,9,0,0,0,3,11V12A9,9,0,0,0,12,21A9,9,0,0,0,21,12V11A9,9,0,0,0,12,2M8,7H10.5V10.5H8V7M13.5,7H16V10.5H13.5V7M8,12H10.5V15.5H8V12M12,19.5A7.5,7.5,0,0,1,4.5,12V11A7.5,7.5,0,0,1,12,3.5A7.5,7.5,0,0,1,19.5,11V12A7.5,7.5,0,0,1,12,19.5M13.5,12H16V15.5H13.5V12Z" /></svg>
+                        </div>
+                        <h3 class="feature-title">Temperature Control</h3>
+                        <p>Advanced insulation keeps your drinks cold for 24 hours or hot for 12 hours.</p>
+                    </div>
+                    
+                    <!-- Feature 3 -->
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">
+                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7C13.4,7 14.8,8.1 14.8,9.5C14.8,10.9 13.4,12 12,12C10.6,12 9.2,10.9 9.2,9.5C9.2,8.1 10.6,7 12,7M17,17H7V15.8C7,13.8 11,12.9 12,12.9C13,12.9 17,13.8 17,15.8V17Z" /></svg>
+                        </div>
+                        <h3 class="feature-title">Built for Life</h3>
+                        <p>Built with premium 18/8 stainless steel, our bottles are dent-resistant and ready for any adventure.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-    
-    <!-- Contact Section -->
-    <section class="contact" id="contact">
-        <div class="container">
-            <h2 class="section-title">Contact Us</h2>
-            <div class="contact-grid">
-                <div class="contact-form">
-                    <form id="contactForm">
-                        <input type="text" placeholder="Your Name" required>
-                        <input type="email" placeholder="Your Email" required>
-                        <textarea placeholder="Your Message" required></textarea>
-                        <button type="submit" class="btn">Send Message</button>
-                    </form>
-                </div>
-                <div class="contact-info">
-                    <h3>Our Information</h3>
-                    <p>123 Hydration Ave, Watertown, CA 90210</p>
-                    <p>Email: info@hydrobottles.com</p>
-                    <p>Phone: (555) 123-4567</p>
-                    <p>Hours: Monday-Friday, 9am-5pm</p>
+        </section>
+        
+        <!-- Testimonials Section -->
+        <section class="testimonials" id="testimonials">
+            <div class="container">
+                <h2 class="section-title fade-in">What Our Customers Say</h2>
+                <div class="testimonial-carousel fade-in">
+                    <div class="testimonial-slider">
+                        <div class="testimonial">
+                            <p class="testimonial-text">"I take my Classic HydroBottle everywhere! It keeps my water ice cold all day, even in the summer heat. Best water bottle I've ever owned."</p>
+                            <p class="testimonial-author">- Sarah T., Avid Hiker</p>
+                        </div>
+                         <div class="testimonial">
+                            <p class="testimonial-text">"The Sport Bottle Pro is perfect for the gym. The straw lid is super convenient and it has never leaked in my gym bag. Highly recommend!"</p>
+                            <p class="testimonial-author">- Mark R., Fitness Enthusiast</p>
+                        </div>
+                         <div class="testimonial">
+                            <p class="testimonial-text">"As a coffee lover, the Insulated Traveler is a game-changer. My coffee stays piping hot for my entire morning commute. Plus, it looks so sleek!"</p>
+                            <p class="testimonial-author">- Emily C., Daily Commuter</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-nav">
+                         <button class="testimonial-nav-btn" id="prev-testimonial" aria-label="Previous testimonial">
+                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z" /></svg>
+                         </button>
+                         <button class="testimonial-nav-btn" id="next-testimonial" aria-label="Next testimonial">
+                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" /></svg>
+                         </button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq" id="faq">
+            <div class="container">
+                <h2 class="section-title fade-in">Frequently Asked Questions</h2>
+                <div class="faq-accordion fade-in">
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span>Are HydroBottles dishwasher safe?</span>
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>We recommend hand-washing your bottle with warm, soapy water for best results and to preserve the exterior finish. Lids are top-rack dishwasher safe.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span>What is your warranty policy?</span>
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>We offer a limited lifetime warranty against manufacturer's defects. This covers things like broken or leaky caps and loss of insulating properties, but not normal wear and tear like scratches or dents.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span>How long does shipping take?</span>
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Standard shipping typically takes 3-5 business days within the continental US. We also offer expedited shipping options at checkout.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span>Are the bottles BPA-free?</span>
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Absolutely! All HydroBottles and lids are made from non-toxic, BPA-free plastics and 18/8 food-grade stainless steel.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Contact Section -->
+        <section class="contact" id="contact">
+            <div class="container">
+                <h2 class="section-title fade-in">Get In Touch</h2>
+                <p class="section-subtitle fade-in" style="color: var(--primary-lightest);">Have questions? We'd love to hear from you!</p>
+                <div class="contact-grid fade-in">
+                    <div class="contact-form">
+                        <form id="contactForm">
+                            <input type="text" name="name" placeholder="Your Name" required>
+                            <input type="email" name="email" placeholder="Your Email" required>
+                            <textarea name="message" placeholder="Your Message" required></textarea>
+                            <button type="submit" class="btn btn-secondary">Send Message</button>
+                        </form>
+                    </div>
+                    <div class="contact-info">
+                        <h3>Our Information</h3>
+                        <p><strong>Address:</strong> 123 Hydration Ave, Watertown, CA 90210</p>
+                        <p><strong>Email:</strong> info@hydrobottles.com</p>
+                        <p><strong>Phone:</strong> (555) 123-4567</p>
+                        <p><strong>Hours:</strong> Monday-Friday, 9am - 5pm PST</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
     
     <!-- Footer -->
     <footer>
         <div class="container">
-            <div class="logo">
-                <h2>Hydro<span>Bottles</span></h2>
+            <div class="footer-content">
+                <div class="footer-column">
+                    <a href="#home" class="footer-logo" aria-label="HydroBottles Homepage">
+                        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M50 0C26.5 0 10 20.8333 10 41.6667C10 66.6667 50 100 50 100C50 100 90 66.6667 90 41.6667C90 20.8333 73.5 0 50 0ZM50 58.3333C41.25 58.3333 34.1667 51.25 34.1667 42.5C34.1667 33.75 41.25 26.6667 50 26.6667C58.75 26.6667 65.8333 33.75 65.8333 42.5C65.8333 51.25 58.75 58.3333 50 58.3333Z" fill="white"/>
+                        </svg>
+                        <h2>Hydro<span>Bottles</span></h2>
+                    </a>
+                    <p style="color: var(--primary-lighter);">Premium bottles for a hydrated life.</p>
+                    <div class="footer-socials">
+                        <a href="#" aria-label="Facebook"><svg><use href="#icon-facebook"></use></svg></a>
+                        <a href="#" aria-label="Instagram"><svg><use href="#icon-instagram"></use></svg></a>
+                        <a href="#" aria-label="Twitter"><svg><use href="#icon-twitter"></use></svg></a>
+                    </div>
+                </div>
+                 <div class="footer-column">
+                    <h4>Shop</h4>
+                    <ul>
+                        <li><a href="#products">All Products</a></li>
+                        <li><a href="#products">New Arrivals</a></li>
+                        <li><a href="#products">Best Sellers</a></li>
+                        <li><a href="#">Gift Cards</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                        <li><a href="#">Shipping & Returns</a></li>
+                        <li><a href="#">Warranty</a></li>
+                    </ul>
+                </div>
+                 <div class="footer-column">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#">Sustainability</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
             </div>
-            <ul class="footer-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#products">Products</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#testimonials">Testimonials</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-            <div class="social-icons">
-                <a href="#" aria-label="Facebook">FB</a>
-                <a href="#" aria-label="Instagram">IG</a>
-                <a href="#" aria-label="Twitter">TW</a>
+            <div class="footer-bottom">
+                <p>© 2025 HydroBottles Co. All Rights Reserved. </p>
             </div>
-            <p>&copy; 2025 HydroBottles Co. All Rights Reserved.</p>
         </div>
     </footer>
     
+    <!-- Shopping Cart Drawer -->
+    <div class="cart-overlay" id="cart-overlay"></div>
+    <div class="cart-drawer" id="cart-drawer">
+        <div class="cart-header">
+            <h3>Your Cart</h3>
+            <button class="close-cart-btn" id="close-cart-btn" aria-label="Close cart">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /></svg>
+            </button>
+        </div>
+        <div class="cart-body">
+            <ul class="cart-items-list" id="cart-items-list">
+                <!-- Cart items will be injected here by JS -->
+            </ul>
+            <p class="cart-empty-message" id="cart-empty-message">Your cart is empty.</p>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-subtotal">
+                <span>Subtotal</span>
+                <span id="cart-subtotal">$0.00</span>
+            </div>
+            <button class="btn cart-checkout-btn">Proceed to Checkout</button>
+        </div>
+    </div>
+    
+    <!-- Back to Top Button -->
+    <a href="#home" class="back-to-top" aria-label="Back to top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
+    </a>
+
     <script>
-        // Simple cart functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize cart
-            let cart = JSON.parse(localStorage.getItem('hydroCart')) || [];
-            
-            // Add to cart functionality
-            const addToCartButtons = document.querySelectorAll('.add-to-cart');
-            addToCartButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const productId = this.getAttribute('data-id');
-                    const productCard = this.closest('.product-card');
-                    const productName = productCard.querySelector('.product-title').textContent;
-                    const productPrice = productCard.querySelector('.product-price').textContent;
-                    
-                    // Add to cart array
-                    cart.push({
-                        id: productId,
-                        name: productName,
-                        price: productPrice
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const App = {
+                // Cart state
+                cart: [],
+
+                // Initialize all application features
+                init() {
+                    this.loadCart();
+                    this.setupEventListeners();
+                    this.setupIntersectionObserver();
+                    this.updateCartUI();
+                },
+
+                // Centralized event listener setup
+                setupEventListeners() {
+                    // Product interactions
+                    document.querySelectorAll('.add-to-cart').forEach(button => {
+                        button.addEventListener('click', this.handleAddToCart.bind(this));
+                    });
+                    document.querySelectorAll('.color-swatch').forEach(swatch => {
+                        swatch.addEventListener('click', this.handleColorSwatch.bind(this));
                     });
                     
-                    // Save to localStorage
-                    localStorage.setItem('hydroCart', JSON.stringify(cart));
+                    // Cart interactions
+                    document.getElementById('open-cart-btn').addEventListener('click', this.toggleCart.bind(this));
+                    document.getElementById('close-cart-btn').addEventListener('click', this.toggleCart.bind(this));
+                    document.getElementById('cart-overlay').addEventListener('click', this.toggleCart.bind(this));
+                    document.getElementById('cart-items-list').addEventListener('click', this.handleCartActions.bind(this));
+
+                    // Testimonial slider
+                    document.getElementById('next-testimonial').addEventListener('click', () => this.moveTestimonial(1));
+                    document.getElementById('prev-testimonial').addEventListener('click', () => this.moveTestimonial(-1));
                     
-                    // Show confirmation
-                    alert(`${productName} added to cart!`);
-                });
-            });
-            
-            // Form submission
-            const contactForm = document.getElementById('contactForm');
-            if (contactForm) {
-                contactForm.addEventListener('submit', function(e) {
+                    // FAQ Accordion
+                    document.querySelectorAll('.faq-question').forEach(button => {
+                        button.addEventListener('click', this.toggleFaq.bind(this));
+                    });
+
+                    // Contact form
+                    const contactForm = document.getElementById('contactForm');
+                    if (contactForm) {
+                        contactForm.addEventListener('submit', this.handleContactForm.bind(this));
+                    }
+
+                    // Back to top button visibility
+                    window.addEventListener('scroll', this.toggleBackToTopButton.bind(this));
+                },
+
+                // --- Cart Logic ---
+                handleAddToCart(e) {
+                    const productCard = e.target.closest('.product-card');
+                    const id = productCard.dataset.id;
+                    const name = productCard.dataset.name;
+                    const price = parseFloat(productCard.dataset.price);
+                    const img = productCard.querySelector('.product-img').src;
+                    
+                    const activeColorSwatch = productCard.querySelector('.color-swatch.active');
+                    const color = activeColorSwatch ? activeColorSwatch.dataset.color : 'default';
+
+                    const uniqueId = `${id}-${color}`; // Create a unique ID based on product and color
+
+                    this.addToCart({ id: uniqueId, name, price, img, color, quantity: 1 });
+                },
+
+                addToCart(item) {
+                    const existingItem = this.cart.find(cartItem => cartItem.id === item.id);
+                    if (existingItem) {
+                        existingItem.quantity++;
+                    } else {
+                        this.cart.push(item);
+                    }
+                    this.saveCart();
+                    this.updateCartUI();
+                    this.showCartNotification(item.name);
+                    if (!document.getElementById('cart-drawer').classList.contains('open')) {
+                         this.toggleCart();
+                    }
+                },
+                
+                handleCartActions(e) {
+                    const target = e.target;
+                    const cartItemEl = target.closest('.cart-item');
+                    if (!cartItemEl) return;
+                    
+                    const itemId = cartItemEl.dataset.itemId;
+                    
+                    if (target.classList.contains('quantity-btn-plus')) {
+                        this.updateQuantity(itemId, 1);
+                    } else if (target.classList.contains('quantity-btn-minus')) {
+                        this.updateQuantity(itemId, -1);
+                    } else if (target.classList.contains('cart-item-remove-btn')) {
+                        this.removeFromCart(itemId);
+                    }
+                },
+                
+                updateQuantity(itemId, change) {
+                    const item = this.cart.find(cartItem => cartItem.id === itemId);
+                    if (item) {
+                        item.quantity += change;
+                        if (item.quantity <= 0) {
+                            this.removeFromCart(itemId);
+                        } else {
+                            this.saveCart();
+                            this.updateCartUI();
+                        }
+                    }
+                },
+                
+                removeFromCart(itemId) {
+                    this.cart = this.cart.filter(item => item.id !== itemId);
+                    this.saveCart();
+                    this.updateCartUI();
+                },
+
+                saveCart() {
+                    localStorage.setItem('hydroCart', JSON.stringify(this.cart));
+                },
+
+                loadCart() {
+                    this.cart = JSON.parse(localStorage.getItem('hydroCart')) || [];
+                },
+
+                // --- UI Update Logic ---
+                updateCartUI() {
+                    const cartItemsList = document.getElementById('cart-items-list');
+                    const cartEmptyMessage = document.getElementById('cart-empty-message');
+                    const cartSubtotalEl = document.getElementById('cart-subtotal');
+                    const cartItemCountEl = document.getElementById('cart-item-count');
+                    
+                    cartItemsList.innerHTML = '';
+                    let subtotal = 0;
+                    let totalItems = 0;
+
+                    if (this.cart.length === 0) {
+                        cartEmptyMessage.style.display = 'block';
+                    } else {
+                        cartEmptyMessage.style.display = 'none';
+                        this.cart.forEach(item => {
+                            const li = document.createElement('li');
+                            li.className = 'cart-item';
+                            li.dataset.itemId = item.id;
+                            
+                            li.innerHTML = `
+                                <img src="${item.img}" alt="${item.name}" class="cart-item-img">
+                                <div class="cart-item-info">
+                                    <span class="cart-item-title">${item.name}</span>
+                                    <span class="cart-item-price">$${item.price.toFixed(2)}</span>
+                                    <div class="cart-item-quantity">
+                                        <button class="quantity-btn quantity-btn-minus" aria-label="Decrease quantity">-</button>
+                                        <span class="item-quantity">${item.quantity}</span>
+                                        <button class="quantity-btn quantity-btn-plus" aria-label="Increase quantity">+</button>
+                                    </div>
+                                </div>
+                                <button class="cart-item-remove-btn">Remove</button>
+                            `;
+                            cartItemsList.appendChild(li);
+                            subtotal += item.price * item.quantity;
+                            totalItems += item.quantity;
+                        });
+                    }
+
+                    cartSubtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+                    cartItemCountEl.textContent = totalItems;
+                    cartItemCountEl.style.display = totalItems > 0 ? 'flex' : 'none';
+                },
+
+                toggleCart() {
+                    document.getElementById('cart-drawer').classList.toggle('open');
+                    document.getElementById('cart-overlay').classList.toggle('open');
+                    document.body.style.overflow = document.body.style.overflow === 'hidden' ? '' : 'hidden';
+                },
+
+                showCartNotification(productName) {
+                    // A simple console log, could be replaced with a toast notification library
+                    console.log(`${productName} added to cart!`);
+                },
+
+                // --- Other Page Features ---
+                handleColorSwatch(e) {
+                    const swatch = e.target;
+                    const productCard = swatch.closest('.product-card');
+                    const productImg = productCard.querySelector('.product-img');
+                    const colorMap = JSON.parse(productImg.dataset.colors);
+                    const selectedColor = swatch.dataset.color;
+                    
+                    if (colorMap[selectedColor]) {
+                        productImg.src = colorMap[selectedColor];
+                    }
+
+                    // Update active state
+                    productCard.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+                    swatch.classList.add('active');
+                },
+                
+                testimonialState: {
+                    currentIndex: 0,
+                    slider: document.querySelector('.testimonial-slider'),
+                    slides: document.querySelectorAll('.testimonial'),
+                },
+                
+                moveTestimonial(direction) {
+                    const { slides, slider } = this.testimonialState;
+                    const totalSlides = slides.length;
+                    this.testimonialState.currentIndex = (this.testimonialState.currentIndex + direction + totalSlides) % totalSlides;
+                    slider.style.transform = `translateX(-${this.testimonialState.currentIndex * 100}%)`;
+                },
+                
+                toggleFaq(e) {
+                    const item = e.currentTarget.closest('.faq-item');
+                    const answer = item.querySelector('.faq-answer');
+                    const icon = item.querySelector('.faq-icon');
+                    
+                    const isActive = item.classList.contains('active');
+                    
+                    // Close all others
+                    document.querySelectorAll('.faq-item').forEach(otherItem => {
+                        otherItem.classList.remove('active');
+                        otherItem.querySelector('.faq-answer').style.maxHeight = null;
+                        otherItem.querySelector('.faq-icon').textContent = '+';
+                    });
+                    
+                    if (!isActive) {
+                        item.classList.add('active');
+                        answer.style.maxHeight = answer.scrollHeight + 'px';
+                        icon.textContent = '-';
+                    }
+                },
+                
+                handleContactForm(e) {
                     e.preventDefault();
                     alert('Thank you for your message! We will get back to you soon.');
-                    contactForm.reset();
-                });
-            }
-            
-            // Smooth scrolling for navigation links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                });
-            });
+                    e.target.reset();
+                },
+
+                toggleBackToTopButton() {
+                    const button = document.querySelector('.back-to-top');
+                    if (window.scrollY > 300) {
+                        button.classList.add('visible');
+                    } else {
+                        button.classList.remove('visible');
+                    }
+                },
+                
+                // --- Scroll Animations ---
+                setupIntersectionObserver() {
+                    const observer = new IntersectionObserver((entries, observer) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add('visible');
+                                observer.unobserve(entry.target);
+                            }
+                        });
+                    }, { threshold: 0.1 });
+
+                    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+                }
+            };
+
+            App.init();
         });
     </script>
 </body>
