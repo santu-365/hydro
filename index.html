@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hydro Bottles Co. - Premium, Eco-Friendly Water Bottles</title>
-    <meta name="description" content="Discover the best collection of premium, insulated, and eco-friendly water bottles. Hydro Bottles Co. offers durable and stylish bottles to keep you hydrated on the go.">
+    <title>HydroBottles Co. - Futuristic Hydration Solutions</title>
+    <meta name="description" content="Experience the future of hydration. Discover our collection of premium, customizable, and eco-friendly smart water bottles. Hydro Bottles Co. offers durable and stylish bottles to keep you hydrated on the go.">
     
     <style>
         /*
@@ -22,14 +22,16 @@
             --secondary-dark: #03045e;
             
             --text-light: #f8f9fa;
-            --text-dark: #343a40;
+            --text-dark: #212529;
             --text-muted: #6c757d;
             
             --background-light: #f8f9fa;
             --background-white: #ffffff;
+            --background-dark: #121212;
             
             --accent-success: #2a9d8f;
             --accent-danger: #e76f51;
+            --accent-glow: #ade8f4;
             
             --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -39,9 +41,11 @@
             --border-radius-md: 10px;
             --border-radius-lg: 30px;
             
-            --font-family-base: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --font-family-base: 'Segoe UI', 'Roboto', Tahoma, Geneva, Verdana, sans-serif;
             
             --transition-speed: 0.3s;
+            --transition-speed-fast: 0.2s;
+            --transition-speed-slow: 0.5s;
         }
 
         /*
@@ -65,6 +69,7 @@
             line-height: 1.6;
             font-family: var(--font-family-base);
             overflow-x: hidden; /* Prevent horizontal scroll from animations */
+            cursor: none; /* Hide default cursor */
         }
         
         .container {
@@ -74,13 +79,14 @@
         }
 
         section {
-            padding: 5rem 0;
+            padding: 6rem 0;
+            position: relative;
         }
 
         .section-title {
             text-align: center;
             margin-bottom: 4rem;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             color: var(--secondary-color);
             font-weight: 700;
         }
@@ -91,13 +97,16 @@
             margin-bottom: 4rem;
             color: var(--text-muted);
             font-size: 1.1rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         /* Animation class for scroll trigger */
         .fade-in {
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
         }
         
         .fade-in.visible {
@@ -107,14 +116,51 @@
 
         /*
         ========================================
+        Custom Cursor & Magnetic Elements
+        ========================================
+        */
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 25px;
+            height: 25px;
+            border: 2px solid var(--primary-color);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
+        }
+
+        .custom-cursor.hovered {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(0, 150, 199, 0.2);
+            border-color: var(--primary-light);
+        }
+
+        .custom-cursor.clicked {
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        [data-magnetic] {
+            transition: transform var(--transition-speed-slow) cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        
+        /*
+        ========================================
         Header & Navigation
         ========================================
         */
         header {
-            background-color: var(--primary-color);
+            background-color: rgba(0, 150, 199, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             color: var(--text-light);
             padding: 1rem 0;
-            box-shadow: var(--shadow-md);
+            box-shadow: none;
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -136,6 +182,10 @@
         .logo svg {
             width: 40px;
             height: 40px;
+            transition: transform 0.4s ease;
+        }
+        .logo:hover svg {
+            transform: rotate(360deg);
         }
 
         .logo h1 {
@@ -154,7 +204,7 @@
         }
         
         nav ul li {
-            margin-left: 2rem;
+            margin-left: 2.5rem;
         }
         
         nav ul li a {
@@ -162,13 +212,23 @@
             text-decoration: none;
             font-weight: 500;
             padding-bottom: 5px;
-            border-bottom: 2px solid transparent;
-            transition: color var(--transition-speed), border-color var(--transition-speed);
+            position: relative;
+            overflow: hidden;
         }
         
-        nav ul li a:hover, nav ul li a.active {
-            color: var(--primary-lightest);
-            border-bottom-color: var(--primary-lightest);
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-lightest);
+            transition: left var(--transition-speed) ease-out;
+        }
+        
+        nav ul li a:hover::after, nav ul li a.active::after {
+            left: 0;
         }
         
         .header-actions {
@@ -178,7 +238,7 @@
         .cart-icon-btn {
             background: none;
             border: none;
-            cursor: pointer;
+            cursor: none; /* Inherits custom cursor */
             position: relative;
         }
 
@@ -208,6 +268,7 @@
             font-size: 0.8rem;
             font-weight: bold;
             border: 2px solid var(--primary-color);
+            box-shadow: 0 0 10px var(--accent-danger);
         }
 
         /*
@@ -216,23 +277,32 @@
         ========================================
         */
         .hero {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            background: linear-gradient(135deg, var(--secondary-dark), var(--primary-color));
             color: var(--text-light);
-            padding: 6rem 0;
+            padding: 8rem 0;
             text-align: center;
+            overflow: hidden;
         }
         
-        .hero h2 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-            text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+        .hero-title-container {
+            font-size: 4.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+            line-height: 1.1;
+        }
+
+        .hero-title-container .char {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(50px) rotate(10deg);
+            transition: opacity 0.6s ease, transform 0.6s ease;
         }
         
         .hero p {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             max-width: 700px;
-            margin: 0 auto 2.5rem;
+            margin: 0 auto 3rem;
             font-weight: 300;
         }
         
@@ -240,26 +310,46 @@
             display: inline-block;
             background-color: var(--secondary-color);
             color: var(--text-light);
-            padding: 0.9rem 2.2rem;
+            padding: 1rem 2.5rem;
             border-radius: var(--border-radius-lg);
             text-decoration: none;
             font-weight: 600;
             border: none;
-            cursor: pointer;
+            cursor: none; /* Inherits custom cursor */
             transition: background-color var(--transition-speed), transform var(--transition-speed), box-shadow var(--transition-speed);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary-light), var(--accent-success));
+            z-index: -1;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease-in-out;
         }
         
         .btn:hover {
-            background-color: var(--secondary-dark);
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-lg);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover::before {
+            transform: scaleX(1);
         }
         
         .btn-secondary {
             background-color: var(--accent-success);
         }
-        .btn-secondary:hover {
-            background-color: #248b7f;
+        .btn-secondary::before {
+            background: linear-gradient(45deg, var(--primary-color), var(--primary-light));
         }
 
         /*
@@ -285,10 +375,11 @@
             transition: transform var(--transition-speed), box-shadow var(--transition-speed);
             display: flex;
             flex-direction: column;
+            position: relative;
         }
         
         .product-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-10px) scale(1.02);
             box-shadow: var(--shadow-lg);
         }
         
@@ -338,7 +429,27 @@
             font-size: 1.4rem;
             margin-bottom: 1rem;
         }
-        
+
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: auto;
+        }
+
+        .product-actions .btn {
+            flex-grow: 1;
+            padding: 0.8rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .quick-view-btn {
+            background-color: var(--text-muted);
+        }
+
+        .quick-view-btn::before {
+             background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+        }
+
         .product-colors {
             margin-bottom: 1.5rem;
         }
@@ -349,9 +460,9 @@
             height: 24px;
             border-radius: 50%;
             margin-right: 8px;
-            cursor: pointer;
+            cursor: none;
             border: 2px solid #ddd;
-            transition: transform 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .color-swatch:hover {
@@ -360,7 +471,189 @@
 
         .color-swatch.active {
             border-color: var(--secondary-color);
-            box-shadow: 0 0 5px var(--secondary-color);
+            box-shadow: 0 0 8px var(--secondary-color);
+            transform: scale(1.1);
+        }
+        
+        /*
+        ========================================
+        Product Customizer Section
+        ========================================
+        */
+        .customizer {
+            background: linear-gradient(180deg, var(--background-white) 0%, var(--primary-lightest) 100%);
+        }
+
+        .customizer-container {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .customizer-options {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 2.5rem;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-md);
+        }
+
+        .option-group {
+            margin-bottom: 2rem;
+        }
+
+        .option-group h4 {
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+            border-bottom: 2px solid var(--primary-lighter);
+            padding-bottom: 0.5rem;
+        }
+
+        .option-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .option-btn {
+            background: var(--background-light);
+            border: 2px solid #ddd;
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--border-radius-lg);
+            cursor: none;
+            transition: all var(--transition-speed-fast);
+        }
+
+        .option-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px var(--primary-light);
+        }
+        
+        .color-option.active {
+             border-width: 3px;
+             transform: scale(1.1);
+        }
+
+        #engraving-text {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: var(--border-radius-sm);
+            margin-top: 1rem;
+        }
+
+        .customizer-preview {
+            text-align: center;
+        }
+
+        .preview-image-wrapper {
+            position: relative;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        #preview-img {
+            max-height: 100%;
+            max-width: 100%;
+            transition: transform var(--transition-speed-slow) ease;
+        }
+        
+        #preview-engraving {
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem;
+            font-family: 'Georgia', serif;
+            color: rgba(0, 0, 0, 0.6);
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
+            width: 150px;
+            word-wrap: break-word;
+        }
+
+        .customizer-price-display {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--secondary-dark);
+            margin-bottom: 1.5rem;
+        }
+
+        /*
+        ========================================
+        AI Recommender Section
+        ========================================
+        */
+        .recommender {
+            background-color: var(--secondary-dark);
+            color: var(--text-light);
+            text-align: center;
+        }
+
+        .recommender .section-title {
+            color: var(--primary-lightest);
+        }
+        
+        .recommender .section-subtitle {
+            color: var(--primary-lighter);
+        }
+
+        .recommender-cta {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 3rem;
+            border-radius: var(--border-radius-md);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .recommender-cta h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .recommender-cta p {
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        /*
+        ========================================
+        Join The Club Section
+        ========================================
+        */
+        .join-club {
+            background: url('https://www.toptal.com/designers/subtlepatterns/uploads/topography.png') var(--background-light);
+        }
+
+        .join-club-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            background: var(--background-white);
+            padding: 4rem;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .join-club-text h3 {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        .join-club-text p {
+            margin-bottom: 1.5rem;
+        }
+
+        .join-club-image img {
+             max-width: 100%;
+             border-radius: var(--border-radius-md);
         }
         
         /*
@@ -414,14 +707,17 @@
         .feature-card {
             text-align: center;
             padding: 2.5rem;
-            background-color: var(--background-light);
+            background-color: transparent;
+            border: 1px solid #e0e0e0;
             border-radius: var(--border-radius-md);
-            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed), background-color var(--transition-speed);
         }
 
         .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-md);
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+            background-color: white;
+            border-color: transparent;
         }
         
         .feature-icon svg {
@@ -429,6 +725,10 @@
             height: 60px;
             fill: var(--primary-color);
             margin-bottom: 1.5rem;
+            transition: transform 0.4s ease;
+        }
+        .feature-card:hover .feature-icon svg {
+            transform: scale(1.1) rotate(-15deg);
         }
         
         .feature-title {
@@ -489,12 +789,13 @@
             display: flex;
             justify-content: space-between;
             padding: 0 1rem;
+            pointer-events: none;
         }
 
         .testimonial-nav-btn {
             background-color: rgba(255, 255, 255, 0.7);
             border: none;
-            cursor: pointer;
+            cursor: none;
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -502,11 +803,13 @@
             align-items: center;
             justify-content: center;
             box-shadow: var(--shadow-sm);
-            transition: background-color var(--transition-speed);
+            transition: background-color var(--transition-speed), transform var(--transition-speed);
+            pointer-events: all;
         }
 
         .testimonial-nav-btn:hover {
             background-color: white;
+            transform: scale(1.1);
         }
 
         .testimonial-nav-btn svg {
@@ -541,11 +844,12 @@
             padding: 1.5rem 1rem;
             font-size: 1.1rem;
             font-weight: 600;
-            cursor: pointer;
+            cursor: none;
             display: flex;
             justify-content: space-between;
             align-items: center;
             color: var(--secondary-color);
+            transition: background-color var(--transition-speed);
         }
         
         .faq-question:hover {
@@ -559,7 +863,7 @@
         }
         
         .faq-item.active .faq-icon {
-            transform: rotate(45deg);
+            transform: rotate(135deg);
         }
 
         .faq-answer {
@@ -595,6 +899,7 @@
             background-color: rgba(255, 255, 255, 0.1);
             padding: 3rem;
             border-radius: var(--border-radius-md);
+            backdrop-filter: blur(5px);
         }
         
         .contact-form input,
@@ -602,10 +907,20 @@
             width: 100%;
             padding: 1rem;
             margin-bottom: 1rem;
-            border: none;
+            border: 1px solid transparent;
             border-radius: var(--border-radius-sm);
             font-family: var(--font-family-base);
             font-size: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--text-dark);
+            transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 10px var(--secondary-color);
         }
         
         .contact-form textarea {
@@ -646,6 +961,8 @@
             font-size: 1.2rem;
             margin-bottom: 1rem;
             color: var(--primary-lightest);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         
         .footer-column ul {
@@ -696,7 +1013,8 @@
             margin: 0 0.75rem;
             font-size: 1.5rem;
             text-decoration: none;
-            transition: color var(--transition-speed);
+            transition: color var(--transition-speed), transform var(--transition-speed);
+            display: inline-block;
         }
 
         .footer-socials a svg {
@@ -707,6 +1025,7 @@
         
         .footer-socials a:hover {
             color: var(--primary-light);
+            transform: translateY(-3px);
         }
         
         .footer-bottom {
@@ -720,6 +1039,139 @@
         
         /*
         ========================================
+        Modals (General) & Overlays
+        ========================================
+        */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+        }
+        
+        .modal-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            background-color: var(--background-white);
+            box-shadow: var(--shadow-lg);
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s, transform 0.4s, visibility 0.4s;
+            border-radius: var(--border-radius-md);
+            overflow: hidden;
+        }
+
+        .modal.open {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .modal-header h3 {
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+        }
+        
+        .modal-close-btn {
+            background: none;
+            border: none;
+            cursor: none;
+            font-size: 2rem;
+        }
+        .modal-close-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-muted);
+            transition: transform 0.2s, fill 0.2s;
+        }
+        .modal-close-btn:hover svg {
+            transform: rotate(90deg);
+            fill: var(--accent-danger);
+        }
+
+        /*
+        ========================================
+        Quick View Modal
+        ========================================
+        */
+        #quick-view-modal {
+            max-width: 800px;
+            width: 90%;
+        }
+        .quick-view-body {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        .quick-view-img {
+            width: 100%;
+            height: 300px;
+            object-fit: contain;
+            background: var(--primary-lightest);
+            border-radius: var(--border-radius-sm);
+        }
+        #quick-view-title { font-size: 1.8rem; color: var(--secondary-color); }
+        #quick-view-price { font-size: 1.5rem; color: var(--primary-color); font-weight: bold; margin: 0.5rem 0 1rem; }
+        #quick-view-description { color: var(--text-muted); margin-bottom: 1.5rem; }
+
+
+        /*
+        ========================================
+        Recommender Modal
+        ========================================
+        */
+        #recommender-modal {
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+        }
+        .recommender-body { padding: 2.5rem; }
+        .recommender-body h3 { font-size: 1.8rem; margin-bottom: 1rem; color: var(--secondary-color); }
+        .recommender-body .btn { margin-top: 1.5rem; }
+
+        .quiz-step { display: none; }
+        .quiz-step.active { display: block; }
+        .quiz-question { font-size: 1.2rem; margin-bottom: 1.5rem; }
+        .quiz-options { display: flex; flex-direction: column; gap: 1rem; }
+        .quiz-options label {
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius-sm);
+            cursor: none;
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+        .quiz-options label:hover { background-color: var(--primary-lightest); }
+        .quiz-options input[type="radio"] { display: none; }
+        .quiz-options input[type="radio"]:checked + span { font-weight: bold; color: var(--primary-color); }
+        .quiz-nav { margin-top: 2rem; display: flex; justify-content: space-between; }
+
+
+        /*
+        ========================================
         Shopping Cart Drawer
         ========================================
         */
@@ -730,8 +1182,11 @@
             width: 100%;
             max-width: 450px;
             height: 100%;
-            background-color: var(--background-white);
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             box-shadow: var(--shadow-lg);
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
             z-index: 2000;
             transition: right 0.4s ease-in-out;
             display: flex;
@@ -747,7 +1202,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 1rem 1.5rem;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
         }
 
         .cart-header h3 {
@@ -758,7 +1213,7 @@
         .close-cart-btn {
             background: none;
             border: none;
-            cursor: pointer;
+            cursor: none;
             font-size: 2rem;
         }
 
@@ -795,6 +1250,9 @@
             align-items: center;
             margin-bottom: 1.5rem;
             gap: 1rem;
+            background: rgba(255,255,255,0.5);
+            padding: 1rem;
+            border-radius: var(--border-radius-sm);
         }
         
         .cart-item-img {
@@ -815,6 +1273,11 @@
             display: block;
             margin-bottom: 0.25rem;
         }
+
+        .cart-item-details {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
         
         .cart-item-price {
             color: var(--primary-color);
@@ -832,7 +1295,7 @@
             border: none;
             width: 25px;
             height: 25px;
-            cursor: pointer;
+            cursor: none;
             font-weight: bold;
         }
         
@@ -846,7 +1309,7 @@
             background: none;
             border: none;
             color: var(--accent-danger);
-            cursor: pointer;
+            cursor: none;
             font-size: 0.8rem;
             text-decoration: underline;
             margin-left: auto;
@@ -854,7 +1317,8 @@
 
         .cart-footer {
             padding: 1.5rem;
-            border-top: 1px solid #eee;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            background: rgba(255,255,255,0.7);
         }
 
         .cart-subtotal {
@@ -869,24 +1333,6 @@
             width: 100%;
             padding: 1rem;
             font-size: 1.1rem;
-        }
-        
-        .cart-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1999;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
-        }
-        
-        .cart-overlay.open {
-            opacity: 1;
-            visibility: visible;
         }
         
         /*
@@ -913,6 +1359,7 @@
             transform: translateY(20px);
             transition: opacity 0.3s, visibility 0.3s, transform 0.3s, background-color 0.3s;
             z-index: 900;
+            cursor: none;
         }
         
         .back-to-top.visible {
@@ -923,6 +1370,7 @@
         
         .back-to-top:hover {
             background-color: var(--secondary-color);
+            transform: translateY(-5px);
         }
         
         .back-to-top svg {
@@ -937,13 +1385,19 @@
         ========================================
         */
         @media (max-width: 1024px) {
-            .about-content {
+            .about-content, .join-club-content {
                 grid-template-columns: 1fr;
                 text-align: center;
             }
-            .about-image {
+            .about-image, .join-club-image {
                 order: -1;
                 margin-bottom: 2rem;
+            }
+            .customizer-container {
+                 grid-template-columns: 1fr;
+            }
+            .quick-view-body {
+                grid-template-columns: 1fr;
             }
         }
         
@@ -960,10 +1414,12 @@
             nav ul {
                 margin-top: 1rem;
                 padding-left: 0;
+                flex-wrap: wrap;
+                justify-content: center;
             }
             
             nav ul li {
-                margin: 0 0.75rem;
+                margin: 0.5rem 0.75rem;
             }
             
             .header-actions {
@@ -972,8 +1428,8 @@
                 right: 1.5rem;
             }
             
-            .hero h2 {
-                font-size: 2.5rem;
+            .hero-title-container {
+                font-size: 3rem;
             }
             .hero p {
                 font-size: 1.1rem;
@@ -988,6 +1444,16 @@
             }
             .testimonial {
                 padding: 2rem 1rem;
+            }
+
+            .custom-cursor {
+                display: none;
+            }
+            body {
+                cursor: auto;
+            }
+            .btn, .cart-icon-btn, .color-swatch, .option-btn, .testimonial-nav-btn, .faq-question, .modal-close-btn, .cart-item-remove-btn, .quantity-btn, .back-to-top, .quiz-options label {
+                cursor: pointer;
             }
         }
         
@@ -1011,11 +1477,20 @@
             .footer-logo {
                 justify-content: center;
             }
+            .product-actions {
+                flex-direction: column;
+            }
+            .hero-title-container {
+                font-size: 2.5rem;
+            }
         }
 
     </style>
 </head>
 <body>
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+
     <!-- SVG Icons Definition -->
     <svg width="0" height="0" class="hidden">
       <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="icon-facebook">
@@ -1035,7 +1510,7 @@
     <header>
         <div class="container">
             <div class="header-content">
-                <a href="#home" class="logo" aria-label="HydroBottles Homepage">
+                <a href="#home" class="logo" aria-label="HydroBottles Homepage" data-magnetic>
                     <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M50 0C26.5 0 10 20.8333 10 41.6667C10 66.6667 50 100 50 100C50 100 90 66.6667 90 41.6667C90 20.8333 73.5 0 50 0ZM50 58.3333C41.25 58.3333 34.1667 51.25 34.1667 42.5C34.1667 33.75 41.25 26.6667 50 26.6667C58.75 26.6667 65.8333 33.75 65.8333 42.5C65.8333 51.25 58.75 58.3333 50 58.3333Z" fill="white"/>
                     </svg>
@@ -1043,15 +1518,15 @@
                 </a>
                 <nav>
                     <ul>
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#products">Products</a></li>
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#features">Features</a></li>
-                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#home" data-magnetic>Home</a></li>
+                        <li><a href="#products" data-magnetic>Products</a></li>
+                        <li><a href="#customizer" data-magnetic>Customize</a></li>
+                        <li><a href="#about" data-magnetic>About</a></li>
+                        <li><a href="#contact" data-magnetic>Contact</a></li>
                     </ul>
                 </nav>
                 <div class="header-actions">
-                    <button class="cart-icon-btn" id="open-cart-btn" aria-label="Open Shopping Cart">
+                    <button class="cart-icon-btn" id="open-cart-btn" aria-label="Open Shopping Cart" data-magnetic>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
                         <span id="cart-item-count" class="cart-item-count">0</span>
                     </button>
@@ -1064,9 +1539,9 @@
         <!-- Hero Section -->
         <section class="hero" id="home">
             <div class="container">
-                <h2 class="fade-in">Stay Hydrated in Style</h2>
+                <h2 class="hero-title-container">Stay Hydrated in Style</h2>
                 <p class="fade-in">Discover our premium collection of eco-friendly, durable water bottles designed for your active lifestyle.</p>
-                <a href="#products" class="btn fade-in">Shop Our Collection</a>
+                <a href="#products" class="btn fade-in" data-magnetic>Shop Our Collection</a>
             </div>
         </section>
         
@@ -1074,7 +1549,7 @@
         <section class="products" id="products">
             <div class="container">
                 <h2 class="section-title fade-in">Our Products</h2>
-                <p class="section-subtitle fade-in">Choose the perfect companion for your daily hydration needs.</p>
+                <p class="section-subtitle fade-in">Choose the perfect companion for your daily hydration needs. Or, build your own!</p>
                 <div class="product-grid">
                     <!-- Product 1 -->
                     <div class="product-card fade-in" data-id="1" data-name="Classic Hydro Bottle" data-price="24.99">
@@ -1090,7 +1565,10 @@
                                 <span class="color-swatch" style="background-color: #a8e6cf;" data-color="#a8e6cf"></span>
                             </div>
                             <p class="product-price">$24.99</p>
-                            <button class="btn add-to-cart">Add to Cart</button>
+                            <div class="product-actions">
+                                <button class="btn quick-view-btn" data-magnetic>Quick View</button>
+                                <button class="btn add-to-cart" data-magnetic>Add to Cart</button>
+                            </div>
                         </div>
                     </div>
                     
@@ -1108,7 +1586,10 @@
                                 <span class="color-swatch" style="background-color: #0096c7;" data-color="#0096c7"></span>
                             </div>
                             <p class="product-price">$29.99</p>
-                            <button class="btn add-to-cart">Add to Cart</button>
+                             <div class="product-actions">
+                                <button class="btn quick-view-btn" data-magnetic>Quick View</button>
+                                <button class="btn add-to-cart" data-magnetic>Add to Cart</button>
+                            </div>
                         </div>
                     </div>
                     
@@ -1126,7 +1607,10 @@
                                 <span class="color-swatch" style="background-color: #d4a373;" data-color="#d4a373"></span>
                             </div>
                             <p class="product-price">$34.99</p>
-                            <button class="btn add-to-cart">Add to Cart</button>
+                             <div class="product-actions">
+                                <button class="btn quick-view-btn" data-magnetic>Quick View</button>
+                                <button class="btn add-to-cart" data-magnetic>Add to Cart</button>
+                            </div>
                         </div>
                     </div>
                     
@@ -1144,47 +1628,80 @@
                                 <span class="color-swatch" style="background-color: #cdb4db;" data-color="#cdb4db"></span>
                             </div>
                             <p class="product-price">$19.99</p>
-                            <button class="btn add-to-cart">Add to Cart</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Product 5 -->
-                    <div class="product-card fade-in" data-id="5" data-name="The Summit Jug" data-price="49.99">
-                        <div class="product-img-container">
-                            <img src="https://placehold.co/300x300/2a9d8f/ffffff?text=The+Jug" alt="The Summit Jug" class="product-img" data-colors='{"#2a9d8f":"https://placehold.co/300x300/2a9d8f/ffffff?text=The+Jug", "#264653":"https://placehold.co/300x300/264653/ffffff?text=The+Jug"}'>
-                        </div>
-                        <div class="product-info">
-                            <h3 class="product-title">The Summit Jug</h3>
-                            <p class="product-description">A massive 64oz jug for all-day hydration on hikes or at the gym. Heavy-duty handle.</p>
-                             <div class="product-colors">
-                                <span class="color-swatch active" style="background-color: #2a9d8f;" data-color="#2a9d8f"></span>
-                                <span class="color-swatch" style="background-color: #264653;" data-color="#264653"></span>
+                            <div class="product-actions">
+                                <button class="btn quick-view-btn" data-magnetic>Quick View</button>
+                                <button class="btn add-to-cart" data-magnetic>Add to Cart</button>
                             </div>
-                            <p class="product-price">$49.99</p>
-                            <button class="btn add-to-cart">Add to Cart</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Product 6 -->
-                    <div class="product-card fade-in" data-id="6" data-name="Urban Sleek Bottle" data-price="27.99">
-                        <div class="product-img-container">
-                            <img src="https://placehold.co/300x300/e9ecef/212529?text=Urban+Sleek" alt="Urban Sleek Bottle" class="product-img" data-colors='{"#e9ecef":"https://placehold.co/300x300/e9ecef/212529?text=Urban+Sleek", "#333333":"https://placehold.co/300x300/333333/ffffff?text=Urban+Sleek"}'>
-                        </div>
-                        <div class="product-info">
-                            <h3 class="product-title">Urban Sleek Bottle</h3>
-                            <p class="product-description">Minimalist design for the modern professional. Fits perfectly in any briefcase. 20oz.</p>
-                             <div class="product-colors">
-                                <span class="color-swatch active" style="background-color: #e9ecef;" data-color="#e9ecef"></span>
-                                <span class="color-swatch" style="background-color: #333333;" data-color="#333333"></span>
-                            </div>
-                            <p class="product-price">$27.99</p>
-                            <button class="btn add-to-cart">Add to Cart</button>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-        
+
+        <!-- Product Customizer Section -->
+        <section class="customizer" id="customizer">
+            <div class="container">
+                <h2 class="section-title fade-in">Build Your Own Bottle</h2>
+                <p class="section-subtitle fade-in">Craft a unique HydroBottle that matches your personal style. The possibilities are endless.</p>
+                <div class="customizer-container fade-in">
+                    <div class="customizer-options">
+                        <div class="option-group">
+                            <h4>1. Choose Your Base Model</h4>
+                            <div class="option-buttons" id="custom-base-options">
+                                <button class="option-btn active" data-value="classic" data-price="24.99" data-magnetic>Classic (24oz)</button>
+                                <button class="option-btn" data-value="sport" data-price="29.99" data-magnetic>Sport (32oz)</button>
+                                <button class="option-btn" data-value="traveler" data-price="34.99" data-magnetic>Traveler (16oz)</button>
+                            </div>
+                        </div>
+                        <div class="option-group">
+                            <h4>2. Select a Color</h4>
+                             <div class="option-buttons" id="custom-color-options">
+                                <button class="option-btn color-option color-swatch active" style="background-color: #ade8f4;" data-value="Sky Blue" data-color-hex="#ade8f4" data-magnetic></button>
+                                <button class="option-btn color-option color-swatch" style="background-color: #343a40;" data-value="Midnight Black" data-color-hex="#343a40" data-magnetic></button>
+                                <button class="option-btn color-option color-swatch" style="background-color: #e76f51;" data-value="Sunset Orange" data-color-hex="#e76f51" data-magnetic></button>
+                                <button class="option-btn color-option color-swatch" style="background-color: #a8e6cf;" data-value="Mint Green" data-color-hex="#a8e6cf" data-magnetic></button>
+                                <button class="option-btn color-option color-swatch" style="background-color: #f8f9fa;" data-value="Arctic White" data-color-hex="#f8f9fa" data-magnetic></button>
+                                <button class="option-btn color-option color-swatch" style="background-color: #ffc8dd;" data-value="Sakura Pink" data-color-hex="#ffc8dd" data-magnetic></button>
+                            </div>
+                        </div>
+                         <div class="option-group">
+                            <h4>3. Pick a Lid (+ $2.00)</h4>
+                             <div class="option-buttons" id="custom-lid-options">
+                                <button class="option-btn active" data-value="standard" data-price="0" data-magnetic>Standard</button>
+                                <button class="option-btn" data-value="straw" data-price="2.00" data-magnetic>Straw Lid</button>
+                                <button class="option-btn" data-value="handle" data-price="2.00" data-magnetic>Handle Lid</button>
+                            </div>
+                        </div>
+                        <div class="option-group">
+                            <h4>4. Add Engraving (+ $5.00)</h4>
+                            <input type="text" id="engraving-text" placeholder="Your Text Here (max 15 chars)" maxlength="15">
+                        </div>
+                    </div>
+                    <div class="customizer-preview">
+                        <div class="preview-image-wrapper">
+                             <img src="https://placehold.co/400x500/ade8f4/023e8a?text=HydroBottle" alt="Customized Bottle Preview" id="preview-img">
+                             <div id="preview-engraving"></div>
+                        </div>
+                        <div class="customizer-price-display" id="customizer-price">$24.99</div>
+                        <button class="btn btn-secondary" id="add-custom-to-cart" data-magnetic>Add Custom Bottle to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Recommender Section -->
+        <section class="recommender" id="recommender">
+            <div class="container">
+                <h2 class="section-title fade-in">Find Your Perfect Match</h2>
+                <p class="section-subtitle fade-in">Not sure where to start? Let our AI-powered guide ask a few questions to find the ideal HydroBottle for your lifestyle.</p>
+                <div class="recommender-cta fade-in">
+                    <h3>The HydroBot 3000 Awaits</h3>
+                    <p>Answer a few simple questions and get a personalized recommendation in seconds. Hydration, optimized.</p>
+                    <button class="btn" id="start-quiz-btn" data-magnetic>Start the Quiz</button>
+                </div>
+            </div>
+        </section>
+
         <!-- About Us Section -->
         <section class="about" id="about">
             <div class="container">
@@ -1197,7 +1714,7 @@
                         <h3>Born from Adventure</h3>
                         <p>Hydro Bottles Co. was founded by a group of outdoor enthusiasts who were tired of single-use plastic and unreliable water bottles. We wanted to create a product that was not only stylish and functional but also kind to our planet.</p>
                         <p>Our mission is simple: to provide the highest quality reusable water bottles that support an active and sustainable lifestyle. Every bottle we design is a testament to our commitment to durability, performance, and environmental responsibility.</p>
-                        <a href="#contact" class="btn btn-secondary">Join Our Journey</a>
+                        <a href="#contact" class="btn btn-secondary" data-magnetic>Join Our Journey</a>
                     </div>
                 </div>
             </div>
@@ -1259,12 +1776,33 @@
                         </div>
                     </div>
                     <div class="testimonial-nav">
-                         <button class="testimonial-nav-btn" id="prev-testimonial" aria-label="Previous testimonial">
+                         <button class="testimonial-nav-btn" id="prev-testimonial" aria-label="Previous testimonial" data-magnetic>
                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z" /></svg>
                          </button>
-                         <button class="testimonial-nav-btn" id="next-testimonial" aria-label="Next testimonial">
+                         <button class="testimonial-nav-btn" id="next-testimonial" aria-label="Next testimonial" data-magnetic>
                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" /></svg>
                          </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Join The Club Section -->
+        <section class="join-club" id="join-club">
+            <div class="container">
+                <div class="join-club-content fade-in">
+                    <div class="join-club-text">
+                        <h3>Join The Hydro Club</h3>
+                        <p>Unlock exclusive benefits with our subscription service. Receive limited-edition bottles, cleaning kits, and flavor drops delivered to your door. Stay hydrated, stay inspired.</p>
+                        <ul style="list-style-position: inside; margin-bottom: 1.5rem;">
+                            <li>Quarterly limited-edition bottle</li>
+                            <li>Free shipping on all orders</li>
+                            <li>Exclusive access to new products</li>
+                        </ul>
+                        <a href="#" class="btn" data-magnetic>Learn More</a>
+                    </div>
+                    <div class="join-club-image">
+                        <img src="https://placehold.co/500x400/2a9d8f/ffffff?text=Hydro+Club" alt="Exclusive Hydro Club bottle">
                     </div>
                 </div>
             </div>
@@ -1290,16 +1828,16 @@
                             <span class="faq-icon">+</span>
                         </button>
                         <div class="faq-answer">
-                            <p>We offer a limited lifetime warranty against manufacturer's defects. This covers things like broken or leaky caps and loss of insulating properties, but not normal wear and tear like scratches or dents.</p>
+                            <p>We offer a limited lifetime warranty against manufacturer's defects. This covers things like broken or leaky caps and loss of insulating properties, but not normal wear and tear like scratches or dents from use.</p>
                         </div>
                     </div>
                     <div class="faq-item">
                         <button class="faq-question">
-                            <span>How long does shipping take?</span>
+                            <span>Do you ship internationally?</span>
                             <span class="faq-icon">+</span>
                         </button>
                         <div class="faq-answer">
-                            <p>Standard shipping typically takes 3-5 business days within the continental US. We also offer expedited shipping options at checkout.</p>
+                            <p>Yes, we ship to most countries worldwide! Shipping costs and times will be calculated at checkout based on your location. Please note that customs fees may apply.</p>
                         </div>
                     </div>
                     <div class="faq-item">
@@ -1308,7 +1846,7 @@
                             <span class="faq-icon">+</span>
                         </button>
                         <div class="faq-answer">
-                            <p>Absolutely! All HydroBottles and lids are made from non-toxic, BPA-free plastics and 18/8 food-grade stainless steel.</p>
+                            <p>Absolutely! All HydroBottles and lids are made from non-toxic, BPA-free plastics and 18/8 food-grade stainless steel. Your health and safety are our top priority.</p>
                         </div>
                     </div>
                 </div>
@@ -1323,10 +1861,10 @@
                 <div class="contact-grid fade-in">
                     <div class="contact-form">
                         <form id="contactForm">
-                            <input type="text" name="name" placeholder="Your Name" required>
-                            <input type="email" name="email" placeholder="Your Email" required>
-                            <textarea name="message" placeholder="Your Message" required></textarea>
-                            <button type="submit" class="btn btn-secondary">Send Message</button>
+                            <input type="text" name="name" placeholder="Your Name" required data-magnetic>
+                            <input type="email" name="email" placeholder="Your Email" required data-magnetic>
+                            <textarea name="message" placeholder="Your Message" required data-magnetic></textarea>
+                            <button type="submit" class="btn btn-secondary" data-magnetic>Send Message</button>
                         </form>
                     </div>
                     <div class="contact-info">
@@ -1346,7 +1884,7 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-column">
-                    <a href="#home" class="footer-logo" aria-label="HydroBottles Homepage">
+                    <a href="#home" class="footer-logo" aria-label="HydroBottles Homepage" data-magnetic>
                         <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M50 0C26.5 0 10 20.8333 10 41.6667C10 66.6667 50 100 50 100C50 100 90 66.6667 90 41.6667C90 20.8333 73.5 0 50 0ZM50 58.3333C41.25 58.3333 34.1667 51.25 34.1667 42.5C34.1667 33.75 41.25 26.6667 50 26.6667C58.75 26.6667 65.8333 33.75 65.8333 42.5C65.8333 51.25 58.75 58.3333 50 58.3333Z" fill="white"/>
                         </svg>
@@ -1354,36 +1892,36 @@
                     </a>
                     <p style="color: var(--primary-lighter);">Premium bottles for a hydrated life.</p>
                     <div class="footer-socials">
-                        <a href="#" aria-label="Facebook"><svg><use href="#icon-facebook"></use></svg></a>
-                        <a href="#" aria-label="Instagram"><svg><use href="#icon-instagram"></use></svg></a>
-                        <a href="#" aria-label="Twitter"><svg><use href="#icon-twitter"></use></svg></a>
+                        <a href="#" aria-label="Facebook" data-magnetic><svg><use href="#icon-facebook"></use></svg></a>
+                        <a href="#" aria-label="Instagram" data-magnetic><svg><use href="#icon-instagram"></use></svg></a>
+                        <a href="#" aria-label="Twitter" data-magnetic><svg><use href="#icon-twitter"></use></svg></a>
                     </div>
                 </div>
                  <div class="footer-column">
                     <h4>Shop</h4>
                     <ul>
-                        <li><a href="#products">All Products</a></li>
-                        <li><a href="#products">New Arrivals</a></li>
-                        <li><a href="#products">Best Sellers</a></li>
-                        <li><a href="#">Gift Cards</a></li>
+                        <li><a href="#products" data-magnetic>All Products</a></li>
+                        <li><a href="#customizer" data-magnetic>Customize</a></li>
+                        <li><a href="#join-club" data-magnetic>Hydro Club</a></li>
+                        <li><a href="#" data-magnetic>Gift Cards</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h4>Support</h4>
                     <ul>
-                        <li><a href="#faq">FAQ</a></li>
-                        <li><a href="#contact">Contact Us</a></li>
-                        <li><a href="#">Shipping & Returns</a></li>
-                        <li><a href="#">Warranty</a></li>
+                        <li><a href="#faq" data-magnetic>FAQ</a></li>
+                        <li><a href="#contact" data-magnetic>Contact Us</a></li>
+                        <li><a href="#" data-magnetic>Shipping & Returns</a></li>
+                        <li><a href="#" data-magnetic>Warranty</a></li>
                     </ul>
                 </div>
                  <div class="footer-column">
                     <h4>Company</h4>
                     <ul>
-                        <li><a href="#about">About Us</a></li>
-                        <li><a href="#">Sustainability</a></li>
-                        <li><a href="#">Careers</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#about" data-magnetic>About Us</a></li>
+                        <li><a href="#" data-magnetic>Sustainability</a></li>
+                        <li><a href="#" data-magnetic>Careers</a></li>
+                        <li><a href="#" data-magnetic>Privacy Policy</a></li>
                     </ul>
                 </div>
             </div>
@@ -1393,12 +1931,76 @@
         </div>
     </footer>
     
+    <!-- Modals & Overlays -->
+    <div class="modal-overlay" id="modal-overlay"></div>
+
+    <!-- Quick View Modal -->
+    <div class="modal" id="quick-view-modal">
+        <div class="modal-header">
+            <h3 id="quick-view-title">Product Title</h3>
+            <button class="modal-close-btn" data-modal-id="quick-view-modal" aria-label="Close quick view" data-magnetic>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /></svg>
+            </button>
+        </div>
+        <div class="quick-view-body">
+            <img src="" alt="" id="quick-view-img" class="quick-view-img">
+            <div class="quick-view-details">
+                <p id="quick-view-price">$0.00</p>
+                <p id="quick-view-description">Product description goes here.</p>
+                <button class="btn add-to-cart" id="quick-view-add-btn" data-magnetic>Add to Cart</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- AI Recommender Modal -->
+    <div class="modal" id="recommender-modal">
+        <div class="modal-header">
+            <h3>HydroBot 3000</h3>
+             <button class="modal-close-btn" data-modal-id="recommender-modal" aria-label="Close recommender" data-magnetic>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /></svg>
+            </button>
+        </div>
+        <div class="recommender-body">
+            <!-- Step 1 -->
+            <div id="quiz-step-1" class="quiz-step active">
+                <p class="quiz-question">What's your primary activity?</p>
+                <div class="quiz-options">
+                    <label><input type="radio" name="activity" value="sport"> <span>Gym & Sports</span></label>
+                    <label><input type="radio" name="activity" value="daily"> <span>Daily Commute & Office</span></label>
+                    <label><input type="radio" name="activity" value="home"> <span>At Home Use</span></label>
+                </div>
+                <div class="quiz-nav">
+                    <button class="btn btn-secondary quiz-next-btn" data-next-step="2">Next</button>
+                </div>
+            </div>
+            <!-- Step 2 -->
+            <div id="quiz-step-2" class="quiz-step">
+                <p class="quiz-question">What's more important to you?</p>
+                <div class="quiz-options">
+                    <label><input type="radio" name="priority" value="capacity"> <span>Large Capacity</span></label>
+                    <label><input type="radio" name="priority" value="portability"> <span>Portability & Style</span></label>
+                    <label><input type="radio" name="priority" value="hotcold"> <span>Keeping Drinks Hot</span></label>
+                </div>
+                <div class="quiz-nav">
+                    <button class="btn quiz-prev-btn" data-prev-step="1">Back</button>
+                    <button class="btn btn-secondary quiz-finish-btn">Get Recommendation</button>
+                </div>
+            </div>
+            <!-- Result Step -->
+            <div id="quiz-result" class="quiz-step">
+                <h3>Our Recommendation For You:</h3>
+                <h4 id="recommendation-title"></h4>
+                <p id="recommendation-desc"></p>
+                <a href="" id="recommendation-link" class="btn" data-magnetic>View Product</a>
+            </div>
+        </div>
+    </div>
+
     <!-- Shopping Cart Drawer -->
-    <div class="cart-overlay" id="cart-overlay"></div>
     <div class="cart-drawer" id="cart-drawer">
         <div class="cart-header">
             <h3>Your Cart</h3>
-            <button class="close-cart-btn" id="close-cart-btn" aria-label="Close cart">
+            <button class="close-cart-btn" id="close-cart-btn" aria-label="Close cart" data-magnetic>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /></svg>
             </button>
         </div>
@@ -1413,12 +2015,12 @@
                 <span>Subtotal</span>
                 <span id="cart-subtotal">$0.00</span>
             </div>
-            <button class="btn cart-checkout-btn">Proceed to Checkout</button>
+            <button class="btn cart-checkout-btn" data-magnetic>Proceed to Checkout</button>
         </div>
     </div>
     
     <!-- Back to Top Button -->
-    <a href="#home" class="back-to-top" aria-label="Back to top">
+    <a href="#home" class="back-to-top" aria-label="Back to top" data-magnetic>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
     </a>
 
@@ -1426,66 +2028,164 @@
         document.addEventListener('DOMContentLoaded', () => {
 
             const App = {
-                // Cart state
+                // State
                 cart: [],
+                testimonialState: { currentIndex: 0 },
+                customizerState: {
+                    base: 'classic',
+                    color: 'Sky Blue',
+                    colorHex: '#ade8f4',
+                    lid: 'standard',
+                    engraving: '',
+                    price: 24.99,
+                    basePrice: 24.99,
+                    lidPrice: 0,
+                    engravingPrice: 5.00,
+                },
 
                 // Initialize all application features
                 init() {
+                    this.cacheDOMElements();
                     this.loadCart();
                     this.setupEventListeners();
                     this.setupIntersectionObserver();
                     this.updateCartUI();
+                    this.initAnimations();
+                    this.updateCustomizerPreview();
+                },
+
+                cacheDOMElements() {
+                    this.dom = {
+                        // Cart
+                        cartDrawer: document.getElementById('cart-drawer'),
+                        cartOverlay: document.getElementById('modal-overlay'), // Re-using overlay
+                        cartItemsList: document.getElementById('cart-items-list'),
+                        cartEmptyMessage: document.getElementById('cart-empty-message'),
+                        cartSubtotalEl: document.getElementById('cart-subtotal'),
+                        cartItemCountEl: document.getElementById('cart-item-count'),
+                        
+                        // Testimonials
+                        testimonialSlider: document.querySelector('.testimonial-slider'),
+                        testimonialSlides: document.querySelectorAll('.testimonial'),
+
+                        // Customizer
+                        previewImg: document.getElementById('preview-img'),
+                        previewEngraving: document.getElementById('preview-engraving'),
+                        customizerPrice: document.getElementById('customizer-price'),
+                        engravingInput: document.getElementById('engraving-text'),
+
+                        // Modals
+                        modalOverlay: document.getElementById('modal-overlay'),
+
+                        // Cursor
+                        customCursor: document.querySelector('.custom-cursor'),
+                        magneticElements: document.querySelectorAll('[data-magnetic]'),
+                    };
                 },
 
                 // Centralized event listener setup
                 setupEventListeners() {
-                    // Product interactions
-                    document.querySelectorAll('.add-to-cart').forEach(button => {
-                        button.addEventListener('click', this.handleAddToCart.bind(this));
-                    });
-                    document.querySelectorAll('.color-swatch').forEach(swatch => {
-                        swatch.addEventListener('click', this.handleColorSwatch.bind(this));
-                    });
-                    
-                    // Cart interactions
-                    document.getElementById('open-cart-btn').addEventListener('click', this.toggleCart.bind(this));
-                    document.getElementById('close-cart-btn').addEventListener('click', this.toggleCart.bind(this));
-                    document.getElementById('cart-overlay').addEventListener('click', this.toggleCart.bind(this));
-                    document.getElementById('cart-items-list').addEventListener('click', this.handleCartActions.bind(this));
+                    // Clicks, delegated where possible
+                    document.body.addEventListener('click', this.handleGlobalClick.bind(this));
 
-                    // Testimonial slider
-                    document.getElementById('next-testimonial').addEventListener('click', () => this.moveTestimonial(1));
-                    document.getElementById('prev-testimonial').addEventListener('click', () => this.moveTestimonial(-1));
-                    
-                    // FAQ Accordion
-                    document.querySelectorAll('.faq-question').forEach(button => {
-                        button.addEventListener('click', this.toggleFaq.bind(this));
-                    });
+                    // Inputs and change events
+                    this.dom.engravingInput?.addEventListener('input', this.handleCustomizerEngraving.bind(this));
 
-                    // Contact form
-                    const contactForm = document.getElementById('contactForm');
-                    if (contactForm) {
-                        contactForm.addEventListener('submit', this.handleContactForm.bind(this));
+                    // Scroll and mouse movements
+                    window.addEventListener('scroll', this.handleScroll.bind(this));
+                    window.addEventListener('mousemove', this.handleMouseMove.bind(this));
+                    window.addEventListener('mousedown', () => this.dom.customCursor.classList.add('clicked'));
+                    window.addEventListener('mouseup', () => this.dom.customCursor.classList.remove('clicked'));
+
+                    // Hover effects for cursor
+                    document.querySelectorAll('a, button, .color-swatch, .faq-question, input, textarea, .quiz-options label')
+                        .forEach(el => {
+                            el.addEventListener('mouseenter', () => this.dom.customCursor.classList.add('hovered'));
+                            el.addEventListener('mouseleave', () => this.dom.customCursor.classList.remove('hovered'));
+                        });
+                },
+
+                // --- Global Event Handlers ---
+                handleGlobalClick(e) {
+                    const target = e.target;
+                    
+                    // Add to Cart
+                    const addToCartBtn = target.closest('.add-to-cart');
+                    if (addToCartBtn) {
+                        this.handleAddToCart(addToCartBtn);
+                        return;
                     }
 
-                    // Back to top button visibility
-                    window.addEventListener('scroll', this.toggleBackToTopButton.bind(this));
+                    // Color Swatch
+                    const colorSwatch = target.closest('.color-swatch:not(.color-option)');
+                    if (colorSwatch) {
+                        this.handleColorSwatch(colorSwatch);
+                        return;
+                    }
+                    
+                    // Cart Drawer
+                    if (target.closest('#open-cart-btn')) this.toggleCart();
+                    if (target.closest('#close-cart-btn')) this.toggleCart();
+
+                    // Cart Actions
+                    if(target.closest('.cart-item')) this.handleCartActions(e);
+
+                    // Testimonials
+                    if (target.closest('#next-testimonial')) this.moveTestimonial(1);
+                    if (target.closest('#prev-testimonial')) this.moveTestimonial(-1);
+
+                    // FAQ
+                    if (target.closest('.faq-question')) this.toggleFaq(target.closest('.faq-question'));
+
+                    // Contact Form
+                    if (target.closest('#contactForm button[type="submit"]')) this.handleContactForm(e);
+
+                    // Modals
+                    if (target.classList.contains('modal-overlay')) this.closeAllModals();
+                    if (target.closest('.modal-close-btn')) this.closeModal(target.closest('.modal-close-btn').dataset.modalId);
+                    if (target.closest('.quick-view-btn')) this.openQuickView(target.closest('.product-card'));
+                    if (target.closest('#start-quiz-btn')) this.openModal('recommender-modal');
+                    
+                    // Recommender Quiz
+                    const quizNextBtn = target.closest('.quiz-next-btn');
+                    if(quizNextBtn) this.navigateQuiz(quizNextBtn.dataset.nextStep);
+                    const quizPrevBtn = target.closest('.quiz-prev-btn');
+                    if(quizPrevBtn) this.navigateQuiz(quizPrevBtn.dataset.prevStep);
+                    if(target.closest('.quiz-finish-btn')) this.finishQuiz();
+
+                    // Customizer
+                    const customOptionBtn = target.closest('.customizer-options .option-btn');
+                    if(customOptionBtn) this.handleCustomizerOption(customOptionBtn);
+                    if(target.closest('#add-custom-to-cart')) this.addCustomBottleToCart();
+                },
+
+                handleScroll() {
+                    this.toggleBackToTopButton();
+                },
+                
+                handleMouseMove(e) {
+                    if (this.dom.customCursor) {
+                        this.dom.customCursor.style.left = `${e.clientX}px`;
+                        this.dom.customCursor.style.top = `${e.clientY}px`;
+                    }
+                    this.handleMagneticElements(e.clientX, e.clientY);
                 },
 
                 // --- Cart Logic ---
-                handleAddToCart(e) {
-                    const productCard = e.target.closest('.product-card');
+                handleAddToCart(button) {
+                    const productCard = button.closest('.product-card') || button.closest('#quick-view-modal');
                     const id = productCard.dataset.id;
-                    const name = productCard.dataset.name;
-                    const price = parseFloat(productCard.dataset.price);
-                    const img = productCard.querySelector('.product-img').src;
+                    const name = productCard.dataset.name || document.getElementById('quick-view-title').textContent;
+                    const price = parseFloat(productCard.dataset.price) || parseFloat(document.getElementById('quick-view-price').textContent.replace('$', ''));
+                    const imgEl = productCard.querySelector('.product-img, #quick-view-img');
+                    const img = imgEl.src;
                     
                     const activeColorSwatch = productCard.querySelector('.color-swatch.active');
-                    const color = activeColorSwatch ? activeColorSwatch.dataset.color : 'default';
+                    const color = activeColorSwatch ? activeColorSwatch.style.backgroundColor : 'default';
+                    
+                    const uniqueId = `${id}-${color}`;
 
-                    const uniqueId = `${id}-${color}`; // Create a unique ID based on product and color
-
-                    this.addToCart({ id: uniqueId, name, price, img, color, quantity: 1 });
+                    this.addToCart({ id: uniqueId, name, price, img, color, quantity: 1, details: 'Standard'});
                 },
 
                 addToCart(item) {
@@ -1497,8 +2197,8 @@
                     }
                     this.saveCart();
                     this.updateCartUI();
-                    this.showCartNotification(item.name);
-                    if (!document.getElementById('cart-drawer').classList.contains('open')) {
+                    this.showNotification(`${item.name} added to cart!`);
+                    if (!this.dom.cartDrawer.classList.contains('open')) {
                          this.toggleCart();
                     }
                 },
@@ -1510,13 +2210,9 @@
                     
                     const itemId = cartItemEl.dataset.itemId;
                     
-                    if (target.classList.contains('quantity-btn-plus')) {
-                        this.updateQuantity(itemId, 1);
-                    } else if (target.classList.contains('quantity-btn-minus')) {
-                        this.updateQuantity(itemId, -1);
-                    } else if (target.classList.contains('cart-item-remove-btn')) {
-                        this.removeFromCart(itemId);
-                    }
+                    if (target.classList.contains('quantity-btn-plus')) this.updateQuantity(itemId, 1);
+                    else if (target.classList.contains('quantity-btn-minus')) this.updateQuantity(itemId, -1);
+                    else if (target.classList.contains('cart-item-remove-btn')) this.removeFromCart(itemId);
                 },
                 
                 updateQuantity(itemId, change) {
@@ -1538,29 +2234,19 @@
                     this.updateCartUI();
                 },
 
-                saveCart() {
-                    localStorage.setItem('hydroCart', JSON.stringify(this.cart));
-                },
-
-                loadCart() {
-                    this.cart = JSON.parse(localStorage.getItem('hydroCart')) || [];
-                },
+                saveCart() { localStorage.setItem('hydroCart', JSON.stringify(this.cart)); },
+                loadCart() { this.cart = JSON.parse(localStorage.getItem('hydroCart')) || []; },
 
                 // --- UI Update Logic ---
                 updateCartUI() {
-                    const cartItemsList = document.getElementById('cart-items-list');
-                    const cartEmptyMessage = document.getElementById('cart-empty-message');
-                    const cartSubtotalEl = document.getElementById('cart-subtotal');
-                    const cartItemCountEl = document.getElementById('cart-item-count');
-                    
-                    cartItemsList.innerHTML = '';
+                    this.dom.cartItemsList.innerHTML = '';
                     let subtotal = 0;
                     let totalItems = 0;
 
                     if (this.cart.length === 0) {
-                        cartEmptyMessage.style.display = 'block';
+                        this.dom.cartEmptyMessage.style.display = 'block';
                     } else {
-                        cartEmptyMessage.style.display = 'none';
+                        this.dom.cartEmptyMessage.style.display = 'none';
                         this.cart.forEach(item => {
                             const li = document.createElement('li');
                             li.className = 'cart-item';
@@ -1570,6 +2256,7 @@
                                 <img src="${item.img}" alt="${item.name}" class="cart-item-img">
                                 <div class="cart-item-info">
                                     <span class="cart-item-title">${item.name}</span>
+                                    <p class="cart-item-details">${item.details}</p>
                                     <span class="cart-item-price">$${item.price.toFixed(2)}</span>
                                     <div class="cart-item-quantity">
                                         <button class="quantity-btn quantity-btn-minus" aria-label="Decrease quantity">-</button>
@@ -1579,95 +2266,260 @@
                                 </div>
                                 <button class="cart-item-remove-btn">Remove</button>
                             `;
-                            cartItemsList.appendChild(li);
+                            this.dom.cartItemsList.appendChild(li);
                             subtotal += item.price * item.quantity;
                             totalItems += item.quantity;
                         });
                     }
 
-                    cartSubtotalEl.textContent = `$${subtotal.toFixed(2)}`;
-                    cartItemCountEl.textContent = totalItems;
-                    cartItemCountEl.style.display = totalItems > 0 ? 'flex' : 'none';
+                    this.dom.cartSubtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+                    this.dom.cartItemCountEl.textContent = totalItems;
+                    this.dom.cartItemCountEl.style.display = totalItems > 0 ? 'flex' : 'none';
                 },
 
                 toggleCart() {
-                    document.getElementById('cart-drawer').classList.toggle('open');
-                    document.getElementById('cart-overlay').classList.toggle('open');
-                    document.body.style.overflow = document.body.style.overflow === 'hidden' ? '' : 'hidden';
+                    const isOpen = this.dom.cartDrawer.classList.toggle('open');
+                    this.dom.modalOverlay.classList.toggle('open', isOpen);
+                    document.body.style.overflow = isOpen ? 'hidden' : '';
                 },
 
-                showCartNotification(productName) {
+                showNotification(message, type = 'success') {
                     // A simple console log, could be replaced with a toast notification library
-                    console.log(`${productName} added to cart!`);
+                    console.log(`[${type.toUpperCase()}] ${message}`);
+                    // For a more visual effect, you could create a temporary div and append it to the body.
+                },
+
+                // --- Product Customizer ---
+                handleCustomizerOption(button) {
+                    const group = button.parentElement;
+                    const type = group.id.split('-')[1];
+
+                    group.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    switch(type) {
+                        case 'base':
+                            this.customizerState.base = button.dataset.value;
+                            this.customizerState.basePrice = parseFloat(button.dataset.price);
+                            break;
+                        case 'color':
+                            this.customizerState.color = button.dataset.value;
+                            this.customizerState.colorHex = button.dataset.colorHex;
+                            break;
+                        case 'lid':
+                            this.customizerState.lid = button.dataset.value;
+                            this.customizerState.lidPrice = parseFloat(button.dataset.price);
+                            break;
+                    }
+                    this.updateCustomizerPreview();
+                },
+
+                handleCustomizerEngraving(e) {
+                    this.customizerState.engraving = e.target.value;
+                    this.updateCustomizerPreview();
+                },
+
+                updateCustomizerPreview() {
+                    const { base, color, colorHex, lid, engraving } = this.customizerState;
+                    const textParam = base.charAt(0).toUpperCase() + base.slice(1);
+                    this.dom.previewImg.src = `https://placehold.co/400x500/${colorHex.substring(1)}/023e8a?text=${textParam}`;
+                    this.dom.previewEngraving.textContent = engraving;
+                    this.calculateCustomPrice();
+                },
+
+                calculateCustomPrice() {
+                    let total = this.customizerState.basePrice + this.customizerState.lidPrice;
+                    if(this.customizerState.engraving.trim() !== '') {
+                        total += this.customizerState.engravingPrice;
+                    }
+                    this.customizerState.price = total;
+                    this.dom.customizerPrice.textContent = `$${total.toFixed(2)}`;
+                },
+
+                addCustomBottleToCart() {
+                    const { base, color, lid, engraving, price } = this.customizerState;
+                    const name = `Custom ${base.charAt(0).toUpperCase() + base.slice(1)} Bottle`;
+                    let details = `Color: ${color}, Lid: ${lid}`;
+                    if(engraving) details += `, Engraving: "${engraving}"`;
+                    
+                    const item = {
+                        id: `custom-${Date.now()}`,
+                        name: name,
+                        price: price,
+                        img: this.dom.previewImg.src,
+                        quantity: 1,
+                        details: details,
+                    };
+                    this.addToCart(item);
+                },
+
+                // --- AI Recommender Quiz ---
+                navigateQuiz(step) {
+                    document.querySelectorAll('.quiz-step').forEach(s => s.classList.remove('active'));
+                    document.getElementById(`quiz-step-${step}`).classList.add('active');
+                },
+
+                finishQuiz() {
+                    const activity = document.querySelector('input[name="activity"]:checked')?.value;
+                    const priority = document.querySelector('input[name="priority"]:checked')?.value;
+                    let recommendationId;
+
+                    if(activity === 'sport' || priority === 'capacity') {
+                        recommendationId = '2'; // Sport Bottle Pro
+                    } else if(priority === 'hotcold') {
+                        recommendationId = '3'; // Insulated Traveler
+                    } else if (activity === 'daily' || priority === 'portability') {
+                        recommendationId = '6'; // Urban Sleek Bottle
+                    } else {
+                        recommendationId = '1'; // Classic
+                    }
+                    
+                    const recommendedProduct = document.querySelector(`.product-card[data-id='${recommendationId}']`);
+                    document.getElementById('recommendation-title').textContent = recommendedProduct.dataset.name;
+                    document.getElementById('recommendation-desc').textContent = recommendedProduct.querySelector('.product-description').textContent;
+                    const recommendationLink = document.getElementById('recommendation-link');
+                    recommendationLink.href = `#products`; // or a direct product page link
+                    recommendationLink.onclick = () => {
+                        this.closeAllModals();
+                        recommendedProduct.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        recommendedProduct.style.boxShadow = '0 0 20px var(--accent-success)';
+                        setTimeout(() => recommendedProduct.style.boxShadow = '', 2000);
+                    };
+
+                    this.navigateQuiz('result');
+                },
+
+                // --- Modals ---
+                openModal(modalId) {
+                    const modal = document.getElementById(modalId);
+                    if (modal) {
+                        this.dom.modalOverlay.classList.add('open');
+                        modal.classList.add('open');
+                        document.body.style.overflow = 'hidden';
+                    }
+                },
+
+                closeModal(modalId) {
+                    const modal = document.getElementById(modalId);
+                    if (modal) {
+                        this.dom.modalOverlay.classList.remove('open');
+                        modal.classList.remove('open');
+                        // Only restore scroll if no other modal/drawer is open
+                        if (!this.dom.cartDrawer.classList.contains('open')) {
+                            document.body.style.overflow = '';
+                        }
+                    }
+                },
+                
+                closeAllModals() {
+                    document.querySelectorAll('.modal.open').forEach(m => this.closeModal(m.id));
+                },
+
+                openQuickView(productCard) {
+                    document.getElementById('quick-view-title').textContent = productCard.dataset.name;
+                    document.getElementById('quick-view-price').textContent = `$${productCard.dataset.price}`;
+                    document.getElementById('quick-view-description').textContent = productCard.querySelector('.product-description').textContent;
+                    document.getElementById('quick-view-img').src = productCard.querySelector('.product-img').src;
+                    
+                    const quickViewModal = document.getElementById('quick-view-modal');
+                    quickViewModal.dataset.id = productCard.dataset.id;
+                    quickViewModal.dataset.name = productCard.dataset.name;
+                    quickViewModal.dataset.price = productCard.dataset.price;
+
+                    this.openModal('quick-view-modal');
                 },
 
                 // --- Other Page Features ---
-                handleColorSwatch(e) {
-                    const swatch = e.target;
+                handleColorSwatch(swatch) {
                     const productCard = swatch.closest('.product-card');
                     const productImg = productCard.querySelector('.product-img');
                     const colorMap = JSON.parse(productImg.dataset.colors);
                     const selectedColor = swatch.dataset.color;
                     
-                    if (colorMap[selectedColor]) {
-                        productImg.src = colorMap[selectedColor];
-                    }
-
-                    // Update active state
+                    if (colorMap[selectedColor]) productImg.src = colorMap[selectedColor];
+                    
                     productCard.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
                     swatch.classList.add('active');
                 },
                 
-                testimonialState: {
-                    currentIndex: 0,
-                    slider: document.querySelector('.testimonial-slider'),
-                    slides: document.querySelectorAll('.testimonial'),
-                },
-                
                 moveTestimonial(direction) {
-                    const { slides, slider } = this.testimonialState;
-                    const totalSlides = slides.length;
+                    const totalSlides = this.dom.testimonialSlides.length;
                     this.testimonialState.currentIndex = (this.testimonialState.currentIndex + direction + totalSlides) % totalSlides;
-                    slider.style.transform = `translateX(-${this.testimonialState.currentIndex * 100}%)`;
+                    this.dom.testimonialSlider.style.transform = `translateX(-${this.testimonialState.currentIndex * 100}%)`;
                 },
                 
-                toggleFaq(e) {
-                    const item = e.currentTarget.closest('.faq-item');
+                toggleFaq(questionButton) {
+                    const item = questionButton.closest('.faq-item');
                     const answer = item.querySelector('.faq-answer');
                     const icon = item.querySelector('.faq-icon');
-                    
                     const isActive = item.classList.contains('active');
                     
                     // Close all others
-                    document.querySelectorAll('.faq-item').forEach(otherItem => {
-                        otherItem.classList.remove('active');
-                        otherItem.querySelector('.faq-answer').style.maxHeight = null;
-                        otherItem.querySelector('.faq-icon').textContent = '+';
+                    document.querySelectorAll('.faq-item.active').forEach(otherItem => {
+                        if (otherItem !== item) {
+                            otherItem.classList.remove('active');
+                            otherItem.querySelector('.faq-answer').style.maxHeight = null;
+                            otherItem.querySelector('.faq-icon').style.transform = 'rotate(0deg)';
+                        }
                     });
                     
-                    if (!isActive) {
-                        item.classList.add('active');
+                    item.classList.toggle('active');
+                    if (item.classList.contains('active')) {
                         answer.style.maxHeight = answer.scrollHeight + 'px';
-                        icon.textContent = '-';
+                        icon.style.transform = 'rotate(135deg)';
+                    } else {
+                        answer.style.maxHeight = null;
+                        icon.style.transform = 'rotate(0deg)';
                     }
                 },
                 
                 handleContactForm(e) {
                     e.preventDefault();
-                    alert('Thank you for your message! We will get back to you soon.');
-                    e.target.reset();
+                    this.showNotification('Thank you for your message! We will get back to you soon.');
+                    e.target.closest('form').reset();
                 },
 
                 toggleBackToTopButton() {
                     const button = document.querySelector('.back-to-top');
-                    if (window.scrollY > 300) {
-                        button.classList.add('visible');
-                    } else {
-                        button.classList.remove('visible');
+                    if (window.scrollY > 300) button.classList.add('visible');
+                    else button.classList.remove('visible');
+                },
+                
+                // --- Animations & Effects ---
+                initAnimations() {
+                    // Hero Text Animation
+                    const title = document.querySelector('.hero-title-container');
+                    if (title) {
+                        title.innerHTML = title.textContent.split('').map(char => `<span class="char">${char === ' ' ? '&nbsp;' : char}</span>`).join('');
+                        setTimeout(() => {
+                           title.querySelectorAll('.char').forEach((char, i) => {
+                               setTimeout(() => {
+                                   char.style.opacity = '1';
+                                   char.style.transform = 'translateY(0) rotate(0)';
+                               }, i * 30);
+                           });
+                        }, 500);
                     }
                 },
                 
-                // --- Scroll Animations ---
+                handleMagneticElements(mouseX, mouseY) {
+                    this.dom.magneticElements.forEach(el => {
+                        const rect = el.getBoundingClientRect();
+                        const x = rect.left + rect.width / 2;
+                        const y = rect.top + rect.height / 2;
+                        
+                        const distance = Math.sqrt(Math.pow(mouseX - x, 2) + Math.pow(mouseY - y, 2));
+                        
+                        if (distance < 100) { // activation distance
+                            const dx = (mouseX - x) * 0.2;
+                            const dy = (mouseY - y) * 0.2;
+                            el.style.transform = `translate(${dx}px, ${dy}px)`;
+                        } else {
+                            el.style.transform = 'translate(0, 0)';
+                        }
+                    });
+                },
+
                 setupIntersectionObserver() {
                     const observer = new IntersectionObserver((entries, observer) => {
                         entries.forEach(entry => {
@@ -1676,7 +2528,7 @@
                                 observer.unobserve(entry.target);
                             }
                         });
-                    }, { threshold: 0.1 });
+                    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
                     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
                 }
