@@ -9,8 +9,10 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                mkdir -p /var/www/html/hydro
-                cp -r * /var/www/html/hydro
+                sudo mkdir -p /var/www/html/hydro
+                sudo cp -r * /var/www/html/hydro
+                sudo chown -R www-data:www-data /var/www/html/hydro
+                sudo chmod -R 775 /var/www/html/hydro
                 '''
             }
         }
