@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Clone Repo') {
             steps {
-                git 'https://github.com/santu-365/hydro.git'
+                git branch: 'main', url: 'https://github.com/santu-365/hydro.git'
             }
         }
         stage('Deploy') {
