@@ -3,3497 +3,857 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HydroBottles Co. - Futuristic Hydration Solutions</title>
-    <meta name="description" content="Experience the future of hydration. Discover our collection of premium, customizable, and eco-friendly smart water bottles. Hydro Bottles Co. offers durable and stylish bottles to keep you hydrated on the go.">
+    <title>HydroBottles | Future Fluidity</title>
+    <meta name="description" content="Next-gen hydration hardware.">
+    
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;400;600;800&display=swap" rel="stylesheet">
     
     <style>
-        /*
+        /* 
         ========================================
-        CSS Variables (Design System)
+        CORE VARIABLES & RESET
         ========================================
         */
         :root {
-            --primary-color: #0096c7;
-            --primary-light: #48cae4;
-            --primary-lighter: #ade8f4;
-            --primary-lightest: #caf0f8;
+            --bg-dark: #050505;
+            --bg-panel: rgba(255, 255, 255, 0.03);
+            --bg-panel-hover: rgba(255, 255, 255, 0.08);
             
-            --secondary-color: #023e8a;
-            --secondary-dark: #03045e;
+            --primary: #00f2ea;
+            --primary-dim: #008f8a;
+            --secondary: #ff0055;
             
-            --text-light: #f8f9fa;
-            --text-dark: #212529;
-            --text-muted: #6c757d;
+            --text-main: #ffffff;
+            --text-muted: #888888;
             
-            --background-light: #f8f9fa;
-            --background-white: #ffffff;
-            --background-dark: #121212;
-            --background-dark-surface: #1e1e1e;
+            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+            --glass-blur: blur(20px);
             
-            --accent-success: #2a9d8f;
-            --accent-danger: #e76f51;
-            --accent-glow: #ade8f4;
-            
-            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
-            
-            --border-radius-sm: 5px;
-            --border-radius-md: 10px;
-            --border-radius-lg: 30px;
-            
-            --font-family-base: 'Segoe UI', 'Roboto', Tahoma, Geneva, Verdana, sans-serif;
-            
-            --transition-speed: 0.3s;
-            --transition-speed-fast: 0.2s;
-            --transition-speed-slow: 0.5s;
+            --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+            --font-main: 'Outfit', sans-serif;
         }
 
-        /*
-        ========================================
-        Dark Mode Theme
-        ========================================
-        */
-        body.dark-mode {
-            --primary-color: #48cae4;
-            --primary-light: #ade8f4;
-            --primary-lighter: #caf0f8;
-            
-            --secondary-color: #90e0ef;
-            --secondary-dark: #00b4d8;
-            
-            --text-light: #121212;
-            --text-dark: #f8f9fa;
-            --text-muted: #adb5bd;
-            
-            --background-light: #121212;
-            --background-white: #1e1e1e;
-            --background-dark: #f8f9fa;
-            --background-dark-surface: #2a2a2a;
-            
-            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
-            --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.3);
-            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.4);
-
-            --accent-glow: #0077b6;
-        }
-
-        /*
-        ========================================
-        Reset and Base Styles
-        ========================================
-        */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        html {
-            scroll-behavior: smooth;
-        }
-
+        html { scroll-behavior: smooth; }
+        
         body {
-            background-color: var(--background-light);
-            color: var(--text-dark);
-            line-height: 1.6;
-            font-family: var(--font-family-base);
-            overflow-x: hidden; /* Prevent horizontal scroll from animations */
-            cursor: none; /* Hide default cursor */
-            transition: background-color var(--transition-speed), color var(--transition-speed);
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-family);
+            overflow-x: hidden;
+            font-family: var(--font-main);
+            cursor: none; /* Custom cursor */
         }
 
-        /*
+        /* 
         ========================================
-        Page Preloader
+        UTILITIES & ANIMATIONS
         ========================================
         */
-        .preloader {
+        .noise-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--secondary-dark);
-            z-index: 10000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            gap: 1rem;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 9000;
+            opacity: 0.05;
+            background: url('https://grainy-gradients.vercel.app/noise.svg');
         }
 
-        .preloader.fade-out {
-            opacity: 0;
-            visibility: hidden;
-        }
-        
-        .preloader-logo svg {
-            width: 80px;
-            height: 80px;
-            animation: pulse 2s infinite ease-in-out;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.1); opacity: 0.8; }
-        }
-
-        .preloader-text {
-            color: var(--text-light);
-            font-size: 1.2rem;
-            font-weight: 300;
-            letter-spacing: 2px;
-        }
-        
         .container {
             width: 90%;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
         section {
-            padding: 6rem 0;
+            padding: 8rem 0;
             position: relative;
+            z-index: 2;
         }
 
-        .section-title {
-            text-align: center;
-            margin-bottom: 4rem;
-            font-size: 2.8rem;
-            color: var(--secondary-color);
-            font-weight: 700;
-            transition: color var(--transition-speed);
-        }
+        h1, h2, h3, h4 { font-weight: 800; text-transform: uppercase; letter-spacing: -0.02em; }
         
-        .section-subtitle {
-            text-align: center;
-            margin-top: -3.5rem;
-            margin-bottom: 4rem;
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            transition: color var(--transition-speed);
-        }
+        .section-header { margin-bottom: 5rem; text-align: center; }
+        .section-title { font-size: 4rem; line-height: 1; margin-bottom: 1rem; background: linear-gradient(to right, #fff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
+        .section-subtitle { color: var(--primary); font-family: monospace; letter-spacing: 0.2em; }
 
-        /* Animation class for scroll trigger */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-        }
-        
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        /* Scramble Text Effect Class */
+        .scramble-text { display: inline-block; }
 
-        /*
+        /* 
         ========================================
-        Custom Cursor & Magnetic Elements
+        CUSTOM CURSOR
         ========================================
         */
-        .custom-cursor {
+        .cursor-dot, .cursor-circle {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 25px;
-            height: 25px;
-            border: 2px solid var(--primary-color);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
+            top: 0; left: 0;
             transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s, opacity 0.3s;
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        .cursor-dot { width: 8px; height: 8px; background: var(--primary); }
+        .cursor-circle {
+            width: 40px; height: 40px;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: width 0.3s, height 0.3s, background 0.3s;
+        }
+        body.hovering .cursor-circle {
+            width: 80px; height: 80px;
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary);
+            backdrop-filter: blur(2px);
         }
 
-        .custom-cursor.hovered {
-            width: 50px;
-            height: 50px;
-            background-color: rgba(0, 150, 199, 0.2);
-            border-color: var(--primary-light);
-        }
-
-        .custom-cursor.clicked {
-            transform: translate(-50%, -50%) scale(0.8);
-        }
-
-        [data-magnetic] {
-            transition: transform var(--transition-speed-slow) cubic-bezier(0.19, 1, 0.22, 1);
-        }
-        
-        /*
+        /* 
         ========================================
-        Header & Navigation
+        HEADER & NAV
         ========================================
         */
         header {
-            background-color: rgba(0, 150, 199, 0.8);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text-light);
-            padding: 1rem 0;
-            box-shadow: none;
-            position: sticky;
-            top: 0;
+            position: fixed;
+            top: 0; width: 100%;
             z-index: 1000;
-            transition: background-color var(--transition-speed);
+            padding: 1.5rem 0;
+            transition: 0.3s;
+            border-bottom: var(--glass-border);
+            background: rgba(5, 5, 5, 0.6);
+            backdrop-filter: var(--glass-blur);
         }
 
-        body.dark-mode header {
-            background-color: rgba(30, 30, 30, 0.8);
-        }
+        .nav-flex { display: flex; justify-content: space-between; align-items: center; }
         
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .logo { font-size: 1.5rem; font-weight: 800; color: white; text-decoration: none; display: flex; align-items: center; gap: 10px; }
+        .logo span { color: var(--primary); }
         
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--text-light);
+        .nav-links { display: flex; gap: 3rem; list-style: none; }
+        .nav-links a {
+            color: var(--text-muted);
             text-decoration: none;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: 0.3s;
         }
-        
-        .logo svg {
-            width: 40px;
-            height: 40px;
-            transition: transform 0.4s ease;
-        }
-        .logo:hover svg {
-            transform: rotate(360deg);
+        .nav-links a:hover { color: var(--text-main); text-shadow: 0 0 10px var(--primary); }
+
+        .header-icons { display: flex; gap: 1.5rem; align-items: center; }
+        .icon-btn { background: none; border: none; color: white; cursor: pointer; position: relative; }
+        .cart-count {
+            position: absolute; top: -8px; right: -8px;
+            background: var(--secondary); color: white;
+            font-size: 10px; width: 16px; height: 16px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
         }
 
-        .logo h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--text-light);
-        }
-        
-        .logo h1 span {
-            font-weight: 300;
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-        
-        nav ul li {
-            margin-left: 2.5rem;
-        }
-        
-        nav ul li a {
-            color: var(--text-light);
-            text-decoration: none;
-            font-weight: 500;
-            padding-bottom: 5px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        nav ul li a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: -100%;
-            width: 100%;
-            height: 2px;
-            background-color: var(--primary-lightest);
-            transition: left var(--transition-speed) ease-out;
-        }
-        
-        nav ul li a:hover::after, nav ul li a.active::after {
-            left: 0;
-        }
-        
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            position: relative;
-        }
-
-        /* Theme Switcher */
-        .theme-switcher {
-            background: none;
-            border: none;
-            cursor: none;
-            color: var(--text-light);
-        }
-        .theme-switcher svg {
-            width: 24px;
-            height: 24px;
-            fill: currentColor;
-            transition: transform var(--transition-speed);
-        }
-        .theme-switcher:hover svg {
-            transform: scale(1.1) rotate(15deg);
-        }
-
-        .cart-icon-btn {
-            background: none;
-            border: none;
-            cursor: none; /* Inherits custom cursor */
-            position: relative;
-        }
-
-        .cart-icon-btn svg {
-            width: 28px;
-            height: 28px;
-            fill: var(--text-light);
-            transition: transform var(--transition-speed);
-        }
-
-        .cart-icon-btn:hover svg {
-            transform: scale(1.1);
-        }
-
-        .cart-item-count {
-            position: absolute;
-            top: -5px;
-            right: -10px;
-            background-color: var(--accent-danger);
-            color: var(--text-light);
-            border-radius: 50%;
-            width: 22px;
-            height: 22px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 0.8rem;
-            font-weight: bold;
-            border: 2px solid var(--primary-color);
-            box-shadow: 0 0 10px var(--accent-danger);
-        }
-
-        /*
+        /* 
         ========================================
-        Hero Section
+        HERO SECTION
         ========================================
         */
         .hero {
-            background: linear-gradient(135deg, var(--secondary-dark), var(--primary-color));
-            color: var(--text-light);
-            padding: 8rem 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-align: center;
-            overflow: hidden;
-            transition: background var(--transition-speed);
-        }
-        
-        .hero-title-container {
-            font-size: 4.5rem;
-            margin-bottom: 1.5rem;
-            font-weight: 800;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
-            line-height: 1.1;
-        }
-
-        .hero-title-container .char {
-            display: inline-block;
-            opacity: 0;
-            transform: translateY(50px) rotate(10deg);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-        
-        .hero p {
-            font-size: 1.4rem;
-            max-width: 700px;
-            margin: 0 auto 3rem;
-            font-weight: 300;
-        }
-        
-        .btn {
-            display: inline-block;
-            background-color: var(--secondary-color);
-            color: var(--text-light);
-            padding: 1rem 2.5rem;
-            border-radius: var(--border-radius-lg);
-            text-decoration: none;
-            font-weight: 600;
-            border: none;
-            cursor: none; /* Inherits custom cursor */
-            transition: background-color var(--transition-speed), transform var(--transition-speed), box-shadow var(--transition-speed);
             position: relative;
             overflow: hidden;
-            z-index: 1;
-        }
-        
-        body.dark-mode .btn {
-            color: var(--text-dark);
         }
 
-        .btn::before {
-            content: '';
+        #bg-canvas {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, var(--primary-light), var(--accent-success));
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+        }
+
+        .hero-content { position: relative; z-index: 2; max-width: 900px; }
+        
+        .hero-title {
+            font-size: 6rem; /* Fallback */
+            font-size: clamp(4rem, 10vw, 8rem);
+            line-height: 0.9;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #fff 0%, #888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-btn {
+            display: inline-block;
+            padding: 1rem 3rem;
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            text-transform: uppercase;
+            font-weight: 700;
+            text-decoration: none;
+            letter-spacing: 0.2em;
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+            margin-top: 2rem;
+        }
+
+        .hero-btn::before {
+            content: ''; position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: var(--primary);
+            transition: 0.4s var(--ease-out);
             z-index: -1;
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.4s ease-in-out;
-        }
-        
-        .btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
         }
 
-        .btn:hover::before {
-            transform: scaleX(1);
-        }
-        
-        .btn-secondary {
-            background-color: var(--accent-success);
-        }
-        .btn-secondary::before {
-            background: linear-gradient(45deg, var(--primary-color), var(--primary-light));
-        }
+        .hero-btn:hover { color: #000; box-shadow: 0 0 30px var(--primary-dim); }
+        .hero-btn:hover::before { left: 0; }
 
-        /*
+        /* 
         ========================================
-        Products Section
+        MARQUEE
         ========================================
         */
-        .products {
-            background-color: var(--background-white);
-            transition: background-color var(--transition-speed);
-        }
-
-        .product-filters {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 3rem;
-            flex-wrap: wrap;
-        }
-        
-        .filter-btn {
-            background: var(--background-light);
-            border: 2px solid #ddd;
-            padding: 0.6rem 1.2rem;
-            border-radius: var(--border-radius-lg);
-            cursor: none;
-            transition: all var(--transition-speed-fast);
-            color: var(--text-muted);
-        }
-
-        body.dark-mode .filter-btn {
-            background: var(--background-dark-surface);
-            border-color: #444;
-            color: var(--text-muted);
+        .marquee {
+            background: var(--primary);
+            color: #000;
+            padding: 1rem 0;
+            overflow: hidden;
+            white-space: nowrap;
+            transform: rotate(-2deg) scale(1.05);
+            border-top: 2px solid #fff;
+            border-bottom: 2px solid #fff;
+            margin: 0;
         }
         
-        .filter-btn.active,
-        .filter-btn:hover {
-            background: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 10px var(--primary-light);
-        }
-
-        body.dark-mode .filter-btn.active,
-        body.dark-mode .filter-btn:hover {
-            color: var(--text-light);
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 20s linear infinite;
+            font-weight: 900;
+            font-size: 1.5rem;
+            text-transform: uppercase;
         }
         
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* 
+        ========================================
+        GLASS PRODUCT GRID (TILT EFFECT)
+        ========================================
+        */
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2.5rem;
-        }
-        
-        .product-card {
-            background-color: var(--background-white);
-            border-radius: var(--border-radius-md);
-            overflow: hidden;
-            box-shadow: var(--shadow-md);
-            transition: transform var(--transition-speed), box-shadow var(--transition-speed), background-color var(--transition-speed);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-        
-        .product-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: var(--shadow-lg);
-        }
-        
-        .product-img-container {
-            height: 250px;
-            background-color: var(--primary-lightest);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            position: relative;
-            transition: background-color var(--transition-speed);
-        }
-
-        body.dark-mode .product-img-container {
-             background-color: var(--background-dark-surface);
-        }
-        
-        .product-img {
-            max-width: 80%;
-            max-height: 220px;
-            transition: transform var(--transition-speed);
-        }
-
-        .product-card:hover .product-img {
-            transform: scale(1.05);
-        }
-        
-        .product-info {
-            padding: 1.5rem;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .product-title {
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-            color: var(--secondary-color);
-        }
-        
-        .product-description {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-            flex-grow: 1;
-        }
-        
-        .product-price {
-            font-weight: bold;
-            color: var(--primary-color);
-            font-size: 1.4rem;
-            margin-bottom: 1rem;
-        }
-
-        .product-actions {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: auto;
-        }
-
-        .product-actions .btn {
-            flex-grow: 1;
-            padding: 0.8rem 1rem;
-            font-size: 0.9rem;
-        }
-
-        .quick-view-btn {
-            background-color: var(--text-muted);
-        }
-
-        .quick-view-btn::before {
-             background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
-        }
-
-        .product-colors {
-            margin-bottom: 1.5rem;
-        }
-
-        .color-swatch {
-            display: inline-block;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            margin-right: 8px;
-            cursor: none;
-            border: 2px solid #ddd;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        body.dark-mode .color-swatch {
-            border-color: #555;
-        }
-
-        .color-swatch:hover {
-            transform: scale(1.2);
-        }
-
-        .color-swatch.active {
-            border-color: var(--secondary-color);
-            box-shadow: 0 0 8px var(--secondary-color);
-            transform: scale(1.1);
-        }
-        
-        /*
-        ========================================
-        Product Customizer Section
-        ========================================
-        */
-        .customizer {
-            background: linear-gradient(180deg, var(--background-white) 0%, var(--primary-lightest) 100%);
-            transition: background var(--transition-speed);
-        }
-
-        body.dark-mode .customizer {
-             background: linear-gradient(180deg, var(--background-white) 0%, var(--background-dark-surface) 100%);
-        }
-
-        .customizer-container {
-            display: grid;
-            grid-template-columns: 1fr 1.5fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .customizer-options {
-            background: rgba(255, 255, 255, 0.7);
-            padding: 2.5rem;
-            border-radius: var(--border-radius-md);
-            box-shadow: var(--shadow-md);
-        }
-
-        body.dark-mode .customizer-options {
-            background: rgba(40, 40, 40, 0.7);
-        }
-
-        .option-group {
-            margin-bottom: 2rem;
-        }
-
-        .option-group h4 {
-            margin-bottom: 1rem;
-            color: var(--secondary-color);
-            font-size: 1.2rem;
-            border-bottom: 2px solid var(--primary-lighter);
-            padding-bottom: 0.5rem;
-        }
-        
-        body.dark-mode .option-group h4 {
-            border-bottom-color: var(--secondary-dark);
-        }
-
-        .option-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-        }
-
-        .option-btn {
-            background: var(--background-light);
-            border: 2px solid #ddd;
-            padding: 0.6rem 1.2rem;
-            border-radius: var(--border-radius-lg);
-            cursor: none;
-            transition: all var(--transition-speed-fast);
-            color: var(--text-dark);
-        }
-        
-        body.dark-mode .option-btn {
-            background: var(--background-dark-surface);
-            border-color: #555;
-        }
-
-        .option-btn.active {
-            background: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 10px var(--primary-light);
-        }
-
-        body.dark-mode .option-btn.active {
-            color: var(--text-light);
-        }
-        
-        .color-option.active {
-             border-width: 3px;
-             transform: scale(1.1);
-        }
-
-        #engraving-text {
-            width: 100%;
-            padding: 0.8rem;
-            border: 2px solid #ddd;
-            border-radius: var(--border-radius-sm);
-            margin-top: 1rem;
-            background-color: var(--background-white);
-            color: var(--text-dark);
-        }
-
-        body.dark-mode #engraving-text {
-             border-color: #555;
-        }
-
-        .customizer-preview {
-            text-align: center;
-        }
-
-        .preview-image-wrapper {
-            position: relative;
-            height: 500px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1rem;
-        }
-
-        #preview-img {
-            max-height: 100%;
-            max-width: 100%;
-            transition: transform var(--transition-speed-slow) ease;
-        }
-        
-        #preview-engraving {
-            position: absolute;
-            top: 55%;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 1.5rem;
-            font-family: 'Georgia', serif;
-            color: rgba(0, 0, 0, 0.6);
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
-            width: 150px;
-            word-wrap: break-word;
-        }
-        
-        body.dark-mode #preview-engraving {
-            color: rgba(255, 255, 255, 0.7);
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-        }
-
-        .customizer-price-display {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--secondary-dark);
-            margin-bottom: 1.5rem;
-        }
-        
-        body.dark-mode .customizer-price-display {
-            color: var(--primary-light);
-        }
-
-        /*
-        ========================================
-        AI Recommender Section
-        ========================================
-        */
-        .recommender {
-            background-color: var(--secondary-dark);
-            color: var(--text-light);
-            text-align: center;
-            background-image: url('https://www.toptal.com/designers/subtlepatterns/uploads/constellations.png');
-            background-attachment: fixed;
-            background-position: center;
-            background-size: cover;
-            transition: background-color var(--transition-speed);
-        }
-
-        .recommender .section-title {
-            color: var(--primary-lightest);
-        }
-        
-        .recommender .section-subtitle {
-            color: var(--primary-lighter);
-        }
-
-        .recommender-cta {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 3rem;
-            border-radius: var(--border-radius-md);
-            max-width: 800px;
-            margin: 0 auto;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        body.dark-mode .recommender-cta {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .recommender-cta h3 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .recommender-cta p {
-            margin-bottom: 2rem;
-            font-size: 1.1rem;
-        }
-
-        /*
-        ========================================
-        Smart Technology Section
-        ========================================
-        */
-        .technology {
-            background-color: var(--background-light);
-            transition: background-color var(--transition-speed);
-        }
-
-        .tech-container {
-            display: grid;
-            grid-template-columns: 1.5fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .tech-features-list {
-            list-style: none;
-        }
-
-        .tech-feature-item {
-            display: flex;
-            gap: 1.5rem;
-            align-items: flex-start;
-            margin-bottom: 2.5rem;
-        }
-        .tech-feature-item svg {
-            width: 40px;
-            height: 40px;
-            flex-shrink: 0;
-            margin-top: 5px;
-            fill: var(--primary-color);
-        }
-        .tech-feature-item h4 {
-            font-size: 1.4rem;
-            color: var(--secondary-color);
-            margin-bottom: 0.5rem;
-        }
-
-        .tech-demo {
-            padding: 2rem;
-            background-color: var(--background-white);
-            border-radius: var(--border-radius-md);
-            box-shadow: var(--shadow-lg);
-            text-align: center;
-        }
-
-        .tech-demo-bottle {
-            width: 150px;
-            margin: 0 auto 1.5rem;
-            position: relative;
-        }
-
-        .tech-demo-bottle img {
-            width: 100%;
-        }
-
-        .hydration-level {
-            position: absolute;
-            bottom: 12%;
-            left: 12%;
-            width: 76%;
-            height: 70%;
-            background: linear-gradient(to top, var(--primary-light), var(--primary-color));
-            border-radius: 0 0 20px 20px;
-            z-index: 1;
-            clip-path: inset(100% 0 0 0);
-            transition: clip-path 0.5s ease-in-out;
-        }
-        
-        #hydration-level-visual {
-            clip-path: inset(50% 0 0 0); /* Example start value */
-        }
-
-        .tech-demo-bottle p {
-            position: absolute;
-            top: 40%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 2;
-            color: white;
-            font-weight: bold;
-            font-size: 1.5rem;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-        }
-
-        .tech-demo .btn {
-            margin-top: 1rem;
-        }
-
-        /*
-        ========================================
-        About Us Section
-        ========================================
-        */
-        .about {
-            background-color: var(--primary-lightest);
-            transition: background-color var(--transition-speed);
-        }
-
-        body.dark-mode .about {
-            background-color: var(--background-dark-surface);
-        }
-        
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
-        }
-        
-        .about-image img {
-            max-width: 100%;
-            border-radius: var(--border-radius-md);
-            box-shadow: var(--shadow-lg);
-        }
-        
-        .about-text h3 {
-            font-size: 2rem;
-            color: var(--secondary-color);
-            margin-bottom: 1rem;
-        }
-        
-        .about-text p {
-            margin-bottom: 1rem;
-            color: var(--text-dark);
-        }
-
-        /*
-        ========================================
-        Features Section
-        ========================================
-        */
-        .features {
-            background-color: var(--background-white);
-            transition: background-color var(--transition-speed);
-        }
-        
-        .features-grid {
-            display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
         }
-        
-        .feature-card {
-            text-align: center;
-            padding: 2.5rem;
-            background-color: transparent;
-            border: 1px solid #e0e0e0;
-            border-radius: var(--border-radius-md);
-            transition: transform var(--transition-speed), box-shadow var(--transition-speed), background-color var(--transition-speed), border-color var(--transition-speed);
-        }
-        
-        body.dark-mode .feature-card {
-            border-color: #444;
-        }
 
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-lg);
-            background-color: var(--background-white);
-            border-color: transparent;
-        }
-        
-        .feature-icon svg {
-            width: 60px;
-            height: 60px;
-            fill: var(--primary-color);
-            margin-bottom: 1.5rem;
-            transition: transform 0.4s ease;
-        }
-        .feature-card:hover .feature-icon svg {
-            transform: scale(1.1) rotate(-15deg);
-        }
-        
-        .feature-title {
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-            color: var(--secondary-color);
-        }
-        
-        /*
-        ========================================
-        Testimonials Section
-        ========================================
-        */
-        .testimonials {
-            background-color: var(--primary-lightest);
-            transition: background-color var(--transition-speed);
-        }
-        
-        body.dark-mode .testimonials {
-            background-color: var(--background-dark-surface);
-        }
-        
-        .testimonial-carousel {
-            max-width: 800px;
-            margin: 0 auto;
+        .card {
+            background: var(--bg-panel);
+            border: var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
             position: relative;
-            overflow: hidden;
-            border-radius: var(--border-radius-md);
-            background-color: var(--background-white);
-            box-shadow: var(--shadow-md);
+            transition: transform 0.1s;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        .card-content {
+            transform: translateZ(20px); /* 3D pop */
+            display: flex; flex-direction: column; height: 100%;
         }
 
-        .testimonial-slider {
-            display: flex;
-            transition: transform var(--transition-speed) ease-in-out;
-        }
-        
-        .testimonial {
-            text-align: center;
-            padding: 3rem 4rem;
-            min-width: 100%;
-            box-sizing: border-box;
-        }
-        
-        .testimonial-text {
-            font-size: 1.2rem;
-            font-style: italic;
+        .card-image-wrap {
+            height: 300px;
+            display: flex; align-items: center; justify-content: center;
             margin-bottom: 1.5rem;
-            color: var(--text-muted);
-        }
-        
-        .testimonial-author {
-            font-weight: bold;
-            color: var(--secondary-color);
-            font-size: 1.1rem;
+            position: relative;
         }
 
-        .testimonial-nav {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
+        .card-img {
+            max-height: 100%;
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5));
+            transition: 0.3s;
+        }
+
+        .card:hover .card-img { transform: scale(1.1) rotate(5deg); }
+
+        .card-title { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .card-price { color: var(--primary); font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; }
+        .card-desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: auto; line-height: 1.6; }
+
+        .add-btn {
             width: 100%;
-            display: flex;
-            justify-content: space-between;
-            padding: 0 1rem;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            font-family: var(--font-main);
+            text-transform: uppercase;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 8px;
+        }
+        .add-btn:hover { background: var(--primary); color: #000; }
+
+        /* Glare effect on tilt */
+        .card::after {
+            content: "";
+            position: absolute; inset: 0;
+            background: linear-gradient(125deg, rgba(255,255,255,0.1) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.1) 100%);
+            border-radius: 20px;
+            opacity: 0; transition: opacity 0.3s;
             pointer-events: none;
         }
+        .card:hover::after { opacity: 1; }
 
-        .testimonial-nav-btn {
-            background-color: rgba(255, 255, 255, 0.7);
-            border: none;
-            cursor: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: var(--shadow-sm);
-            transition: background-color var(--transition-speed), transform var(--transition-speed);
-            pointer-events: all;
-        }
-
-        body.dark-mode .testimonial-nav-btn {
-            background-color: rgba(50, 50, 50, 0.7);
-        }
-
-        .testimonial-nav-btn:hover {
-            background-color: white;
-            transform: scale(1.1);
-        }
-        
-        body.dark-mode .testimonial-nav-btn:hover {
-            background-color: var(--background-dark-surface);
-        }
-
-        .testimonial-nav-btn svg {
-            width: 20px;
-            height: 20px;
-            fill: var(--secondary-color);
-        }
-        
-        /*
+        /* 
         ========================================
-        Blog Section
+        CUSTOMIZER (Split Layout)
         ========================================
         */
-        .blog {
-            background: url('https://www.toptal.com/designers/subtlepatterns/uploads/topography.png') var(--background-light);
-            transition: background var(--transition-speed);
-        }
-        
-        .blog-grid {
+        .customizer-layout {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .blog-card {
-            background: var(--background-white);
-            border-radius: var(--border-radius-md);
-            box-shadow: var(--shadow-md);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
-        }
-        .blog-card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-lg);
-        }
-        .blog-card-img {
-            height: 200px;
-            width: 100%;
-            object-fit: cover;
-        }
-        .blog-card-content {
-            padding: 1.5rem;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        .blog-card-tag {
-            background: var(--primary-lightest);
-            color: var(--primary-color);
-            padding: 0.25rem 0.75rem;
-            border-radius: var(--border-radius-lg);
-            font-size: 0.8rem;
-            font-weight: bold;
-            display: inline-block;
-            margin-bottom: 1rem;
-        }
-        body.dark-mode .blog-card-tag {
-            background: var(--secondary-dark);
-            color: var(--text-dark);
-        }
-        .blog-card-title {
-            font-size: 1.3rem;
-            color: var(--secondary-color);
-            margin-bottom: 0.5rem;
-        }
-        .blog-card-excerpt {
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-            flex-grow: 1;
-        }
-        .blog-card-link {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: bold;
-            margin-top: auto;
-        }
-        .blog-card-link:hover {
-            text-decoration: underline;
-        }
-
-        /*
-        ========================================
-        FAQ Section
-        ========================================
-        */
-        .faq {
-            background-color: var(--background-white);
-            transition: background-color var(--transition-speed);
-        }
-
-        .faq-accordion {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .faq-item {
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        body.dark-mode .faq-item {
-            border-bottom-color: #444;
-        }
-        
-        .faq-question {
-            width: 100%;
-            background: none;
-            border: none;
-            text-align: left;
-            padding: 1.5rem 1rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: none;
-            display: flex;
-            justify-content: space-between;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
             align-items: center;
-            color: var(--secondary-color);
-            transition: background-color var(--transition-speed);
-        }
-        
-        .faq-question:hover {
-            background-color: var(--primary-lightest);
-        }
-        
-        body.dark-mode .faq-question:hover {
-            background-color: var(--background-dark-surface);
-        }
-        
-        .faq-icon {
-            transition: transform var(--transition-speed);
-            font-size: 1.5rem;
-            color: var(--primary-color);
-        }
-        
-        .faq-item.active .faq-icon {
-            transform: rotate(135deg);
         }
 
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
-            padding: 0 1rem;
+        .preview-stage {
+            height: 600px;
+            background: radial-gradient(circle at center, rgba(0,242,234,0.1) 0%, transparent 70%);
+            display: flex; align-items: center; justify-content: center;
+            border: var(--glass-border);
+            border-radius: 30px;
+            position: relative;
         }
-        
-        .faq-answer p {
-            padding-bottom: 1.5rem;
-            color: var(--text-dark);
+
+        .preview-img { height: 80%; z-index: 2; transition: 0.5s; }
+        .engraving-text {
+            position: absolute;
+            bottom: 25%;
+            font-family: monospace;
+            color: rgba(255,255,255,0.7);
+            font-size: 1.2rem;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            transform: rotate(-2deg);
+            z-index: 3;
         }
-        
-        /*
-        ========================================
-        Contact Section
-        ========================================
-        */
-        .contact {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
-            color: var(--text-light);
-            padding: 5rem 0;
-            transition: background var(--transition-speed);
-        }
-        
-        .contact .section-title {
-            color: var(--text-light);
-        }
-        
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 3rem;
-            background-color: rgba(255, 255, 255, 0.1);
+
+        .controls-panel {
+            background: var(--bg-panel);
             padding: 3rem;
-            border-radius: var(--border-radius-md);
-            backdrop-filter: blur(5px);
-        }
-        
-        body.dark-mode .contact-grid {
-            background-color: rgba(0, 0, 0, 0.2);
-        }
-        
-        .contact-form input,
-        .contact-form textarea {
-            width: 100%;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border: 1px solid transparent;
-            border-radius: var(--border-radius-sm);
-            font-family: var(--font-family-base);
-            font-size: 1rem;
-            background: rgba(255, 255, 255, 0.9);
-            color: var(--text-dark);
-            transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+            border-radius: 20px;
+            border: var(--glass-border);
+            backdrop-filter: var(--glass-blur);
         }
 
-        .contact-form input:focus,
-        .contact-form textarea:focus {
-            outline: none;
-            border-color: var(--secondary-color);
-            box-shadow: 0 0 10px var(--secondary-color);
+        .control-group { margin-bottom: 2rem; }
+        .control-label { display: block; margin-bottom: 1rem; color: var(--text-muted); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; }
+
+        .color-grid { display: flex; gap: 10px; }
+        .color-btn {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: 0.3s;
         }
-        
-        .contact-form textarea {
-            height: 150px;
-            resize: vertical;
+        .color-btn.active { border-color: white; transform: scale(1.2); }
+
+        .text-input {
+            width: 100%;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid #333;
+            padding: 1rem;
+            color: white;
+            font-family: var(--font-main);
+            border-radius: 8px;
         }
-        
-        .contact-info {
-            line-height: 2.2;
-        }
-        
-        .contact-info h3 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-        }
-        
-        /*
+        .text-input:focus { outline: none; border-color: var(--primary); }
+
+        /* 
         ========================================
-        Footer
+        CART DRAWER
+        ========================================
+        */
+        .cart-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1001;
+            opacity: 0; pointer-events: none;
+            transition: 0.3s;
+        }
+        .cart-overlay.open { opacity: 1; pointer-events: all; }
+
+        .cart-drawer {
+            position: fixed; top: 0; right: -450px;
+            width: 450px; height: 100%;
+            background: #0a0a0a;
+            border-left: var(--glass-border);
+            z-index: 1002;
+            padding: 2rem;
+            display: flex; flex-direction: column;
+            transition: 0.4s var(--ease-out);
+        }
+        .cart-drawer.open { right: 0; }
+
+        .cart-items { flex-grow: 1; overflow-y: auto; margin: 2rem 0; list-style: none; }
+        .cart-item {
+            display: flex; align-items: center; gap: 1rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.05);
+            margin-bottom: 1rem;
+            border-radius: 8px;
+        }
+        .cart-item img { width: 50px; height: 50px; object-fit: contain; }
+        .cart-total { font-size: 1.5rem; border-top: 1px solid #333; padding-top: 1rem; display: flex; justify-content: space-between; }
+
+        /* 
+        ========================================
+        FOOTER
         ========================================
         */
         footer {
-            background-color: var(--secondary-dark);
-            color: var(--text-light);
-            padding: 4rem 0 2rem 0;
-            text-align: center;
-            transition: background-color var(--transition-speed);
-        }
-
-        body.dark-mode footer {
-            background-color: #000;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            text-align: left;
-            margin-bottom: 3rem;
-        }
-
-        .footer-column h4 {
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-            color: var(--primary-lightest);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .footer-column ul {
-            list-style: none;
-        }
-        
-        .footer-column ul li {
-            margin-bottom: 0.5rem;
-        }
-
-        .footer-column a {
-            color: var(--primary-lighter);
-            text-decoration: none;
-            transition: color var(--transition-speed);
-        }
-
-        .footer-column a:hover {
-            color: var(--text-light);
-            text-decoration: underline;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .footer-logo svg {
-            width: 40px;
-            height: 40px;
-        }
-        
-        .footer-logo h2 {
-            font-size: 1.8rem;
-        }
-
-        .footer-logo span {
-            font-weight: 300;
-        }
-        
-        .footer-newsletter-form {
-            margin-top: 1.5rem;
-            display: flex;
-        }
-        .footer-newsletter-form input {
-            flex-grow: 1;
-            padding: 0.75rem;
-            border: 1px solid var(--primary-color);
-            border-radius: var(--border-radius-sm) 0 0 var(--border-radius-sm);
-            background: var(--background-dark-surface);
-            color: var(--text-light);
-        }
-        .footer-newsletter-form button {
-            padding: 0.75rem 1rem;
-            background: var(--primary-color);
-            color: var(--text-light);
-            border: 1px solid var(--primary-color);
-            border-radius: 0 var(--border-radius-sm) var(--border-radius-sm) 0;
-            cursor: none;
-        }
-
-        .footer-socials {
-            margin-top: 1.5rem;
-        }
-        
-        .footer-socials a {
-            color: var(--text-light);
-            margin: 0 0.75rem;
-            font-size: 1.5rem;
-            text-decoration: none;
-            transition: color var(--transition-speed), transform var(--transition-speed);
-            display: inline-block;
-        }
-
-        .footer-socials a svg {
-            width: 24px;
-            height: 24px;
-            fill: currentColor;
-        }
-        
-        .footer-socials a:hover {
-            color: var(--primary-light);
-            transform: translateY(-3px);
-        }
-        
-        .footer-bottom {
-            border-top: 1px solid #1a5ca4;
-            padding-top: 2rem;
-            margin-top: 2rem;
-            text-align: center;
-            font-size: 0.9rem;
-            color: var(--primary-lighter);
-        }
-
-        body.dark-mode .footer-bottom {
-            border-top-color: #333;
-        }
-        
-        /*
-        ========================================
-        Modals (General) & Overlays
-        ========================================
-        */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-            z-index: 1999;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
-        }
-        
-        .modal-overlay.open {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.95);
-            background-color: var(--background-white);
-            box-shadow: var(--shadow-lg);
-            z-index: 2000;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.4s, transform 0.4s, visibility 0.4s, background-color var(--transition-speed);
-            border-radius: var(--border-radius-md);
-            overflow: hidden;
-        }
-
-        .modal.open {
-            opacity: 1;
-            visibility: visible;
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid #eee;
-        }
-        
-        body.dark-mode .modal-header {
-            border-bottom-color: #333;
-        }
-        
-        .modal-header h3 {
-            font-size: 1.5rem;
-            color: var(--secondary-color);
-        }
-        
-        .modal-close-btn {
-            background: none;
-            border: none;
-            cursor: none;
-            font-size: 2rem;
-        }
-        .modal-close-btn svg {
-            width: 24px;
-            height: 24px;
-            fill: var(--text-muted);
-            transition: transform 0.2s, fill 0.2s;
-        }
-        .modal-close-btn:hover svg {
-            transform: rotate(90deg);
-            fill: var(--accent-danger);
-        }
-
-        /*
-        ========================================
-        Quick View Modal
-        ========================================
-        */
-        #quick-view-modal {
-            max-width: 800px;
-            width: 90%;
-        }
-        .quick-view-body {
-            padding: 2rem;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-        }
-        .quick-view-img {
-            width: 100%;
-            height: 300px;
-            object-fit: contain;
-            background: var(--primary-lightest);
-            border-radius: var(--border-radius-sm);
-        }
-        body.dark-mode .quick-view-img {
-            background: var(--background-dark-surface);
-        }
-        #quick-view-title { font-size: 1.8rem; color: var(--secondary-color); }
-        #quick-view-price { font-size: 1.5rem; color: var(--primary-color); font-weight: bold; margin: 0.5rem 0 1rem; }
-        #quick-view-description { color: var(--text-muted); margin-bottom: 1.5rem; }
-
-
-        /*
-        ========================================
-        Recommender Modal
-        ========================================
-        */
-        #recommender-modal {
-            max-width: 600px;
-            width: 90%;
-            text-align: center;
-        }
-        .recommender-body { padding: 2.5rem; }
-        .recommender-body h3 { font-size: 1.8rem; margin-bottom: 1rem; color: var(--secondary-color); }
-        .recommender-body .btn { margin-top: 1.5rem; }
-
-        .quiz-step { display: none; }
-        .quiz-step.active { display: block; animation: fadeInStep 0.5s ease-in-out; }
-        @keyframes fadeInStep {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .quiz-question { font-size: 1.2rem; margin-bottom: 1.5rem; }
-        .quiz-options { display: flex; flex-direction: column; gap: 1rem; }
-        .quiz-options label {
-            padding: 1rem;
-            border: 1px solid #ddd;
-            border-radius: var(--border-radius-sm);
-            cursor: none;
-            transition: border-color 0.2s, background-color 0.2s;
-            text-align: left;
-        }
-        body.dark-mode .quiz-options label { border-color: #444; }
-        .quiz-options label:hover { background-color: var(--primary-lightest); }
-        body.dark-mode .quiz-options label:hover { background-color: var(--background-dark-surface); }
-        .quiz-options input[type="radio"] { display: none; }
-        .quiz-options input[type="radio"]:checked + span { font-weight: bold; color: var(--primary-color); }
-        .quiz-nav { margin-top: 2rem; display: flex; justify-content: space-between; }
-
-
-        /*
-        ========================================
-        Shopping Cart Drawer
-        ========================================
-        */
-        .cart-drawer {
-            position: fixed;
-            top: 0;
-            right: -100%; /* Initially hidden */
-            width: 100%;
-            max-width: 450px;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            box-shadow: var(--shadow-lg);
-            border-left: 1px solid rgba(255, 255, 255, 0.2);
-            z-index: 2000;
-            transition: right 0.4s ease-in-out, background-color var(--transition-speed);
-            display: flex;
-            flex-direction: column;
-        }
-        
-        body.dark-mode .cart-drawer {
-            background-color: rgba(30, 30, 30, 0.85);
-            border-left: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .cart-drawer.open {
-            right: 0;
-        }
-
-        .cart-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid rgba(0,0,0,0.1);
-        }
-        
-        body.dark-mode .cart-header {
-            border-bottom-color: rgba(255,255,255,0.1);
-        }
-
-        .cart-header h3 {
-            font-size: 1.5rem;
-            color: var(--secondary-color);
-        }
-        
-        .close-cart-btn {
-            background: none;
-            border: none;
-            cursor: none;
-            font-size: 2rem;
-        }
-
-        .close-cart-btn svg {
-            width: 24px;
-            height: 24px;
-            fill: var(--text-muted);
-            transition: transform 0.2s, fill 0.2s;
-        }
-
-        .close-cart-btn:hover svg {
-            transform: rotate(90deg);
-            fill: var(--accent-danger);
-        }
-        
-        .cart-body {
-            flex-grow: 1;
-            overflow-y: auto;
-            padding: 1.5rem;
-        }
-        
-        .cart-empty-message {
+            border-top: var(--glass-border);
+            padding: 4rem 0;
+            background: #020202;
             text-align: center;
             color: var(--text-muted);
-            margin-top: 2rem;
         }
 
-        .cart-items-list {
-            list-style: none;
-        }
-
-        .cart-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            gap: 1rem;
-            background: rgba(255,255,255,0.5);
-            padding: 1rem;
-            border-radius: var(--border-radius-sm);
-        }
-        
-        body.dark-mode .cart-item {
-            background: rgba(255,255,255,0.05);
-        }
-        
-        .cart-item-img {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
-            background-color: var(--primary-lightest);
-            border-radius: var(--border-radius-sm);
-        }
-        
-        body.dark-mode .cart-item-img {
-            background-color: var(--background-dark-surface);
-        }
-        
-        .cart-item-info {
-            flex-grow: 1;
-        }
-
-        .cart-item-title {
-            font-size: 1rem;
-            font-weight: 600;
-            display: block;
-            margin-bottom: 0.25rem;
-        }
-
-        .cart-item-details {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-        
-        .cart-item-price {
-            color: var(--primary-color);
-            font-size: 0.9rem;
-        }
-        
-        .cart-item-quantity {
-            display: flex;
-            align-items: center;
-            margin-top: 0.5rem;
-        }
-
-        .quantity-btn {
-            background-color: #eee;
-            border: none;
-            width: 25px;
-            height: 25px;
-            cursor: none;
-            font-weight: bold;
-            color: var(--text-dark);
-            border-radius: 50%;
-        }
-        
-        body.dark-mode .quantity-btn {
-            background-color: #444;
-            color: var(--text-dark);
-        }
-        
-        .item-quantity {
-            width: 30px;
-            text-align: center;
-            font-weight: 600;
-        }
-
-        .cart-item-remove-btn {
-            background: none;
-            border: none;
-            color: var(--accent-danger);
-            cursor: none;
-            font-size: 0.8rem;
-            text-decoration: underline;
-            margin-left: auto;
-        }
-
-        .cart-footer {
-            padding: 1.5rem;
-            border-top: 1px solid rgba(0,0,0,0.1);
-            background: rgba(255,255,255,0.7);
-        }
-        
-        body.dark-mode .cart-footer {
-            border-top-color: rgba(255,255,255,0.1);
-            background: rgba(40,40,40,0.7);
-        }
-
-        .cart-subtotal, .cart-discount, .cart-total {
-            display: flex;
-            justify-content: space-between;
-            font-size: 1.1rem;
-            margin-bottom: 0.75rem;
-        }
-        .cart-total {
-            font-size: 1.3rem;
-            font-weight: bold;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px dashed var(--text-muted);
-        }
-        .cart-discount {
-            color: var(--accent-success);
-            display: none; /* Hidden by default */
-        }
-
-        .promo-code-wrapper {
-            display: flex;
-            margin-bottom: 1.5rem;
-            gap: 0.5rem;
-        }
-        .promo-code-wrapper input {
-            flex-grow: 1;
-            padding: 0.75rem;
-            border: 1px solid #ccc;
-            border-radius: var(--border-radius-sm);
-        }
-        body.dark-mode .promo-code-wrapper input {
-            background-color: var(--background-dark-surface);
-            border-color: #555;
-            color: var(--text-dark);
-        }
-
-        .cart-checkout-btn {
-            width: 100%;
-            padding: 1rem;
-            font-size: 1.1rem;
-            margin-top: 1rem;
-        }
-        
-        /*
-        ========================================
-        Toast Notifications
-        ========================================
-        */
-        .toast-container {
-            position: fixed;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 9998;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            align-items: center;
-        }
-
-        .toast {
-            padding: 1rem 1.5rem;
-            border-radius: var(--border-radius-lg);
-            color: var(--text-light);
-            font-weight: 500;
-            box-shadow: var(--shadow-lg);
-            opacity: 0;
-            transform: translateY(20px);
-            animation: toast-in 0.3s forwards, toast-out 0.3s 2.7s forwards;
-        }
-        .toast.success { background-color: var(--accent-success); }
-        .toast.error { background-color: var(--accent-danger); }
-        .toast.info { background-color: var(--primary-color); }
-
-        @keyframes toast-in {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        @keyframes toast-out {
-            from {
-                opacity: 1;
-                transform: translateY(0);
-            }
-            to {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-        }
-
-        /*
-        ========================================
-        Back to Top Button
-        ========================================
-        */
-        .back-to-top {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background-color: var(--primary-color);
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            box-shadow: var(--shadow-md);
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(20px);
-            transition: opacity 0.3s, visibility 0.3s, transform 0.3s, background-color 0.3s;
-            z-index: 900;
-            cursor: none;
-        }
-        
-        .back-to-top.visible {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-        
-        .back-to-top:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-5px);
-        }
-        
-        .back-to-top svg {
-            width: 24px;
-            height: 24px;
-            fill: white;
-        }
-
-        /*
-        ========================================
-        Responsive Adjustments
-        ========================================
-        */
-        @media (max-width: 1024px) {
-            .about-content, .join-club-content, .tech-container {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            .about-image, .join-club-image, .tech-demo {
-                order: -1;
-                margin-bottom: 2rem;
-            }
-            .customizer-container {
-                 grid-template-columns: 1fr;
-            }
-            .quick-view-body {
-                grid-template-columns: 1fr;
-            }
-            .tech-feature-item {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-        }
-        
+        /* Mobile Responsive */
         @media (max-width: 768px) {
-            .section-title {
-                font-size: 2rem;
-            }
-            
-            nav { display: none; } /* Simplified for demo, would need a hamburger menu */
-            
-            .header-content {
-                justify-content: space-between;
-                width: 100%;
-            }
-            
-            .header-actions {
-                position: static;
-            }
-            
-            .hero-title-container {
-                font-size: 3rem;
-            }
-            .hero p {
-                font-size: 1.1rem;
-            }
-
-            .contact-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .testimonial-nav {
-                padding: 0;
-            }
-            .testimonial {
-                padding: 2rem 1rem;
-            }
-
-            .custom-cursor {
-                display: none;
-            }
-            body {
-                cursor: auto;
-            }
-            .btn, .cart-icon-btn, .color-swatch, .option-btn, .testimonial-nav-btn, .faq-question, .modal-close-btn, .cart-item-remove-btn, .quantity-btn, .back-to-top, .quiz-options label, .filter-btn, .theme-switcher, .footer-newsletter-form button {
-                cursor: pointer;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .container {
-                width: 95%;
-            }
-            .product-grid {
-                grid-template-columns: 1fr;
-            }
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-            .footer-content {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            .footer-column ul {
-                padding-left: 0;
-            }
-            .footer-logo {
-                justify-content: center;
-            }
-             .footer-newsletter-form {
-                justify-content: center;
-            }
-            .product-actions {
-                flex-direction: column;
-            }
-            .hero-title-container {
-                font-size: 2.5rem;
-            }
+            .section-title { font-size: 2.5rem; }
+            .customizer-layout { grid-template-columns: 1fr; }
+            .nav-links { display: none; } /* Simplified for demo */
+            .cart-drawer { width: 100%; right: -100%; }
         }
     </style>
 </head>
 <body>
-    <!-- Page Preloader -->
-    <div class="preloader">
-        <div class="preloader-logo">
-            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M50 0C26.5 0 10 20.8333 10 41.6667C10 66.6667 50 100 50 100C50 100 90 66.6667 90 41.6667C90 20.8333 73.5 0 50 0ZM50 58.3333C41.25 58.3333 34.1667 51.25 34.1667 42.5C34.1667 33.75 41.25 26.6667 50 26.6667C58.75 26.6667 65.8333 33.75 65.8333 42.5C65.8333 51.25 58.75 58.3333 50 58.3333Z" fill="white"/>
-            </svg>
-        </div>
-        <p class="preloader-text">HYDRATING YOUR WORLD</p>
-    </div>
+
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay"></div>
 
     <!-- Custom Cursor -->
-    <div class="custom-cursor"></div>
+    <div class="cursor-dot"></div>
+    <div class="cursor-circle"></div>
 
-    <!-- Toast Notification Container -->
-    <div id="toast-container" class="toast-container"></div>
-
-    <!-- SVG Icons Definition -->
-    <svg width="0" height="0" class="hidden">
-      <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="icon-facebook"><path d="M18.77 7.46H14.5v-1.9c0-.9.6-1.1 1-1.1h3V.5h-4.33C10.24.5 9.5 3.14 9.5 5.32v2.14H6v4.44h3.5v12h4.44v-12h3.81l.47-4.44z"/></symbol>
-      <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="icon-instagram"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.584.069-4.85c.149-3.225 1.664-4.771 4.919-4.919C8.416 2.175 8.796 2.163 12 2.163m0-1.602c-3.264 0-3.66.014-4.944.076-4.353.2-6.135 1.983-6.335 6.335-.062 1.284-.076 1.68-.076 4.944s.014 3.66.076 4.944c.2 4.353 1.982 6.135 6.335 6.335 1.284.062 1.68.076 4.944.076s3.66-.014 4.944-.076c4.353-.2 6.135-1.982 6.335-6.335.062-1.284-.076-1.68.076-4.944s-.014-3.66-.076-4.944c-.2-4.353-1.982-6.135-6.335-6.335C15.66.575 15.264.561 12 .561z"/><path d="M12 6.865c-2.841 0-5.135 2.294-5.135 5.135s2.294 5.135 5.135 5.135 5.135-2.294 5.135-5.135S14.841 6.865 12 6.865zm0 8.73c-1.984 0-3.595-1.611-3.595-3.595s1.611-3.595 3.595-3.595 3.595 1.611 3.595 3.595-1.611 3.595-3.595 3.595z"/><circle cx="16.862" cy="7.138" r="1.232"/></symbol>
-      <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="icon-twitter"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.223.085 4.93 4.93 0 004.6 3.419A9.9 9.9 0 010 17.54a13.94 13.94 0 007.544 2.213c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></symbol>
-      <symbol id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></symbol>
-      <symbol id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></symbol>
-    </svg>
-
-    <!-- Header Section -->
+    <!-- Navigation -->
     <header>
-        <div class="container">
-            <div class="header-content">
-                <a href="#home" class="logo" aria-label="HydroBottles Homepage" data-magnetic>
-                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M50 0C26.5 0 10 20.8333 10 41.6667C10 66.6667 50 100 50 100C50 100 90 66.6667 90 41.6667C90 20.8333 73.5 0 50 0ZM50 58.3333C41.25 58.3333 34.1667 51.25 34.1667 42.5C34.1667 33.75 41.25 26.6667 50 26.6667C58.75 26.6667 65.8333 33.75 65.8333 42.5C65.8333 51.25 58.75 58.3333 50 58.3333Z" fill="white"/>
-                    </svg>
-                    <h1>Hydro<span>Bottles</span></h1>
-                </a>
-                <nav>
-                    <ul>
-                        <li><a href="#home" data-magnetic>Home</a></li>
-                        <li><a href="#products" data-magnetic>Products</a></li>
-                        <li><a href="#customizer" data-magnetic>Customize</a></li>
-                        <li><a href="#about" data-magnetic>About</a></li>
-                        <li><a href="#contact" data-magnetic>Contact</a></li>
-                    </ul>
-                </nav>
-                <div class="header-actions">
-                    <button class="theme-switcher" id="theme-switcher" aria-label="Toggle light/dark theme" data-magnetic>
-                        <svg class="sun-icon"><use href="#icon-sun"/></svg>
-                        <svg class="moon-icon" style="display:none;"><use href="#icon-moon"/></svg>
-                    </button>
-                    <button class="cart-icon-btn" id="open-cart-btn" aria-label="Open Shopping Cart" data-magnetic>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
-                        <span id="cart-item-count" class="cart-item-count">0</span>
-                    </button>
-                </div>
+        <div class="container nav-flex">
+            <a href="#" class="logo" data-hover>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--primary)"><path d="M12,2c-5,0-9,4-9,9c0,5,4,9,9,9s9-4,9-9C21,6,17,2,12,2z M12,18c-3.9,0-7-3.1-7-7c0-3.9,3.1-7,7-7s7,3.1,7,7C19,14.9,15.9,18,12,18z"/><circle cx="12" cy="11" r="2.5"/></svg>
+                HYDRO<span>BOTTLES</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#products" data-hover>Collection</a></li>
+                <li><a href="#customizer" data-hover>Lab</a></li>
+                <li><a href="#tech" data-hover>Technology</a></li>
+            </ul>
+            <div class="header-icons">
+                <button class="icon-btn" id="cart-btn" data-hover>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                    <span class="cart-count">0</span>
+                </button>
             </div>
         </div>
     </header>
-    
-    <main>
-        <!-- Hero Section -->
-        <section class="hero" id="home">
-            <div class="container">
-                <h2 class="hero-title-container">Stay Hydrated in Style</h2>
-                <p class="fade-in">Discover our premium collection of eco-friendly, durable water bottles designed for your active lifestyle.</p>
-                <a href="#products" class="btn fade-in" data-magnetic>Shop Our Collection</a>
+
+    <!-- Cart Drawer -->
+    <div class="cart-overlay"></div>
+    <div class="cart-drawer">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h2>Your Cart</h2>
+            <button class="icon-btn" id="close-cart">✕</button>
+        </div>
+        <ul class="cart-items" id="cart-items-list">
+            <!-- Items injected via JS -->
+            <li style="text-align:center; color:#555; margin-top:2rem;">Your hydration pod is empty.</li>
+        </ul>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total</span>
+                <span id="cart-total-price">$0.00</span>
             </div>
-        </section>
-        
-        <!-- Products Section -->
-        <section class="products" id="products">
-            <div class="container">
-                <h2 class="section-title fade-in">Our Products</h2>
-                <p class="section-subtitle fade-in">Choose the perfect companion for your daily hydration needs. Or, build your own!</p>
+            <button class="hero-btn" style="width:100%; margin-top:1rem;">Checkout</button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <canvas id="bg-canvas"></canvas>
+        <div class="hero-content">
+            <div class="section-subtitle">PROJECT HYDRATION</div>
+            <h1 class="hero-title" id="scramble-hero">FUTURE FLUIDITY</h1>
+            <p style="font-size: 1.2rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 2rem;">
+                Engineered with aerospace-grade composites and smart-sensor integration. 
+                Drink water like it's 2077.
+            </p>
+            <a href="#products" class="hero-btn" data-hover>Initialize Shop</a>
+        </div>
+    </section>
+
+    <!-- Infinite Marquee -->
+    <div class="marquee">
+        <div class="marquee-content">
+            SMART SENSORS /// 24H COLD INSULATION /// TITANIUM ALLOY CORE /// BLUETOOTH SYNC /// RGB LIGHTING /// SMART SENSORS /// 24H COLD INSULATION /// TITANIUM ALLOY CORE /// BLUETOOTH SYNC /// RGB LIGHTING ///
+        </div>
+    </div>
+
+    <!-- Products Section -->
+    <section id="products">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-subtitle">THE COLLECTION</div>
+                <h2 class="section-title scramble-text">Hardware</h2>
+            </div>
+            
+            <div class="product-grid">
+                <!-- Product 1 -->
+                <div class="card" data-tilt data-id="1" data-price="45" data-title="Cyber Flask V1">
+                    <div class="card-image-wrap">
+                        <img src="https://placehold.co/300x400/00f2ea/000000.png?text=CYBER+V1" alt="Bottle" class="card-img">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Cyber Flask V1</h3>
+                        <div class="card-price">$45.00</div>
+                        <p class="card-desc">Standard issue hydration unit. Matte finish with neon accents.</p>
+                        <button class="add-btn" data-hover>Add to Cart</button>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="card" data-tilt data-id="2" data-price="89" data-title="Smart Core Pro">
+                    <div class="card-image-wrap">
+                        <img src="https://placehold.co/300x400/ff0055/ffffff.png?text=CORE+PRO" alt="Bottle" class="card-img">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Smart Core Pro</h3>
+                        <div class="card-price">$89.00</div>
+                        <p class="card-desc">Integrated OLED display. Tracks intake and temperature.</p>
+                        <button class="add-btn" data-hover>Add to Cart</button>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="card" data-tilt data-id="3" data-price="65" data-title="Stealth Ops">
+                    <div class="card-image-wrap">
+                        <img src="https://placehold.co/300x400/333333/ffffff.png?text=STEALTH" alt="Bottle" class="card-img">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Stealth Ops</h3>
+                        <div class="card-price">$65.00</div>
+                        <p class="card-desc">Radar absorbent material. 48oz capacity. Heavy duty.</p>
+                        <button class="add-btn" data-hover>Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Customizer Section -->
+    <section id="customizer" style="background: radial-gradient(circle at top right, #111, #000);">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-subtitle">THE LAB</div>
+                <h2 class="section-title scramble-text">Customize</h2>
+            </div>
+
+            <div class="customizer-layout">
+                <div class="preview-stage">
+                    <div class="engraving-text" id="engraving-preview"></div>
+                    <img id="custom-bottle-img" src="https://placehold.co/300x500/00f2ea/000000.png?text=V1" class="preview-img">
+                </div>
                 
-                <div class="product-filters fade-in">
-                    <button class="filter-btn active" data-filter="all" data-magnetic>All</button>
-                    <button class="filter-btn" data-filter="smart" data-magnetic>Smart</button>
-                    <button class="filter-btn" data-filter="sport" data-magnetic>Sport</button>
-                    <button class="filter-btn" data-filter="daily" data-magnetic>Daily Use</button>
-                    <button class="filter-btn" data-filter="kids" data-magnetic>Kids</button>
-                </div>
-                
-                <div class="product-grid">
-                    <!-- Product 1 -->
-                    <div class="product-card fade-in" data-id="1" data-name="Classic Hydro Bottle" data-price="24.99" data-category="daily">
-                        <div class="product-img-container">
-                            <img src="https://placehold.co/300x300/ade8f4/023e8a?text=HydroBottle" alt="Classic Hydro Bottle" class="product-img" data-colors='{"#ade8f4":"https://placehold.co/300x300/ade8f4/023e8a?text=HydroBottle", "#f7a8a8":"https://placehold.co/300x300/f7a8a8/ffffff?text=HydroBottle", "#a8e6cf":"https://placehold.co/300x300/a8e6cf/023e8a?text=HydroBottle"}'>
-                        </div>
-                        <div class="product-info">
-                            <h3 class="product-title">Classic Hydro Bottle</h3>
-                            <p class="product-description">Perfect for everyday use with 24-hour cold retention. 24oz capacity.</p>
-                             <div class="product-colors">
-                                <span class="color-swatch active" style="background-color: #ade8f4;" data-color="#ade8f4"></span>
-                                <span class="color-swatch" style="background-color: #f7a8a8;" data-color="#f7a8a8"></span>
-                                <span class="color-swatch" style="background-color: #a8e6cf;" data-color="#a8e6cf"></span>
-                            </div>
-                            <p class="product-price">$24.99</p>
-                            <div class="product-actions">
-                                <button class="btn quick-view-btn" data-magnetic>Quick View</button>
-                                <button class="btn add-to-cart" data-magnetic>Add to Cart</button>
-                            </div>
-                        </div>
-                    </div>
+                <div class="controls-panel">
+                    <h3 style="margin-bottom: 2rem;">Configuration</h3>
                     
-                    <!-- Product 2 -->
-                    <div class="product-card fade-in" data-id="2" data-name="Sport Bottle Pro" data-price="29.99" data-category="sport">
-                        <div class="product-img-container">
-                            <img src="https://placehold.co/300x300/343a40/ffffff?text=Sport+Pro" alt="Sport Bottle Pro" class="product-img" data-colors='{"#343a40":"https://placehold.co/300x300/343a40/ffffff?text=Sport+Pro", "#e76f51":"https://placehold.co/300x300/e76f51/ffffff?text=Sport+Pro", "#0096c7":"https://placehold.co/300x300/0096c7/ffffff?text=Sport+Pro"}'>
-                        </div>
-                        <div class="product-info">
-                            <h3 class="product-title">Sport Bottle Pro</h3>
-                            <p class="product-description">Designed for athletes with an easy-flip straw and a non-slip grip. 32oz.</p>
-                             <div class="product-colors">
-                                <span class="color-swatch active" style="background-color: #343a40;" data-color="#343a40"></span>
-                                <span class="color-swatch" style="background-color: #e76f51;" data-color="#e76f51"></span>
-                                <span class="color-swatch" style="background-color: #0096c7;" data-color="#0096c7"></span>
-                            </div>
-                            <p class="product-price">$29.99</p>
-                             <div class="product-actions">
-                                <button class="btn quick-view-btn" data-magnetic>Quick View</button>
-                                <button class="btn add-to-cart" data-magnetic>Add to Cart</button>
-                            </div>
+                    <div class="control-group">
+                        <span class="control-label">Nano-Coating Color</span>
+                        <div class="color-grid">
+                            <button class="color-btn active" style="background:#00f2ea" data-color="00f2ea" data-hover></button>
+                            <button class="color-btn" style="background:#ff0055" data-color="ff0055" data-hover></button>
+                            <button class="color-btn" style="background:#ffffff" data-color="ffffff" data-hover></button>
+                            <button class="color-btn" style="background:#ffff00" data-color="ffff00" data-hover></button>
                         </div>
                     </div>
 
-                    <!-- Product 3 -->
-                    <div class="product-card fade-in" data-id="5" data-name="HydroSmart GLOW" data-price="49.99" data-category="smart">
-                        <div class="product-img-container">
-                            <img src="https://placehold.co/300x300/00b4d8/ffffff?text=SmartGlow" alt="HydroSmart GLOW" class="product-img" data-colors='{"#00b4d8":"https://placehold.co/300x300/00b4d8/ffffff?text=SmartGlow", "#ffffff":"https://placehold.co/300x300/ffffff/000000?text=SmartGlow", "#333333":"https://placehold.co/300x300/333333/ffffff?text=SmartGlow"}'>
-                        </div>
-                        <div class="product-info">
-                            <h3 class="product-title">HydroSmart GLOW</h3>
-                            <p class="product-description">Our smartest bottle yet. Tracks intake via Bluetooth and glows to remind you to drink. 21oz.</p>
-                             <div class="product-colors">
-                                <span class="color-swatch active" style="background-color: #00b4d8;" data-color="#00b4d8"></span>
-                                <span class="color-swatch" style="background-color: #ffffff; border: 1px solid #ccc" data-color="#ffffff"></span>
-                                <span class="color-swatch" style="background-color: #333333;" data-color="#333333"></span>
-                            </div>
-                            <p class="product-price">$49.99</p>
-                            <div class="product-actions">
-                                <button class="btn quick-view-btn" data-magnetic>Quick View</button>
-                                <button class="btn add-to-cart" data-magnetic>Add to Cart</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Product 4 -->
-                    <div class="product-card fade-in" data-id="3" data-name="Insulated Traveler" data-price="34.99" data-category="daily">
-                        <div class="product-img-container">
-                            <img src="https://placehold.co/300x300/f8f9fa/343a40?text=Traveler" alt="Insulated Traveler" class="product-img" data-colors='{"#f8f9fa":"https://placehold.co/300x300/f8f9fa/343a40?text=Traveler", "#6c757d":"https://placehold.co/300x300/6c757d/ffffff?text=Traveler", "#d4a373":"https://placehold.co/300x300/d4a373/ffffff?text=Traveler"}'>
-                        </div>
-                        <div class="product-info">
-                            <h3 class="product-title">Insulated Traveler</h3>
-                            <p class="product-description">Leak-proof coffee mug for hot and cold drinks. Fits most cup holders. 16oz.</p>
-                             <div class="product-colors">
-                                <span class="color-swatch active" style="background-color: #f8f9fa;" data-color="#f8f9fa"></span>
-                                <span class="color-swatch" style="background-color: #6c757d;" data-color="#6c757d"></span>
-                                <span class="color-swatch" style="background-color: #d4a373;" data-color="#d4a373"></span>
-                            </div>
-                            <p class="product-price">$34.99</p>
-                             <div class="product-actions">
-                                <button class="btn quick-view-btn" data-magnetic>Quick View</button>
-                                <button class="btn add-to-cart" data-magnetic>Add to Cart</button>
-                            </div>
-                        </div>
+                    <div class="control-group">
+                        <span class="control-label">Laser Engraving</span>
+                        <input type="text" class="text-input" id="engraving-input" placeholder="ENTER TEXT..." maxlength="12" data-hover>
                     </div>
 
-                    <!-- Product 5 -->
-                    <div class="product-card fade-in" data-id="6" data-name="The Juggernaut" data-price="39.99" data-category="sport">
-                        <div class="product-img-container">
-                            <img src="https://placehold.co/300x300/212529/ffffff?text=Juggernaut" alt="The Juggernaut" class="product-img" data-colors='{"#212529":"https://placehold.co/300x300/212529/ffffff?text=Juggernaut", "#e63946":"https://placehold.co/300x300/e63946/ffffff?text=Juggernaut"}'>
-                        </div>
-                        <div class="product-info">
-                            <h3 class="product-title">The Juggernaut</h3>
-                            <p class="product-description">For serious hydration. This half-gallon (64oz) beast keeps you going all day long.</p>
-                             <div class="product-colors">
-                                <span class="color-swatch active" style="background-color: #212529;" data-color="#212529"></span>
-                                <span class="color-swatch" style="background-color: #e63946;" data-color="#e63946"></span>
-                            </div>
-                            <p class="product-price">$39.99</p>
-                            <div class="product-actions">
-                                <button class="btn quick-view-btn" data-magnetic>Quick View</button>
-                                <button class="btn add-to-cart" data-magnetic>Add to Cart</button>
-                            </div>
-                        </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:3rem;">
+                        <div style="font-size:2rem; font-weight:700;">$55.00</div>
+                        <button class="hero-btn" id="add-custom-btn" data-hover>Build Unit</button>
                     </div>
-                    
-                    <!-- Product 6 -->
-                    <div class="product-card fade-in" data-id="4" data-name="Kids Hydro Pal" data-price="19.99" data-category="kids">
-                        <div class="product-img-container">
-                            <img src="https://placehold.co/300x300/ffc8dd/bde0fe?text=Kids+Pal" alt="Kids Hydro Pal" class="product-img" data-colors='{"#ffc8dd":"https://placehold.co/300x300/ffc8dd/bde0fe?text=Kids+Pal", "#a2d2ff":"https://placehold.co/300x300/a2d2ff/ffffff?text=Kids+Pal", "#cdb4db":"https://placehold.co/300x300/cdb4db/ffffff?text=Kids+Pal"}'>
-                        </div>
-                        <div class="product-info">
-                            <h3 class="product-title">Kids Hydro Pal</h3>
-                            <p class="product-description">Colorful, durable, and safe for children of all ages. Easy to clean. 12oz.</p>
-                             <div class="product-colors">
-                                <span class="color-swatch active" style="background-color: #ffc8dd;" data-color="#ffc8dd"></span>
-                                <span class="color-swatch" style="background-color: #a2d2ff;" data-color="#a2d2ff"></span>
-                                <span class="color-swatch" style="background-color: #cdb4db;" data-color="#cdb4db"></span>
-                            </div>
-                            <p class="product-price">$19.99</p>
-                            <div class="product-actions">
-                                <button class="btn quick-view-btn" data-magnetic>Quick View</button>
-                                <button class="btn add-to-cart" data-magnetic>Add to Cart</button>
-                            </div>
-                        </div>
-                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                    <!-- Product 7 -->
-                     <div class="product-card fade-in" data-id="7" data-name="Urban Sleek" data-price="27.99" data-category="daily">
-                        <div class="product-img-container">
-                            <img src="https://placehold.co/300x300/ced4da/212529?text=Urban" alt="Urban Sleek" class="product-img" data-colors='{"#ced4da":"https://placehold.co/300x300/ced4da/212529?text=Urban", "#6d6875":"https://placehold.co/300x300/6d6875/ffffff?text=Urban"}'>
-                        </div>
-                        <div class="product-info">
-                            <h3 class="product-title">Urban Sleek</h3>
-                            <p class="product-description">A minimalist design for the modern professional. Slim and lightweight. 20oz.</p>
-                             <div class="product-colors">
-                                <span class="color-swatch active" style="background-color: #ced4da;" data-color="#ced4da"></span>
-                                <span class="color-swatch" style="background-color: #6d6875;" data-color="#6d6875"></span>
-                            </div>
-                            <p class="product-price">$27.99</p>
-                            <div class="product-actions">
-                                <button class="btn quick-view-btn" data-magnetic>Quick View</button>
-                                <button class="btn add-to-cart" data-magnetic>Add to Cart</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Product 8 -->
-                    <div class="product-card fade-in" data-id="8" data-name="Infuser Bottle" data-price="28.99" data-category="daily">
-                        <div class="product-img-container">
-                             <img src="https://placehold.co/300x300/90ee90/4f772d?text=Infuser" alt="Infuser Bottle" class="product-img" data-colors='{"#90ee90":"https://placehold.co/300x300/90ee90/4f772d?text=Infuser", "#ffb3c1":"https://placehold.co/300x300/ffb3c1/800f2f?text=Infuser"}'>
-                        </div>
-                        <div class="product-info">
-                            <h3 class="product-title">Infuser Bottle</h3>
-                            <p class="product-description">Add a taste of nature. Comes with a removable fruit infuser basket. 28oz.</p>
-                             <div class="product-colors">
-                                <span class="color-swatch active" style="background-color: #90ee90;" data-color="#90ee90"></span>
-                                <span class="color-swatch" style="background-color: #ffb3c1;" data-color="#ffb3c1"></span>
-                            </div>
-                            <p class="product-price">$28.99</p>
-                            <div class="product-actions">
-                                <button class="btn quick-view-btn" data-magnetic>Quick View</button>
-                                <button class="btn add-to-cart" data-magnetic>Add to Cart</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Product Customizer Section -->
-        <section class="customizer" id="customizer">
-            <div class="container">
-                <h2 class="section-title fade-in">Build Your Own Bottle</h2>
-                <p class="section-subtitle fade-in">Craft a unique HydroBottle that matches your personal style. The possibilities are endless.</p>
-                <div class="customizer-container fade-in">
-                    <div class="customizer-options">
-                        <div class="option-group">
-                            <h4>1. Choose Your Base Model</h4>
-                            <div class="option-buttons" id="custom-base-options">
-                                <button class="option-btn active" data-value="classic" data-price="24.99" data-magnetic>Classic (24oz)</button>
-                                <button class="option-btn" data-value="sport" data-price="29.99" data-magnetic>Sport (32oz)</button>
-                                <button class="option-btn" data-value="traveler" data-price="34.99" data-magnetic>Traveler (16oz)</button>
-                            </div>
-                        </div>
-                        <div class="option-group">
-                            <h4>2. Select a Color</h4>
-                             <div class="option-buttons" id="custom-color-options">
-                                <button class="option-btn color-option color-swatch active" style="background-color: #ade8f4;" data-value="Sky Blue" data-color-hex="#ade8f4" data-magnetic></button>
-                                <button class="option-btn color-option color-swatch" style="background-color: #343a40;" data-value="Midnight Black" data-color-hex="#343a40" data-magnetic></button>
-                                <button class="option-btn color-option color-swatch" style="background-color: #e76f51;" data-value="Sunset Orange" data-color-hex="#e76f51" data-magnetic></button>
-                                <button class="option-btn color-option color-swatch" style="background-color: #a8e6cf;" data-value="Mint Green" data-color-hex="#a8e6cf" data-magnetic></button>
-                                <button class="option-btn color-option color-swatch" style="background-color: #f8f9fa;" data-value="Arctic White" data-color-hex="#f8f9fa" data-magnetic></button>
-                                <button class="option-btn color-option color-swatch" style="background-color: #ffc8dd;" data-value="Sakura Pink" data-color-hex="#ffc8dd" data-magnetic></button>
-                            </div>
-                        </div>
-                         <div class="option-group">
-                            <h4>3. Pick a Lid (+ $2.00)</h4>
-                             <div class="option-buttons" id="custom-lid-options">
-                                <button class="option-btn active" data-value="standard" data-price="0" data-magnetic>Standard</button>
-                                <button class="option-btn" data-value="straw" data-price="2.00" data-magnetic>Straw Lid</button>
-                                <button class="option-btn" data-value="handle" data-price="2.00" data-magnetic>Handle Lid</button>
-                            </div>
-                        </div>
-                        <div class="option-group">
-                            <h4>4. Add Engraving (+ $5.00)</h4>
-                            <input type="text" id="engraving-text" placeholder="Your Text Here (max 15 chars)" maxlength="15">
-                        </div>
-                    </div>
-                    <div class="customizer-preview">
-                        <div class="preview-image-wrapper">
-                             <img src="https://placehold.co/400x500/ade8f4/023e8a?text=HydroBottle" alt="Customized Bottle Preview" id="preview-img">
-                             <div id="preview-engraving"></div>
-                        </div>
-                        <div class="customizer-price-display" id="customizer-price">$24.99</div>
-                        <button class="btn btn-secondary" id="add-custom-to-cart" data-magnetic>Add Custom Bottle to Cart</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- AI Recommender Section -->
-        <section class="recommender" id="recommender">
-            <div class="container">
-                <h2 class="section-title fade-in">Find Your Perfect Match</h2>
-                <p class="section-subtitle fade-in">Not sure where to start? Let our AI-powered guide ask a few questions to find the ideal HydroBottle for your lifestyle.</p>
-                <div class="recommender-cta fade-in">
-                    <h3>The HydroBot 3000 Awaits</h3>
-                    <p>Answer a few simple questions and get a personalized recommendation in seconds. Hydration, optimized.</p>
-                    <button class="btn" id="start-quiz-btn" data-magnetic>Start the Quiz</button>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Smart Technology Section -->
-        <section class="technology" id="technology">
-            <div class="container">
-                <h2 class="section-title fade-in">The Future of Hydration</h2>
-                <p class="section-subtitle fade-in">Our HydroSmart bottles are more than just containers; they're your personal hydration coach.</p>
-                <div class="tech-container fade-in">
-                    <ul class="tech-features-list">
-                        <li class="tech-feature-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,18A6,6 0 0,1 6,12C6,11 6.25,10.03 6.7,9.15L7.9,10.35C7.65,10.85 7.5,11.41 7.5,12A4.5,4.5 0 0,0 12,16.5A4.5,4.5 0 0,0 16.5,12C16.5,11.41 16.35,10.85 16.1,10.35L17.3,9.15C17.75,10.03 18,11 18,12A6,6 0 0,1 12,18M12,4.5A7.5,7.5 0 0,1 19.5,12C19.5,13.62 19,15.12 18.12,16.35L16.95,15.18C17.61,14.31 18,13.2 18,12A6,6 0 0,0 12,6A6,6 0 0,0 6,12C6,13.2 6.39,14.31 7.05,15.18L5.88,16.35C5,15.12 4.5,13.62 4.5,12A7.5,7.5 0 0,1 12,4.5M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2Z"/></svg>
-                            <div>
-                                <h4>Smart Hydration Tracking</h4>
-                                <p>A high-precision sensor in the cap tracks your every sip. Sync with our app to set goals, monitor progress, and view your hydration history.</p>
-                            </div>
-                        </li>
-                        <li class="tech-feature-item">
-                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,6V7.3L13.8,5.5C14.24,5.06 14.9,4.95 15.44,5.2C15.98,5.45 16.29,6.04 16.13,6.59L15,10H18A2,2 0 0,1 20,12C20,12.83 19.5,13.56 18.79,13.87L13,19.8V18.5L11.2,20.3C10.76,20.74 10.1,20.85 9.56,20.6C9.02,20.35 8.71,19.76 8.87,19.21L10,15H7A2,2 0 0,1 5,13C5,12.17 5.5,11.44 6.21,11.13L12,6Z" /></svg>
-                            <div>
-                                <h4>Glow-to-Drink™ Reminders</h4>
-                                <p>The entire bottle body gently glows at set intervals to remind you it's time to drink. Never forget to hydrate again, even during your busiest days.</p>
-                            </div>
-                        </li>
-                         <li class="tech-feature-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5,16L3,5L8.5,10.5M19,16L21,5L15.5,10.5M12,22L15,17H9L12,22Z" /></svg>
-                            <div>
-                                <h4>Find My Bottle</h4>
-                                <p>Can't find your HydroBottle? Use the app to make it glow or play a sound, guiding you right to it. It's hydration, unlosable.</p>
-                            </div>
-                        </li>
-                    </ul>
-                    <div class="tech-demo">
-                        <h4>Interactive Demo</h4>
-                        <p class="text-muted">See it in action!</p>
-                        <div class="tech-demo-bottle">
-                            <p id="hydration-percent">50%</p>
-                            <img src="https://placehold.co/150x300/e9ecef/e9ecef?text=" alt="Bottle Outline">
-                            <div class="hydration-level" id="hydration-level-visual"></div>
-                        </div>
-                        <button class="btn" id="tech-demo-btn" data-magnetic>Simulate a Drink</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- About Us Section -->
-        <section class="about" id="about">
-            <div class="container">
-                <h2 class="section-title fade-in">Our Story</h2>
-                <div class="about-content">
-                    <div class="about-image fade-in">
-                        <img src="https://placehold.co/500x350/023e8a/ffffff?text=Our+Team" alt="A group of people hiking with water bottles">
-                    </div>
-                    <div class="about-text fade-in">
-                        <h3>Born from Adventure</h3>
-                        <p>Hydro Bottles Co. was founded by a group of outdoor enthusiasts who were tired of single-use plastic and unreliable water bottles. We wanted to create a product that was not only stylish and functional but also kind to our planet.</p>
-                        <p>Our mission is simple: to provide the highest quality reusable water bottles that support an active and sustainable lifestyle. Every bottle we design is a testament to our commitment to durability, performance, and environmental responsibility.</p>
-                        <a href="#contact" class="btn btn-secondary" data-magnetic>Join Our Journey</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Features Section -->
-        <section class="features" id="features">
-            <div class="container">
-                <h2 class="section-title fade-in">Why Choose HydroBottles</h2>
-                <p class="section-subtitle fade-in">We build our bottles with you and the planet in mind.</p>
-                <div class="features-grid">
-                    <!-- Feature 1 -->
-                    <div class="feature-card fade-in">
-                        <div class="feature-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,2A10,10,0,0,0,2,12A10,10,0,0,0,12,22A10,10,0,0,0,22,12C22,8.85,20.54,6.07,18.3,4.32L17.68,5C19.5,6.54,20.5,8.9,20.5,11.5A8.5,8.5,0,0,1,12,20A8.5,8.5,0,0,1,3.5,11.5A8.5,8.5,0,0,1,12,3A8.5,8.5,0,0,1,17.65,5.55L18.4,4.92C16.8,3.62,14.5,3,12,3A9,9,0,0,0,3,12A9,9,0,0,0,12,21A9,9,0,0,0,21,12C21,8.45,19.17,5.4,16.5,3.68V2H12M12,6V12H18V10H14V6H12Z" /></svg>
-                        </div>
-                        <h3 class="feature-title">Eco-Friendly</h3>
-                        <p>All our bottles are made from sustainable, BPA-free materials, helping reduce plastic waste.</p>
-                    </div>
-                    
-                    <!-- Feature 2 -->
-                    <div class="feature-card fade-in">
-                        <div class="feature-icon">
-                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,2A9,9,0,0,0,3,11V12A9,9,0,0,0,12,21A9,9,0,0,0,21,12V11A9,9,0,0,0,12,2M8,7H10.5V10.5H8V7M13.5,7H16V10.5H13.5V7M8,12H10.5V15.5H8V12M12,19.5A7.5,7.5,0,0,1,4.5,12V11A7.5,7.5,0,0,1,12,3.5A7.5,7.5,0,0,1,19.5,11V12A7.5,7.5,0,0,1,12,19.5M13.5,12H16V15.5H13.5V12Z" /></svg>
-                        </div>
-                        <h3 class="feature-title">Temperature Control</h3>
-                        <p>Advanced insulation keeps your drinks cold for 24 hours or hot for 12 hours.</p>
-                    </div>
-                    
-                    <!-- Feature 3 -->
-                    <div class="feature-card fade-in">
-                        <div class="feature-icon">
-                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7C13.4,7 14.8,8.1 14.8,9.5C14.8,10.9 13.4,12 12,12C10.6,12 9.2,10.9 9.2,9.5C9.2,8.1 10.6,7 12,7M17,17H7V15.8C7,13.8 11,12.9 12,12.9C13,12.9 17,13.8 17,15.8V17Z" /></svg>
-                        </div>
-                        <h3 class="feature-title">Built for Life</h3>
-                        <p>Built with premium 18/8 stainless steel, our bottles are dent-resistant and ready for any adventure.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Testimonials Section -->
-        <section class="testimonials" id="testimonials">
-            <div class="container">
-                <h2 class="section-title fade-in">What Our Customers Say</h2>
-                <div class="testimonial-carousel fade-in">
-                    <div class="testimonial-slider">
-                        <div class="testimonial">
-                            <p class="testimonial-text">"I take my Classic HydroBottle everywhere! It keeps my water ice cold all day, even in the summer heat. Best water bottle I've ever owned."</p>
-                            <p class="testimonial-author">- Sarah T., Avid Hiker</p>
-                        </div>
-                         <div class="testimonial">
-                            <p class="testimonial-text">"The Sport Bottle Pro is perfect for the gym. The straw lid is super convenient and it has never leaked in my gym bag. Highly recommend!"</p>
-                            <p class="testimonial-author">- Mark R., Fitness Enthusiast</p>
-                        </div>
-                         <div class="testimonial">
-                            <p class="testimonial-text">"As a coffee lover, the Insulated Traveler is a game-changer. My coffee stays piping hot for my entire morning commute. Plus, it looks so sleek!"</p>
-                            <p class="testimonial-author">- Emily C., Daily Commuter</p>
-                        </div>
-                        <div class="testimonial">
-                            <p class="testimonial-text">"The HydroSmart GLOW is genius! The glowing reminders have genuinely helped me drink more water throughout my work day. Worth every penny."</p>
-                            <p class="testimonial-author">- David L., Tech Professional</p>
-                        </div>
-                    </div>
-                    <div class="testimonial-nav">
-                         <button class="testimonial-nav-btn" id="prev-testimonial" aria-label="Previous testimonial" data-magnetic>
-                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z" /></svg>
-                         </button>
-                         <button class="testimonial-nav-btn" id="next-testimonial" aria-label="Next testimonial" data-magnetic>
-                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" /></svg>
-                         </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Blog Section -->
-        <section class="blog" id="blog">
-            <div class="container">
-                <h2 class="section-title fade-in">From Our Blog</h2>
-                <p class="section-subtitle fade-in">Tips, stories, and news on staying hydrated and living sustainably.</p>
-                <div class="blog-grid fade-in">
-                    <!-- Blog Card 1 -->
-                    <div class="blog-card">
-                        <img src="https://placehold.co/400x200/2a9d8f/ffffff?text=Hydration+Tips" alt="Water pouring into a glass" class="blog-card-img">
-                        <div class="blog-card-content">
-                            <span class="blog-card-tag">Wellness</span>
-                            <h4 class="blog-card-title">5 Surprising Benefits of Staying Properly Hydrated</h4>
-                            <p class="blog-card-excerpt">Beyond quenching thirst, discover how water impacts everything from your mood to your cognitive function.</p>
-                            <a href="#" class="blog-card-link" data-magnetic>Read More →</a>
-                        </div>
-                    </div>
-                    <!-- Blog Card 2 -->
-                    <div class="blog-card">
-                        <img src="https://placehold.co/400x200/e76f51/ffffff?text=Adventure" alt="Mountain landscape at sunset" class="blog-card-img">
-                        <div class="blog-card-content">
-                            <span class="blog-card-tag">Adventure</span>
-                            <h4 class="blog-card-title">Adventure-Proof: How to Choose the Right Bottle for Your Next Hike</h4>
-                            <p class="blog-card-excerpt">We break down the features to look for in a trusty trail companion, from durability to insulation.</p>
-                            <a href="#" class="blog-card-link" data-magnetic>Read More →</a>
-                        </div>
-                    </div>
-                    <!-- Blog Card 3 -->
-                    <div class="blog-card">
-                        <img src="https://placehold.co/400x200/0096c7/ffffff?text=Sustainability" alt="Hands holding a sapling" class="blog-card-img">
-                        <div class="blog-card-content">
-                            <span class="blog-card-tag">Sustainability</span>
-                            <h4 class="blog-card-title">One Bottle at a Time: Our Commitment to a Plastic-Free Future</h4>
-                            <p class="blog-card-excerpt">Learn about our sustainability initiatives and how choosing a HydroBottle makes a global impact.</p>
-                            <a href="#" class="blog-card-link" data-magnetic>Read More →</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- FAQ Section -->
-        <section class="faq" id="faq">
-            <div class="container">
-                <h2 class="section-title fade-in">Frequently Asked Questions</h2>
-                <div class="faq-accordion fade-in">
-                    <div class="faq-item">
-                        <button class="faq-question">
-                            <span>Are HydroBottles dishwasher safe?</span>
-                            <span class="faq-icon">+</span>
-                        </button>
-                        <div class="faq-answer">
-                            <p>We recommend hand-washing your bottle with warm, soapy water for best results and to preserve the exterior finish. Lids are top-rack dishwasher safe.</p>
-                        </div>
-                    </div>
-                    <div class="faq-item">
-                        <button class="faq-question">
-                            <span>What is your warranty policy?</span>
-                            <span class="faq-icon">+</span>
-                        </button>
-                        <div class="faq-answer">
-                            <p>We offer a limited lifetime warranty against manufacturer's defects. This covers things like broken or leaky caps and loss of insulating properties, but not normal wear and tear like scratches or dents from use.</p>
-                        </div>
-                    </div>
-                    <div class="faq-item">
-                        <button class="faq-question">
-                            <span>How does the HydroSmart bottle track my intake?</span>
-                            <span class="faq-icon">+</span>
-                        </button>
-                        <div class="faq-answer">
-                            <p>Our HydroSmart bottles use a high-precision capacitive sensor integrated into the lid. It measures the change in water volume each time you drink and syncs this data to the HydroBottles app via low-energy Bluetooth. It's completely automatic!</p>
-                        </div>
-                    </div>
-                    <div class="faq-item">
-                        <button class="faq-question">
-                            <span>Do you ship internationally?</span>
-                            <span class="faq-icon">+</span>
-                        </button>
-                        <div class="faq-answer">
-                            <p>Yes, we ship to most countries worldwide! Shipping costs and times will be calculated at checkout based on your location. Please note that customs fees may apply.</p>
-                        </div>
-                    </div>
-                    <div class="faq-item">
-                        <button class="faq-question">
-                            <span>Are the bottles BPA-free?</span>
-                            <span class="faq-icon">+</span>
-                        </button>
-                        <div class="faq-answer">
-                            <p>Absolutely! All HydroBottles and lids are made from non-toxic, BPA-free plastics and 18/8 food-grade stainless steel. Your health and safety are our top priority.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Contact Section -->
-        <section class="contact" id="contact">
-            <div class="container">
-                <h2 class="section-title fade-in">Get In Touch</h2>
-                <p class="section-subtitle fade-in" style="color: var(--primary-lightest);">Have questions? We'd love to hear from you!</p>
-                <div class="contact-grid fade-in">
-                    <div class="contact-form">
-                        <form id="contactForm">
-                            <input type="text" name="name" placeholder="Your Name" required data-magnetic>
-                            <input type="email" name="email" placeholder="Your Email" required data-magnetic>
-                            <textarea name="message" placeholder="Your Message" required data-magnetic></textarea>
-                            <button type="submit" class="btn btn-secondary" data-magnetic>Send Message</button>
-                        </form>
-                    </div>
-                    <div class="contact-info">
-                        <h3>Our Information</h3>
-                        <p><strong>Address:</strong> 123 Hydration Ave, Watertown, CA 90210</p>
-                        <p><strong>Email:</strong> info@hydrobottles.com</p>
-                        <p><strong>Phone:</strong> (555) 123-4567</p>
-                        <p><strong>Hours:</strong> Monday-Friday, 9am - 5pm PST</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-    
     <!-- Footer -->
     <footer>
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <a href="#home" class="footer-logo" aria-label="HydroBottles Homepage" data-magnetic>
-                        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M50 0C26.5 0 10 20.8333 10 41.6667C10 66.6667 50 100 50 100C50 100 90 66.6667 90 41.6667C90 20.8333 73.5 0 50 0ZM50 58.3333C41.25 58.3333 34.1667 51.25 34.1667 42.5C34.1667 33.75 41.25 26.6667 50 26.6667C58.75 26.6667 65.8333 33.75 65.8333 42.5C65.8333 51.25 58.75 58.3333 50 58.3333Z" fill="white"/>
-                        </svg>
-                        <h2>Hydro<span>Bottles</span></h2>
-                    </a>
-                    <p style="color: var(--primary-lighter);">Premium bottles for a hydrated life.</p>
-                    <div class="footer-socials">
-                        <a href="#" aria-label="Facebook" data-magnetic><svg><use href="#icon-facebook"></use></svg></a>
-                        <a href="#" aria-label="Instagram" data-magnetic><svg><use href="#icon-instagram"></use></svg></a>
-                        <a href="#" aria-label="Twitter" data-magnetic><svg><use href="#icon-twitter"></use></svg></a>
-                    </div>
-                </div>
-                 <div class="footer-column">
-                    <h4>Shop</h4>
-                    <ul>
-                        <li><a href="#products" data-magnetic>All Products</a></li>
-                        <li><a href="#customizer" data-magnetic>Customize</a></li>
-                        <li><a href="#blog" data-magnetic>Blog</a></li>
-                        <li><a href="#" data-magnetic>Gift Cards</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Support</h4>
-                    <ul>
-                        <li><a href="#faq" data-magnetic>FAQ</a></li>
-                        <li><a href="#contact" data-magnetic>Contact Us</a></li>
-                        <li><a href="#" data-magnetic>Shipping & Returns</a></li>
-                        <li><a href="#" data-magnetic>Warranty</a></li>
-                    </ul>
-                </div>
-                 <div class="footer-column">
-                    <h4>Stay Connected</h4>
-                    <p style="color: var(--primary-lighter); margin-bottom: 1rem;">Sign up for our newsletter for news and 10% off your first order.</p>
-                    <form class="footer-newsletter-form" id="newsletterForm">
-                        <input type="email" placeholder="your.email@example.com" required>
-                        <button type="submit" aria-label="Subscribe to newsletter" data-magnetic>Go</button>
-                    </form>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>© 2025 HydroBottles Co. All Rights Reserved. | Website by Santosh Teli</p>
+            <h3>HydroBottles Co.</h3>
+            <p style="margin: 1rem 0;">Designed in 2025. Built for the future.</p>
+            <div style="display:flex; justify-content:center; gap:1rem; margin-top:2rem;">
+                <a href="#" style="color:white;">Instagram</a>
+                <a href="#" style="color:white;">Twitter</a>
             </div>
         </div>
     </footer>
-    
-    <!-- Modals & Overlays -->
-    <div class="modal-overlay" id="modal-overlay"></div>
-
-    <!-- Quick View Modal -->
-    <div class="modal" id="quick-view-modal">
-        <div class="modal-header">
-            <h3 id="quick-view-title">Product Title</h3>
-            <button class="modal-close-btn" data-modal-id="quick-view-modal" aria-label="Close quick view" data-magnetic>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /></svg>
-            </button>
-        </div>
-        <div class="quick-view-body">
-            <img src="" alt="" id="quick-view-img" class="quick-view-img">
-            <div class="quick-view-details">
-                <p id="quick-view-price">$0.00</p>
-                <p id="quick-view-description">Product description goes here.</p>
-                <button class="btn add-to-cart" id="quick-view-add-btn" data-magnetic>Add to Cart</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- AI Recommender Modal -->
-    <div class="modal" id="recommender-modal">
-        <div class="modal-header">
-            <h3>HydroBot 3000</h3>
-             <button class="modal-close-btn" data-modal-id="recommender-modal" aria-label="Close recommender" data-magnetic>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /></svg>
-            </button>
-        </div>
-        <div class="recommender-body">
-            <!-- Step 1 -->
-            <div id="quiz-step-1" class="quiz-step active">
-                <p class="quiz-question">What's your primary activity?</p>
-                <div class="quiz-options">
-                    <label><input type="radio" name="activity" value="sport"> <span>Gym & Sports</span></label>
-                    <label><input type="radio" name="activity" value="daily"> <span>Daily Commute & Office</span></label>
-                    <label><input type="radio" name="activity" value="home"> <span>At Home Use</span></label>
-                    <label><input type="radio" name="activity" value="adventure"> <span>Hiking & Outdoors</span></label>
-                </div>
-                <div class="quiz-nav">
-                    <span></span>
-                    <button class="btn btn-secondary quiz-next-btn" data-next-step="2">Next</button>
-                </div>
-            </div>
-            <!-- Step 2 -->
-            <div id="quiz-step-2" class="quiz-step">
-                <p class="quiz-question">What's most important to you?</p>
-                <div class="quiz-options">
-                    <label><input type="radio" name="priority" value="capacity"> <span>Maximum Capacity</span></label>
-                    <label><input type="radio" name="priority" value="tech"> <span>Smart Features & Tracking</span></label>
-                    <label><input type="radio" name="priority" value="portability"> <span>Portability & Style</span></label>
-                    <label><input type="radio" name="priority" value="hotcold"> <span>Keeping Drinks Hot</span></label>
-                </div>
-                <div class="quiz-nav">
-                    <button class="btn quiz-prev-btn" data-prev-step="1">Back</button>
-                    <button class="btn btn-secondary quiz-finish-btn">Get Recommendation</button>
-                </div>
-            </div>
-            <!-- Result Step -->
-            <div id="quiz-result" class="quiz-step">
-                <h3>Our Recommendation For You:</h3>
-                <h4 id="recommendation-title"></h4>
-                <p id="recommendation-desc"></p>
-                <a href="" id="recommendation-link" class="btn" data-magnetic>View Product</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Shopping Cart Drawer -->
-    <div class="cart-drawer" id="cart-drawer">
-        <div class="cart-header">
-            <h3>Your Cart</h3>
-            <button class="close-cart-btn" id="close-cart-btn" aria-label="Close cart" data-magnetic>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /></svg>
-            </button>
-        </div>
-        <div class="cart-body">
-            <ul class="cart-items-list" id="cart-items-list">
-                <!-- Cart items will be injected here by JS -->
-            </ul>
-            <p class="cart-empty-message" id="cart-empty-message">Your cart is empty.</p>
-        </div>
-        <div class="cart-footer">
-            <div class="promo-code-wrapper">
-                <input type="text" id="promo-code-input" placeholder="Promo Code (e.g., SAVE10)">
-                <button class="btn" id="apply-promo-btn">Apply</button>
-            </div>
-            <div class="cart-subtotal">
-                <span>Subtotal</span>
-                <span id="cart-subtotal">$0.00</span>
-            </div>
-             <div class="cart-discount" id="cart-discount-row">
-                <span>Discount</span>
-                <span id="cart-discount-amount">-$0.00</span>
-            </div>
-             <div class="cart-total">
-                <span>Total</span>
-                <span id="cart-total-amount">$0.00</span>
-            </div>
-            <button class="btn cart-checkout-btn" data-magnetic>Proceed to Checkout</button>
-        </div>
-    </div>
-    
-    <!-- Back to Top Button -->
-    <a href="#home" class="back-to-top" aria-label="Back to top" data-magnetic>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
-    </a>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-
-            /**
-             * The main application object that encapsulates all functionality for the HydroBottles website.
-             * @namespace App
-             */
-            const App = {
-                // Application state
-                state: {
-                    cart: [],
-                    testimonial: { currentIndex: 0, totalSlides: 0 },
-                    customizer: {
-                        base: 'classic', color: 'Sky Blue', colorHex: '#ade8f4',
-                        lid: 'standard', engraving: '', price: 24.99,
-                        basePrice: 24.99, lidPrice: 0, engravingPrice: 5.00,
-                    },
-                    techDemo: { level: 50 },
-                    promoCode: { applied: false, code: 'SAVE10', discount: 0.10 }
-                },
-
-                // DOM element cache
-                dom: {},
-
-                /**
-                 * Initializes the application. Caches DOM elements, sets up event listeners,
-                 * loads data from localStorage, and starts initial animations.
-                 * @memberof App
-                 */
-                init() {
-                    this.cacheDOMElements();
-                    this.loadStateFromStorage();
-                    this.setupEventListeners();
-                    this.setupIntersectionObserver();
-                    this.updateCartUI();
-                    this.initAnimations();
-                    this.updateCustomizerPreview();
-                    this.applyInitialTheme();
-                    this.state.testimonial.totalSlides = this.dom.testimonialSlides.length;
-
-                    window.addEventListener('load', () => {
-                        this.dom.preloader.classList.add('fade-out');
-                    });
-                },
-
-                /**
-                 * Caches frequently accessed DOM elements to improve performance.
-                 * @memberof App
-                 */
-                cacheDOMElements() {
-                    this.dom = {
-                        // General
-                        body: document.body,
-                        preloader: document.querySelector('.preloader'),
-                        customCursor: document.querySelector('.custom-cursor'),
-                        magneticElements: document.querySelectorAll('[data-magnetic]'),
-                        backToTopBtn: document.querySelector('.back-to-top'),
-                        toastContainer: document.getElementById('toast-container'),
-
-                        // Header
-                        themeSwitcher: document.getElementById('theme-switcher'),
-                        sunIcon: document.querySelector('.sun-icon'),
-                        moonIcon: document.querySelector('.moon-icon'),
-
-                        // Products
-                        productGrid: document.querySelector('.product-grid'),
-                        productCards: document.querySelectorAll('.product-card'),
-                        
-                        // Cart
-                        cartDrawer: document.getElementById('cart-drawer'),
-                        cartItemsList: document.getElementById('cart-items-list'),
-                        cartEmptyMessage: document.getElementById('cart-empty-message'),
-                        cartSubtotalEl: document.getElementById('cart-subtotal'),
-                        cartItemCountEl: document.getElementById('cart-item-count'),
-                        promoCodeInput: document.getElementById('promo-code-input'),
-                        cartDiscountRow: document.getElementById('cart-discount-row'),
-                        cartDiscountAmount: document.getElementById('cart-discount-amount'),
-                        cartTotalAmount: document.getElementById('cart-total-amount'),
-                        
-                        // Testimonials
-                        testimonialSlider: document.querySelector('.testimonial-slider'),
-                        testimonialSlides: document.querySelectorAll('.testimonial'),
-
-                        // Customizer
-                        previewImg: document.getElementById('preview-img'),
-                        previewEngraving: document.getElementById('preview-engraving'),
-                        customizerPrice: document.getElementById('customizer-price'),
-                        engravingInput: document.getElementById('engraving-text'),
-
-                        // Modals
-                        modalOverlay: document.getElementById('modal-overlay'),
-                        
-                        // Tech Demo
-                        hydrationLevelVisual: document.getElementById('hydration-level-visual'),
-                        hydrationPercent: document.getElementById('hydration-percent'),
-                    };
-                },
-
-                /**
-                 * Loads application state (cart, theme) from localStorage.
-                 * @memberof App
-                 */
-                loadStateFromStorage() {
-                    this.state.cart = JSON.parse(localStorage.getItem('hydroCart')) || [];
-                    this.state.theme = localStorage.getItem('hydroTheme') || 'light';
-                },
+            
+            // --- 1. Custom Cursor Logic ---
+            const cursorDot = document.querySelector('.cursor-dot');
+            const cursorCircle = document.querySelector('.cursor-circle');
+            
+            document.addEventListener('mousemove', (e) => {
+                cursorDot.style.left = e.clientX + 'px';
+                cursorDot.style.top = e.clientY + 'px';
                 
-                /**
-                 * Sets up all global event listeners for the application.
-                 * Uses event delegation where possible for efficiency.
-                 * @memberof App
-                 */
-                setupEventListeners() {
-                    // Delegated click handler
-                    this.dom.body.addEventListener('click', this.handleGlobalClick.bind(this));
+                // Slight delay for the circle
+                setTimeout(() => {
+                    cursorCircle.style.left = e.clientX + 'px';
+                    cursorCircle.style.top = e.clientY + 'px';
+                }, 50);
+            });
 
-                    // Input/Change events
-                    this.dom.engravingInput?.addEventListener('input', this.handleCustomizerEngraving.bind(this));
+            // Hover state for interactive elements
+            document.querySelectorAll('[data-hover]').forEach(el => {
+                el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+                el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+            });
 
-                    // Window events
-                    window.addEventListener('scroll', this.handleScroll.bind(this));
-                    window.addEventListener('mousemove', this.handleMouseMove.bind(this));
-                    window.addEventListener('mousedown', () => this.dom.customCursor.classList.add('clicked'));
-                    window.addEventListener('mouseup', () => this.dom.customCursor.classList.remove('clicked'));
-
-                    // Form submissions
-                    const contactForm = document.getElementById('contactForm');
-                    contactForm?.addEventListener('submit', this.handleFormSubmit.bind(this));
-                    const newsletterForm = document.getElementById('newsletterForm');
-                    newsletterForm?.addEventListener('submit', this.handleFormSubmit.bind(this));
-
-                    // Cursor hover effects
-                    document.querySelectorAll('a, button, [data-magnetic], .color-swatch, .faq-question, input, textarea, .quiz-options label')
-                        .forEach(el => {
-                            el.addEventListener('mouseenter', () => this.dom.customCursor.classList.add('hovered'));
-                            el.addEventListener('mouseleave', () => this.dom.customCursor.classList.remove('hovered'));
-                        });
-                },
-
-                /**
-                 * Central click handler using event delegation.
-                 * @param {Event} e - The click event object.
-                 * @memberof App
-                 */
-                handleGlobalClick(e) {
-                    const target = e.target;
-                    const actions = {
-                        '.add-to-cart': el => this.handleAddToCart(el),
-                        '.color-swatch:not(.color-option)': el => this.handleColorSwatch(el),
-                        '#open-cart-btn': () => this.toggleCart(),
-                        '#close-cart-btn': () => this.toggleCart(),
-                        '.cart-item': el => this.handleCartActions(e, el),
-                        '#next-testimonial': () => this.moveTestimonial(1),
-                        '#prev-testimonial': () => this.moveTestimonial(-1),
-                        '.faq-question': el => this.toggleFaq(el),
-                        '.modal-overlay': () => this.closeAllModals(),
-                        '.modal-close-btn': el => this.closeModal(el.dataset.modalId),
-                        '.quick-view-btn': el => this.openQuickView(el.closest('.product-card')),
-                        '#start-quiz-btn': () => this.openModal('recommender-modal'),
-                        '.quiz-next-btn': el => this.navigateQuiz(el.dataset.nextStep),
-                        '.quiz-prev-btn': el => this.navigateQuiz(el.dataset.prevStep),
-                        '.quiz-finish-btn': () => this.finishQuiz(),
-                        '.customizer-options .option-btn': el => this.handleCustomizerOption(el),
-                        '#add-custom-to-cart': () => this.addCustomBottleToCart(),
-                        '#theme-switcher': () => this.toggleTheme(),
-                        '#tech-demo-btn': () => this.runTechDemo(),
-                        '.filter-btn': el => this.filterProducts(el),
-                        '#apply-promo-btn': () => this.applyPromoCode(),
-                    };
-
-                    for (const selector in actions) {
-                        const closestEl = target.closest(selector);
-                        if (closestEl) {
-                            actions[selector](closestEl);
-                            return;
-                        }
-                    }
-                },
-                
-                /**
-                 * Handles window scroll events for back-to-top button and parallax effects.
-                 * @memberof App
-                 */
-                handleScroll() {
-                    // Back to Top Button
-                    this.dom.backToTopBtn.classList.toggle('visible', window.scrollY > 300);
+            // --- 2. 3D Tilt Effect for Cards ---
+            const cards = document.querySelectorAll('[data-tilt]');
+            
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
                     
-                    // Parallax Effect
-                    const recommenderSection = document.querySelector('.recommender');
-                    if (recommenderSection) {
-                        const scrollY = window.pageYOffset;
-                        recommenderSection.style.backgroundPositionY = `${scrollY * 0.5}px`;
-                    }
-                },
-                
-                /**
-                 * Handles mouse move events for the custom cursor and magnetic elements.
-                 * @param {MouseEvent} e - The mouse move event.
-                 * @memberof App
-                 */
-                handleMouseMove(e) {
-                    if (this.dom.customCursor) {
-                        this.dom.customCursor.style.left = `${e.clientX}px`;
-                        this.dom.customCursor.style.top = `${e.clientY}px`;
-                    }
-                    this.handleMagneticElements(e.clientX, e.clientY);
-                },
-
-                /**
-                 * Handles generic form submissions for contact and newsletter forms.
-                 * @param {Event} e - The submit event.
-                 * @memberof App
-                 */
-                handleFormSubmit(e) {
-                    e.preventDefault();
-                    const formId = e.target.id;
-                    if (formId === 'contactForm') {
-                        this.showToast('Thank you for your message! We will get back to you soon.', 'success');
-                    } else if (formId === 'newsletterForm') {
-                         this.showToast('Thanks for subscribing!', 'info');
-                    }
-                    e.target.reset();
-                },
-                
-                // --- Cart Logic ---
-
-                /**
-                 * Adds a product to the cart when an "Add to Cart" button is clicked.
-                 * @param {HTMLElement} button - The button element that was clicked.
-                 * @memberof App
-                 */
-                handleAddToCart(button) {
-                    const productCard = button.closest('.product-card') || button.closest('#quick-view-modal');
-                    const id = productCard.dataset.id;
-                    const name = productCard.dataset.name || document.getElementById('quick-view-title').textContent;
-                    const price = parseFloat(productCard.dataset.price) || parseFloat(document.getElementById('quick-view-price').textContent.replace('$', ''));
-                    const imgEl = productCard.querySelector('.product-img, #quick-view-img');
-                    const img = imgEl.src;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
                     
-                    const activeColorSwatch = productCard.querySelector('.color-swatch.active');
-                    const color = activeColorSwatch ? activeColorSwatch.style.backgroundColor : 'default';
+                    const rotateX = ((y - centerY) / centerY) * -10; // Max rotation deg
+                    const rotateY = ((x - centerX) / centerX) * 10;
                     
-                    const uniqueId = `${id}-${color}`;
-
-                    this.addToCart({ id: uniqueId, name, price, img, color, quantity: 1, details: 'Standard'});
-                },
-
-                /**
-                 * Adds an item object to the cart array, incrementing quantity if it already exists.
-                 * @param {object} item - The item to add to the cart.
-                 * @memberof App
-                 */
-                addToCart(item) {
-                    const existingItem = this.state.cart.find(cartItem => cartItem.id === item.id);
-                    if (existingItem) {
-                        existingItem.quantity++;
-                    } else {
-                        this.state.cart.push(item);
-                    }
-                    this.saveCart();
-                    this.updateCartUI();
-                    this.showToast(`${item.name} added to cart!`, 'success');
-                    if (!this.dom.cartDrawer.classList.contains('open')) {
-                         this.toggleCart();
-                    }
-                },
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                });
                 
-                /**
-                 * Handles clicks within a cart item (e.g., quantity changes, removal).
-                 * @param {Event} e - The original click event.
-                 * @param {HTMLElement} cartItemEl - The `.cart-item` element.
-                 * @memberof App
-                 */
-                handleCartActions(e, cartItemEl) {
-                    const itemId = cartItemEl.dataset.itemId;
-                    if (e.target.closest('.quantity-btn-plus')) this.updateQuantity(itemId, 1);
-                    else if (e.target.closest('.quantity-btn-minus')) this.updateQuantity(itemId, -1);
-                    else if (e.target.closest('.cart-item-remove-btn')) this.removeFromCart(itemId);
-                },
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)`;
+                });
+            });
+
+            // --- 3. Scramble Text Effect ---
+            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            
+            const scrambleElements = document.querySelectorAll('.scramble-text, #scramble-hero');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        scramble(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            scrambleElements.forEach(el => observer.observe(el));
+
+            function scramble(element) {
+                let iterations = 0;
+                const originalText = element.innerText;
                 
-                /**
-                 * Updates the quantity of an item in the cart.
-                 * @param {string} itemId - The unique ID of the item to update.
-                 * @param {number} change - The amount to change the quantity by (+1 or -1).
-                 * @memberof App
-                 */
-                updateQuantity(itemId, change) {
-                    const item = this.state.cart.find(cartItem => cartItem.id === itemId);
-                    if (item) {
-                        item.quantity += change;
-                        if (item.quantity <= 0) {
-                            this.removeFromCart(itemId);
-                        } else {
-                            this.saveCart();
-                            this.updateCartUI();
-                        }
-                    }
-                },
-                
-                /**
-                 * Removes an item from the cart.
-                 * @param {string} itemId - The unique ID of the item to remove.
-                 * @memberof App
-                 */
-                removeFromCart(itemId) {
-                    this.state.cart = this.state.cart.filter(item => item.id !== itemId);
-                    this.saveCart();
-                    this.updateCartUI();
-                },
-
-                /**
-                 * Saves the current cart state to localStorage.
-                 * @memberof App
-                 */
-                saveCart() { localStorage.setItem('hydroCart', JSON.stringify(this.state.cart)); },
-
-                /**
-                 * Applies a promo code to the cart.
-                 * @memberof App
-                 */
-                applyPromoCode() {
-                    const input = this.dom.promoCodeInput.value.trim().toUpperCase();
-                    if(input === this.state.promoCode.code) {
-                        this.state.promoCode.applied = true;
-                        this.showToast('Promo code applied!', 'success');
-                        this.updateCartUI();
-                    } else {
-                        this.showToast('Invalid promo code.', 'error');
-                        this.state.promoCode.applied = false;
-                        this.updateCartUI();
-                    }
-                },
-
-                // --- UI Update Logic ---
-                /**
-                 * Updates the entire shopping cart UI based on the current cart state.
-                 * Renders items, calculates totals, and handles visibility of elements.
-                 * @memberof App
-                 */
-                updateCartUI() {
-                    this.dom.cartItemsList.innerHTML = '';
-                    let subtotal = 0;
-                    let totalItems = 0;
-
-                    if (this.state.cart.length === 0) {
-                        this.dom.cartEmptyMessage.style.display = 'block';
-                        this.state.promoCode.applied = false; // Reset promo on empty cart
-                    } else {
-                        this.dom.cartEmptyMessage.style.display = 'none';
-                        this.state.cart.forEach(item => {
-                            const li = document.createElement('li');
-                            li.className = 'cart-item';
-                            li.dataset.itemId = item.id;
-                            
-                            li.innerHTML = `
-                                <img src="${item.img}" alt="${item.name}" class="cart-item-img">
-                                <div class="cart-item-info">
-                                    <span class="cart-item-title">${item.name}</span>
-                                    <p class="cart-item-details">${item.details}</p>
-                                    <span class="cart-item-price">$${item.price.toFixed(2)}</span>
-                                    <div class="cart-item-quantity">
-                                        <button class="quantity-btn quantity-btn-minus" aria-label="Decrease quantity">-</button>
-                                        <span class="item-quantity">${item.quantity}</span>
-                                        <button class="quantity-btn quantity-btn-plus" aria-label="Increase quantity">+</button>
-                                    </div>
-                                </div>
-                                <button class="cart-item-remove-btn">Remove</button>
-                            `;
-                            this.dom.cartItemsList.appendChild(li);
-                            subtotal += item.price * item.quantity;
-                            totalItems += item.quantity;
-                        });
-                    }
-
-                    const discountAmount = this.state.promoCode.applied ? subtotal * this.state.promoCode.discount : 0;
-                    const total = subtotal - discountAmount;
-                    
-                    this.dom.cartSubtotalEl.textContent = `$${subtotal.toFixed(2)}`;
-                    this.dom.cartDiscountRow.style.display = this.state.promoCode.applied ? 'flex' : 'none';
-                    this.dom.cartDiscountAmount.textContent = `-$${discountAmount.toFixed(2)}`;
-                    this.dom.cartTotalAmount.textContent = `$${total.toFixed(2)}`;
-                    
-                    this.dom.cartItemCountEl.textContent = totalItems;
-                    this.dom.cartItemCountEl.style.display = totalItems > 0 ? 'flex' : 'none';
-                },
-
-                /**
-                 * Toggles the visibility of the shopping cart drawer and overlay.
-                 * @memberof App
-                 */
-                toggleCart() {
-                    const isOpen = this.dom.cartDrawer.classList.toggle('open');
-                    this.dom.modalOverlay.classList.toggle('open', isOpen);
-                    this.dom.body.style.overflow = isOpen ? 'hidden' : '';
-                },
-
-                /**
-                 * Displays a toast notification message.
-                 * @param {string} message - The message to display.
-                 * @param {string} type - The type of toast ('success', 'error', 'info').
-                 * @memberof App
-                 */
-                showToast(message, type = 'info') {
-                    const toast = document.createElement('div');
-                    toast.className = `toast ${type}`;
-                    toast.textContent = message;
-                    this.dom.toastContainer.appendChild(toast);
-                    setTimeout(() => toast.remove(), 3000);
-                },
-                
-                /**
-                 * Filters the product grid based on a category.
-                 * @param {HTMLElement} button - The filter button that was clicked.
-                 * @memberof App
-                 */
-                filterProducts(button) {
-                    const filter = button.dataset.filter;
-                    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-
-                    this.dom.productCards.forEach(card => {
-                        card.style.display = 'flex';
-                        if (filter !== 'all' && card.dataset.category !== filter) {
-                            card.style.display = 'none';
-                        }
-                    });
-                },
-
-                // --- Product Customizer ---
-                /**
-                 * Handles changes to the customizer options (base model, color, lid).
-                 * @param {HTMLElement} button - The option button that was clicked.
-                 * @memberof App
-                 */
-                handleCustomizerOption(button) {
-                    const group = button.parentElement;
-                    const type = group.id.split('-')[1];
-
-                    group.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-
-                    switch(type) {
-                        case 'base':
-                            this.state.customizer.base = button.dataset.value;
-                            this.state.customizer.basePrice = parseFloat(button.dataset.price);
-                            break;
-                        case 'color':
-                            this.state.customizer.color = button.dataset.value;
-                            this.state.customizer.colorHex = button.dataset.colorHex;
-                            break;
-                        case 'lid':
-                            this.state.customizer.lid = button.dataset.value;
-                            this.state.customizer.lidPrice = parseFloat(button.dataset.price);
-                            break;
-                    }
-                    this.updateCustomizerPreview();
-                },
-
-                /**
-                 * Handles input in the engraving text field.
-                 * @param {Event} e - The input event.
-                 * @memberof App
-                 */
-                handleCustomizerEngraving(e) {
-                    this.state.customizer.engraving = e.target.value;
-                    this.updateCustomizerPreview();
-                },
-
-                /**
-                 * Updates the customizer preview image, text, and price.
-                 * @memberof App
-                 */
-                updateCustomizerPreview() {
-                    const { base, colorHex, engraving } = this.state.customizer;
-                    const textParam = base.charAt(0).toUpperCase() + base.slice(1);
-                    this.dom.previewImg.src = `https://placehold.co/400x500/${colorHex.substring(1)}/023e8a?text=${textParam}`;
-                    this.dom.previewEngraving.textContent = engraving;
-                    this.calculateCustomPrice();
-                },
-
-                /**
-                 * Calculates and displays the total price for the custom bottle.
-                 * @memberof App
-                 */
-                calculateCustomPrice() {
-                    let total = this.state.customizer.basePrice + this.state.customizer.lidPrice;
-                    if(this.state.customizer.engraving.trim() !== '') {
-                        total += this.state.customizer.engravingPrice;
-                    }
-                    this.state.customizer.price = total;
-                    this.dom.customizerPrice.textContent = `$${total.toFixed(2)}`;
-                },
-
-                /**
-                 * Adds the fully configured custom bottle to the cart.
-                 * @memberof App
-                 */
-                addCustomBottleToCart() {
-                    const { base, color, lid, engraving, price } = this.state.customizer;
-                    const name = `Custom ${base.charAt(0).toUpperCase() + base.slice(1)} Bottle`;
-                    let details = `Color: ${color}, Lid: ${lid}`;
-                    if(engraving) details += `, Engraving: "${engraving}"`;
-                    
-                    const item = {
-                        id: `custom-${Date.now()}`, name, price,
-                        img: this.dom.previewImg.src, quantity: 1, details,
-                    };
-                    this.addToCart(item);
-                },
-
-                // --- AI Recommender Quiz ---
-                /**
-                 * Navigates between steps in the recommender quiz modal.
-                 * @param {string} step - The ID of the step to navigate to.
-                 * @memberof App
-                 */
-                navigateQuiz(step) {
-                    document.querySelectorAll('.quiz-step').forEach(s => s.classList.remove('active'));
-                    document.getElementById(`quiz-step-${step}`).classList.add('active');
-                },
-
-                /**
-                 * Finalizes the quiz and displays the recommended product.
-                 * @memberof App
-                 */
-                finishQuiz() {
-                    const activity = document.querySelector('input[name="activity"]:checked')?.value;
-                    const priority = document.querySelector('input[name="priority"]:checked')?.value;
-                    let recommendationId = '1'; // Default: Classic
-
-                    if(priority === 'tech') recommendationId = '5'; // SmartGlow
-                    else if(priority === 'hotcold') recommendationId = '3'; // Traveler
-                    else if(activity === 'sport' || priority === 'capacity') recommendationId = '2'; // Sport Pro
-                    else if(activity === 'adventure') recommendationId = '6'; // Juggernaut
-                    else if(activity === 'daily' || priority === 'portability') recommendationId = '7'; // Urban Sleek
-                    
-                    const recommendedProduct = document.querySelector(`.product-card[data-id='${recommendationId}']`);
-                    if (!recommendedProduct) return;
-
-                    document.getElementById('recommendation-title').textContent = recommendedProduct.dataset.name;
-                    document.getElementById('recommendation-desc').textContent = recommendedProduct.querySelector('.product-description').textContent;
-                    const recommendationLink = document.getElementById('recommendation-link');
-                    recommendationLink.href = `#products`; 
-                    recommendationLink.onclick = (e) => {
-                        e.preventDefault();
-                        this.closeAllModals();
-                        recommendedProduct.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        recommendedProduct.style.boxShadow = '0 0 20px var(--accent-success)';
-                        setTimeout(() => recommendedProduct.style.boxShadow = '', 2000);
-                    };
-
-                    this.navigateQuiz('result');
-                },
-
-                // --- Modals ---
-                /**
-                 * Opens a modal by its ID.
-                 * @param {string} modalId - The ID of the modal to open.
-                 * @memberof App
-                 */
-                openModal(modalId) {
-                    const modal = document.getElementById(modalId);
-                    if (modal) {
-                        this.dom.modalOverlay.classList.add('open');
-                        modal.classList.add('open');
-                        this.dom.body.style.overflow = 'hidden';
-                    }
-                },
-
-                /**
-                 * Closes a modal by its ID.
-                 * @param {string} modalId - The ID of the modal to close.
-                 * @memberof App
-                 */
-                closeModal(modalId) {
-                    const modal = document.getElementById(modalId);
-                    if (modal) {
-                        this.dom.modalOverlay.classList.remove('open');
-                        modal.classList.remove('open');
-                        if (!this.dom.cartDrawer.classList.contains('open')) {
-                            this.dom.body.style.overflow = '';
-                        }
-                    }
-                },
-                
-                /**
-                 * Closes all currently open modals.
-                 * @memberof App
-                 */
-                closeAllModals() {
-                    document.querySelectorAll('.modal.open').forEach(m => this.closeModal(m.id));
-                },
-
-                /**
-                 * Opens the quick view modal with details from a product card.
-                 * @param {HTMLElement} productCard - The product card element.
-                 * @memberof App
-                 */
-                openQuickView(productCard) {
-                    document.getElementById('quick-view-title').textContent = productCard.dataset.name;
-                    document.getElementById('quick-view-price').textContent = `$${productCard.dataset.price}`;
-                    document.getElementById('quick-view-description').textContent = productCard.querySelector('.product-description').textContent;
-                    document.getElementById('quick-view-img').src = productCard.querySelector('.product-img').src;
-                    
-                    const quickViewModal = document.getElementById('quick-view-modal');
-                    quickViewModal.dataset.id = productCard.dataset.id;
-                    quickViewModal.dataset.name = productCard.dataset.name;
-                    quickViewModal.dataset.price = productCard.dataset.price;
-
-                    this.openModal('quick-view-modal');
-                },
-
-                // --- Page Features & Animations ---
-                /**
-                 * Handles changing the color swatch on a product card.
-                 * @param {HTMLElement} swatch - The color swatch element that was clicked.
-                 * @memberof App
-                 */
-                handleColorSwatch(swatch) {
-                    const productCard = swatch.closest('.product-card');
-                    const productImg = productCard.querySelector('.product-img');
-                    const colorMap = JSON.parse(productImg.dataset.colors);
-                    const selectedColor = swatch.dataset.color;
-                    
-                    if (colorMap[selectedColor]) productImg.src = colorMap[selectedColor];
-                    
-                    productCard.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
-                    swatch.classList.add('active');
-                },
-                
-                /**
-                 * Moves the testimonial carousel.
-                 * @param {number} direction - The direction to move (-1 for prev, 1 for next).
-                 * @memberof App
-                 */
-                moveTestimonial(direction) {
-                    const { currentIndex, totalSlides } = this.state.testimonial;
-                    this.state.testimonial.currentIndex = (currentIndex + direction + totalSlides) % totalSlides;
-                    this.dom.testimonialSlider.style.transform = `translateX(-${this.state.testimonial.currentIndex * 100}%)`;
-                },
-                
-                /**
-                 * Toggles an FAQ item open or closed.
-                 * @param {HTMLElement} questionButton - The FAQ question button.
-                 * @memberof App
-                 */
-                toggleFaq(questionButton) {
-                    const item = questionButton.closest('.faq-item');
-                    const answer = item.querySelector('.faq-answer');
-                    
-                    item.classList.toggle('active');
-                    if (item.classList.contains('active')) {
-                        answer.style.maxHeight = answer.scrollHeight + 'px';
-                    } else {
-                        answer.style.maxHeight = null;
-                    }
-                },
-                
-                /**
-                 * Initializes animations like the hero text reveal.
-                 * @memberof App
-                 */
-                initAnimations() {
-                    const title = document.querySelector('.hero-title-container');
-                    if (title) {
-                        title.innerHTML = title.textContent.split('').map(char => `<span class="char">${char === ' ' ? '&nbsp;' : char}</span>`).join('');
-                        setTimeout(() => {
-                           title.querySelectorAll('.char').forEach((char, i) => {
-                               setTimeout(() => {
-                                   char.style.opacity = '1';
-                                   char.style.transform = 'translateY(0) rotate(0)';
-                               }, i * 30);
-                           });
-                        }, 500);
-                    }
-                },
-                
-                /**
-                 * Applies a magnetic effect to elements when the mouse is near.
-                 * @param {number} mouseX - The clientX position of the mouse.
-                 * @param {number} mouseY - The clientY position of the mouse.
-                 * @memberof App
-                 */
-                handleMagneticElements(mouseX, mouseY) {
-                    this.dom.magneticElements.forEach(el => {
-                        const rect = el.getBoundingClientRect();
-                        const x = rect.left + rect.width / 2;
-                        const y = rect.top + rect.height / 2;
-                        const distance = Math.sqrt(Math.pow(mouseX - x, 2) + Math.pow(mouseY - y, 2));
-                        
-                        if (distance < 100) {
-                            const dx = (mouseX - x) * 0.2;
-                            const dy = (mouseY - y) * 0.2;
-                            el.style.transform = `translate(${dx}px, ${dy}px)`;
-                        } else {
-                            el.style.transform = 'translate(0, 0)';
-                        }
-                    });
-                },
-
-                /**
-                 * Sets up the IntersectionObserver to trigger fade-in animations on scroll.
-                 * @memberof App
-                 */
-                setupIntersectionObserver() {
-                    const observer = new IntersectionObserver((entries, observer) => {
-                        entries.forEach(entry => {
-                            if (entry.isIntersecting) {
-                                entry.target.classList.add('visible');
-                                observer.unobserve(entry.target);
+                const interval = setInterval(() => {
+                    element.innerText = originalText.split("")
+                        .map((letter, index) => {
+                            if(index < iterations) {
+                                return originalText[index];
                             }
-                        });
-                    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-
-                    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-                },
-
-                /**
-                 * Toggles the color theme between light and dark mode.
-                 * @memberof App
-                 */
-                toggleTheme() {
-                    this.state.theme = this.state.theme === 'light' ? 'dark' : 'light';
-                    localStorage.setItem('hydroTheme', this.state.theme);
-                    this.applyTheme(this.state.theme);
-                },
-
-                /**
-                 * Applies the initial theme on page load.
-                 * @memberof App
-                 */
-                applyInitialTheme() {
-                    this.applyTheme(this.state.theme);
-                },
-
-                /**
-                 * Applies a specific theme to the page.
-                 * @param {string} theme - The theme to apply ('light' or 'dark').
-                 * @memberof App
-                 */
-                applyTheme(theme) {
-                    this.dom.body.classList.toggle('dark-mode', theme === 'dark');
-                    this.dom.sunIcon.style.display = theme === 'dark' ? 'block' : 'none';
-                    this.dom.moonIcon.style.display = theme === 'light' ? 'block' : 'none';
-                },
-
-                /**
-                 * Runs the interactive tech demo simulation.
-                 * @memberof App
-                 */
-                runTechDemo() {
-                    this.state.techDemo.level += 10;
-                    if (this.state.techDemo.level > 100) this.state.techDemo.level = 10;
+                            return letters[Math.floor(Math.random() * 26)];
+                        })
+                        .join("");
                     
-                    const level = this.state.techDemo.level;
-                    this.dom.hydrationLevelVisual.style.clipPath = `inset(${100 - level}% 0 0 0)`;
-                    this.dom.hydrationPercent.textContent = `${level}%`;
-                }
-            };
+                    if(iterations >= originalText.length) clearInterval(interval);
+                    iterations += 1/3;
+                }, 30);
+            }
 
-            App.init();
+            // --- 4. Interactive Particle Background (Canvas) ---
+            const canvas = document.getElementById('bg-canvas');
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            let particles = [];
+            
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.vx = (Math.random() - 0.5) * 0.5;
+                    this.vy = (Math.random() - 0.5) * 0.5;
+                    this.size = Math.random() * 2;
+                }
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    if(this.x < 0) this.x = width;
+                    if(this.x > width) this.x = 0;
+                    if(this.y < 0) this.y = height;
+                    if(this.y > height) this.y = 0;
+                }
+                draw() {
+                    ctx.fillStyle = 'rgba(0, 242, 234, 0.3)';
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            for(let i=0; i<100; i++) particles.push(new Particle());
+
+            function animateCanvas() {
+                ctx.clearRect(0, 0, width, height);
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+                // Connect particles
+                particles.forEach((a, index) => {
+                    particles.slice(index + 1).forEach(b => {
+                        const dx = a.x - b.x;
+                        const dy = a.y - b.y;
+                        const dist = Math.sqrt(dx*dx + dy*dy);
+                        if(dist < 100) {
+                            ctx.strokeStyle = `rgba(0, 242, 234, ${0.1 - dist/1000})`;
+                            ctx.beginPath();
+                            ctx.moveTo(a.x, a.y);
+                            ctx.lineTo(b.x, b.y);
+                            ctx.stroke();
+                        }
+                    });
+                });
+                requestAnimationFrame(animateCanvas);
+            }
+            animateCanvas();
+
+            // --- 5. Cart Logic ---
+            let cart = [];
+            const cartBtn = document.getElementById('cart-btn');
+            const closeCartBtn = document.getElementById('close-cart');
+            const cartDrawer = document.querySelector('.cart-drawer');
+            const cartOverlay = document.querySelector('.cart-overlay');
+            const cartCountEl = document.querySelector('.cart-count');
+            const cartItemsList = document.getElementById('cart-items-list');
+            const cartTotalEl = document.getElementById('cart-total-price');
+
+            function toggleCart() {
+                cartDrawer.classList.toggle('open');
+                cartOverlay.classList.toggle('open');
+            }
+
+            cartBtn.addEventListener('click', toggleCart);
+            closeCartBtn.addEventListener('click', toggleCart);
+            cartOverlay.addEventListener('click', toggleCart);
+
+            window.addToCart = function(item) {
+                cart.push(item);
+                updateCartUI();
+                toggleCart();
+            }
+
+            function updateCartUI() {
+                cartCountEl.innerText = cart.length;
+                cartItemsList.innerHTML = '';
+                let total = 0;
+
+                cart.forEach((item, index) => {
+                    total += item.price;
+                    const li = document.createElement('li');
+                    li.className = 'cart-item';
+                    li.innerHTML = `
+                        <img src="${item.img}" alt="img">
+                        <div style="flex-grow:1">
+                            <div style="font-weight:700">${item.title}</div>
+                            <div style="font-size:0.8rem; color:#888;">${item.meta || ''}</div>
+                        </div>
+                        <div style="color:var(--primary); font-weight:700;">$${item.price}</div>
+                    `;
+                    cartItemsList.appendChild(li);
+                });
+
+                cartTotalEl.innerText = '$' + total.toFixed(2);
+            }
+
+            document.querySelectorAll('.add-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const card = e.target.closest('.card');
+                    const item = {
+                        title: card.dataset.title,
+                        price: parseFloat(card.dataset.price),
+                        img: card.querySelector('img').src
+                    };
+                    window.addToCart(item);
+                });
+            });
+
+            // --- 6. Customizer Logic ---
+            const colorBtns = document.querySelectorAll('.color-btn');
+            const bottleImg = document.getElementById('custom-bottle-img');
+            const engravingInput = document.getElementById('engraving-input');
+            const engravingPreview = document.getElementById('engraving-preview');
+            const addCustomBtn = document.getElementById('add-custom-btn');
+            let selectedColor = '00f2ea'; // Default cyan
+
+            colorBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Visual active state
+                    colorBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    // Change Image color (using Placeholder API for demo)
+                    selectedColor = btn.dataset.color;
+                    bottleImg.src = `https://placehold.co/300x500/${selectedColor}/000000.png?text=CUSTOM`;
+                    
+                    // Simple animation reset
+                    bottleImg.style.opacity = 0;
+                    setTimeout(() => bottleImg.style.opacity = 1, 100);
+                });
+            });
+
+            engravingInput.addEventListener('input', (e) => {
+                engravingPreview.innerText = e.target.value;
+            });
+
+            addCustomBtn.addEventListener('click', () => {
+                window.addToCart({
+                    title: 'Custom Build',
+                    price: 55.00,
+                    img: bottleImg.src,
+                    meta: `Color: #${selectedColor} | Text: ${engravingInput.value}`
+                });
+            });
+
         });
     </script>
 </body>
